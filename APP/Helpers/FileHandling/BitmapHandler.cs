@@ -13,7 +13,7 @@ namespace APP.Helpers.FileHandling
 {
     public interface IBitmapHandler
     {
-        Contour LoadBitmap(Bitmap path);
+        Contour LoadBitmap(Bitmap bitmap);
     }
 
     public class BitmapHandler : IBitmapHandler

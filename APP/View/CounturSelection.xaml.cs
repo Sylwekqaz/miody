@@ -16,6 +16,8 @@ using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 
 using Point = System.Windows.Point;
+using System.Drawing;
+using APP.Helpers.FileHandling;
 
 namespace APP.View
 {
@@ -181,6 +183,10 @@ namespace APP.View
 
                 bmp.Render(dv);
 
+           //     Bitmap bitmap = (Bitmap)bmp;  //to do
+               // IContourSaver  ContourSaver;
+             //   ContourSaver.SaveContour(path, bitmap);
+      
                 BitmapEncoder encoder = new BmpBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bmp));
                 encoder.Save(fs);
@@ -208,7 +214,7 @@ namespace APP.View
                 var item = listView.SelectedItem;
                 if (item != null)
                 {
-                    Color color = (Color)((Pollen)item);
+                    System.Windows.Media.Color color = (System.Windows.Media.Color)((Pollen)item);
                     System.Windows.Media.Color mediaColor = System.Windows.Media.Color.FromArgb(color.A,color.R,color.G,color.B);
                     brushColor = new SolidColorBrush(mediaColor);
                 }

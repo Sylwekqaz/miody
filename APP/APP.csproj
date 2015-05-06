@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\FileHandling\ContourLoader.cs" />
+    <Compile Include="Helpers\FileHandling\ContourSaver.cs" />
     <Compile Include="Helpers\MaskGenerator.cs" />
     <Compile Include="Helpers\Measures\HausdorffDistance.cs" />
     <Compile Include="Model\Pollen.cs" />

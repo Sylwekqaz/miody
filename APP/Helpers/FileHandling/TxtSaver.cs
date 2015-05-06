@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace APP.Helpers.FileHandling
 {
-    class TxtSaver
+    public interface ITxtSaver
+    {
+        void SaveTxt(Contour kontur, TextWriter writer);
+    }
+    class  TxtSaver : ITxtSaver
     {
         /// <summary>
         /// Metoda zapisuje kontur do pliku tekstowego
@@ -19,8 +23,9 @@ namespace APP.Helpers.FileHandling
         /// <param name="writer">
         /// TextWriter umożliwiający zapis do pliku
         /// </param>
-        public TxtSaver(Contour kontur, TextWriter writer)
+        public  void SaveTxt(Contour kontur, TextWriter writer)
         {
+           
             string linia;
             string pylek_nazwa;
             foreach (var item in kontur.ContourSet)
@@ -33,6 +38,7 @@ namespace APP.Helpers.FileHandling
 
                 }
             }
+
         }
     }
 }
