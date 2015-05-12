@@ -1,43 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Media;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using APP.Model;
+using Color = System.Windows.Media.Color;
 
 namespace APP.Helpers.FileHandling
 {
     public interface IBitmapHandler
     {
-        Contour LoadBitmap(Bitmap path);
+        Contour LoadBitmap(Bitmap bitmap);
     }
 
     public class BitmapHandler : IBitmapHandler
     {
-        public Contour LoadBitmap(Bitmap bitmap)//dostaje bitmape
+        /// <summary>
+        /// Metoda odczytuje z bitmapy dane, tworząc kontur
+        /// </summary>
+        /// <param name="bitmap">
+        /// Instancja bitmapy, na jednej bitmapie mamy wiele konturow, ktore roznia sie kolorem
+        /// </param>
+        /// <returns>
+        /// Zwraca Kontur
+        /// </returns>
+        public Contour LoadBitmap(Bitmap bitmap)
         {
-            //na jednej bitmapie mamy wiele konturow, ktore roznia sie kolorem
-            Contour wynikContour = null;
-            wynikContour.Bitmap = bitmap;
-            for (int i = 0; i < bitmap.Height; i++) //po ilosci pikseli w wysokosci
+
+#if DEBUG
+            Bitmap tempBitmap = new Bitmap(bitmap.Width,bitmap.Height);
+            for (int w = 0; w < bitmap.Width; w++)
             {
-                for (int j = 0; j < bitmap.Width; j++) //po ilosci pikseli w szerokosci
+                for (int h = 0; h < bitmap.Height; h++)
                 {
-                    Color pixelcolor = bitmap.GetPixel(i, j);
-                KnownColor znanyColor =     pixelcolor.ToKnownColor();  //mamy juz enum z lista kolorów
-                //https://msdn.microsoft.com/en-us/library/system.drawing.knowncolor(v=vs.110).aspx
-            // korzystamy z wbudowanej juz listy enum i moze zostac int jako TYP.
-                    int numerEnumeracji = (int) znanyColor;
-                    //kolor tego konkretnego pixela
-                 ContourPoint point = new ContourPoint()
-                     {                        
-                         Location = new   System.Windows.Point(i, j),
-                         Type = numerEnumeracji                     
-                     };
-                    wynikContour.ContourSet.Add(point);
+                    tempBitmap.SetPixel(w,h,System.Drawing.Color.White);
+                }
+            }
+
+#endif
+
+
+            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
+            wynikContour.Bitmap = bitmap;
+            for (int i = 0; i < bitmap.Height; i++) 
+            {
+                for (int j = 0; j < bitmap.Width; j++)
+                {
+                    var drawingColor = bitmap.GetPixel(j, i);
+                    Color pixelcolor = Color.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
+                    if (Pollen.TryPrase(pixelcolor) != null)
+                    {
+                        ContourPoint point = new ContourPoint()
+                        {
+                            Location = new Point(j, i),
+                            Type = Pollen.TryPrase(pixelcolor)
+                        };
+#if DEBUG
+                        tempBitmap.SetPixel(j, i, drawingColor);
+#endif
+                        wynikContour.ContourSet.Add(point);
+                    }
+                   
                 }
             }
        

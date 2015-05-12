@@ -7,10 +7,17 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.IO;
 using System.Collections.Generic;
+
 using Microsoft.Win32;
 
 using APP.Model;
 using APP.Helpers;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+
+using Point = System.Windows.Point;
+using System.Drawing;
+using APP.Helpers.FileHandling;
 
 namespace APP.View
 {
@@ -19,6 +26,8 @@ namespace APP.View
     /// </summary>
     public partial class CounturSelection : Window
     {
+        private IContourSaver _contourSaver;
+
         private Brush brushColor;
         private Point? currentPoint = null;
         private List<int> przedzial;
@@ -32,8 +41,9 @@ namespace APP.View
             przedzial = new List<int>();
             przedzial.Add(0);
 
-            Pylek.init();
-            ListColors.ItemsSource = Pylek.NazwyPylkowList.Values;
+            IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
+
+            ListColors.ItemsSource = values;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -175,6 +185,8 @@ namespace APP.View
 
                 bmp.Render(dv);
 
+                //_contourSaver.SaveContour();
+      
                 BitmapEncoder encoder = new BmpBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bmp));
                 encoder.Save(fs);
@@ -196,11 +208,17 @@ namespace APP.View
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
-            var item = (sender as ListView).SelectedItem;
-            if (item != null)
+            var listView = sender as ListView;
+            if (listView != null)
             {
-                brushColor = new SolidColorBrush((item as Pylek).color);
-            }            
+                var item = listView.SelectedItem;
+                if (item != null)
+                {
+                    System.Windows.Media.Color color = (System.Windows.Media.Color)((Pollen)item);
+                    System.Windows.Media.Color mediaColor = System.Windows.Media.Color.FromArgb(color.A,color.R,color.G,color.B);
+                    brushColor = new SolidColorBrush(mediaColor);
+                }
+            }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

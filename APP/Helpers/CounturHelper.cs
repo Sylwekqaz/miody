@@ -17,29 +17,6 @@ namespace APP.Helpers
         {
             throw new NotImplementedException();
         }
-
-        //public Contour LoadBitmap(string patch)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Contour LoadTxt(string patch)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Contour SaveBitmap(string patch)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Contour SaveTxt(string patch)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
-      
        
     }
 }

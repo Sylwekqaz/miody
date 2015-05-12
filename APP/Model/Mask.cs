@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace APP.Model
 {
     public class Mask
     {
-        int[,] Ints { get; set; }
+        public Mask(int height, int width)
+        {
+            Height = height;
+            Width = width;
+            var tempMaskMap = Pollen.Values.ToDictionary(value => value, value => new bool[height, width]);
+            MaskMap = tempMaskMap;
+        }
+
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+        public IReadOnlyDictionary<Pollen,bool[,]>  MaskMap  { get; private set; }
     }
 }

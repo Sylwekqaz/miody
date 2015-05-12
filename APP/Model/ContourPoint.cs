@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Drawing;
 
 namespace APP.Model
 {
     public class ContourPoint
     {
-        public int Type { get; set; }  // Typ Pyłku 
+        public Pollen Type { get; set; }  // Typ Pyłku 
 
         public Point Location { get; set; }
 

@@ -53,7 +53,7 @@
                 </ListView.Resources>
                 <ListView.View>                    
                     <GridView>                        
-                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding name}" />                        
+                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}" />                        
                         <GridViewColumn Header="Kolor" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -61,7 +61,7 @@
                                         <Rectangle.Fill>
                                             <LinearGradientBrush StartPoint="0.3,0" EndPoint="1,0">
                                                 <GradientStop Color="White" Offset="0" />
-                                                <GradientStop Color="{Binding color}" Offset="1" />
+                                                <GradientStop Color="{Binding Color}" Offset="1" />
                                             </LinearGradientBrush>
                                         </Rectangle.Fill>
                                     </Rectangle>
