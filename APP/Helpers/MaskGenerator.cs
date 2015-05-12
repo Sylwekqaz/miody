@@ -6,44 +6,47 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Effects;
 using APP.Model;
 
 namespace APP.Helpers
 {
     public class MaskGenerator
     {
-
         public Mask GenerateMask(Contour contour)
         {
-            int height = (int) Math.Ceiling((double) contour.ContourSet.Max(point => point.Location.X));
-            int width = (int)Math.Ceiling((double) contour.ContourSet.Max(point => point.Location.Y));
+            int height = contour.Height;
+            int width = contour.Width;
+
+            Dictionary<Pollen, Bitmap> bitmaps = new Dictionary<Pollen, Bitmap>();
+ 
+
 
             foreach (Pollen pylek in Pollen.Values)
             {
-                Bitmap bitmap= new Bitmap(width, height);
-                Graphics graphics = Graphics.FromImage(bitmap);
-                graphics.SmoothingMode = SmoothingMode.None;
+                Bitmap bitmap = new Bitmap(width, height);
 
 
-                foreach (ContourPoint contourPoint in contour.ContourSet.Where(point => point.Type==pylek))
-                {
-                    graphics.DrawLine(new Pen(Color.Black, 10), contourPoint.Location, contourPoint.Location);
-                }
-
-
+                bitmaps.Add(pylek, bitmap);
 
             }
 
 
+            foreach (ContourPoint contourPoint in contour.ContourSet)
+            {
+                bitmaps[contourPoint.Type].SetPixel(contourPoint.Location.X,contourPoint.Location.Y,Color.Black);
+            }
 
-            return  new Mask(height, width);
+            //foreach (Pollen pylek in Pollen.Values)
+            //{
+                bitmaps[/*pylek*/ Pollen.Rzepakowy].FloodFill(new Point(170, 130), 10);
+
+
+            //}
 
 
 
-
-
-
-
+            return new Mask(height, width);
         }
     }
 }
