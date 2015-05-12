@@ -16,7 +16,7 @@ namespace APP.Helpers.Measures
             int mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
 
             double wynik = 1 - (mocRóżnicyAB + mocRóżnicyBA) / (a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
-            return new Result { Title = "Hamming Distance", D = wynik };
+            return new Result { Title = "1 - (względna odległość Hamminga)", D = wynik };
         }
         
         private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
