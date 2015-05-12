@@ -32,16 +32,24 @@ namespace APP.Helpers.FileHandling
             //Pylek kolorp = KnownColor.ActiveCaption;
             //Pylek nazwo = "rzepakowy";
             //string name;
-       
+
+            string s = reader.ReadLine();
+            if (s == null)
+            {
+                throw new Exception("pierwsza linijka jest pusta");
+            }
+            string[] line = s.Split(' ');
+                int w = int.Parse(line[0]);
+                int h =int.Parse(line[1]);
             
-            Contour wynikContour = new Contour();
+            Contour wynikContour = new Contour(w,h);
 
             while (reader.Peek() != -1)
         {
                  string readLine = reader.ReadLine();
                  if (readLine != null)
             {
-                     string[] line = readLine.Split(' ');
+                     line = readLine.Split(' ');
                      ContourPoint point = new ContourPoint()
                      {  // kazda linijka to odpowiednio współrzędna: X Y Typ pyłku ;rozna ilosc spacji
                          Location = new Point(int.Parse(line[0]), int.Parse(line[1])),

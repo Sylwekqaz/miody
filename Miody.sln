@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APP", "APP\APP.csproj", "{0038DC83-C374-44DB-AA8A-A6D16D0E7A94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{1838C97D-3582-42CC-9926-2D4BA3EDE808}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskTests", "MaskTests\MaskTests.csproj", "{DA812C47-4E25-4914-A140-DFAA343800E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,8 +41,21 @@ Global
 		{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DA812C47-4E25-4914-A140-DFAA343800E4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DA812C47-4E25-4914-A140-DFAA343800E4} = {1838C97D-3582-42CC-9926-2D4BA3EDE808}
 	EndGlobalSection
 EndGlobal
