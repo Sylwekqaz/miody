@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,6 +48,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Images\Testy bloku 3\Test 3.10\Test 3.10.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.11\Test 3.11.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.12\Test 3.12.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.13\Test 3.13.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.14\Test 3.14.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.15\Test 3.15.docx" />
+    <None Include="Images\Testy bloku 3\Test\Test 3.16.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.17\Test 3.17.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.18\Test 3.18.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.1\Test 3.1.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.2\Test 3.2.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.3\Test 3.3.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.4\Test 3.4.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.5\Test 3.5.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.6\Test 3.6.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.7\Test 3.7.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.8\Test 3.8.docx" />
+    <None Include="Images\Testy bloku 3\Test 3.9\Test 3.9.docx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\APP\APP.csproj">
@@ -56,6 +75,43 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\conturUnclosed.png" />
+    <Content Include="Images\conturUnclosed1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.10\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.10\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.11\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.11\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.12\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.12\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.13\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.13\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.14\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.14\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.15\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.15\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test\kontur.bmp" />
+    <Content Include="Images\Testy bloku 3\Test\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.17\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.17\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.18\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.18\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.1\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.1\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.2\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.2\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.3\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.3\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.4\kontur 1.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.4\kontur 2.bmp" />
+    <Content Include="Images\Testy bloku 3\Test 3.5\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.5\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.6\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.6\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.7\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.7\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.8\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.8\kontur 2.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.9\kontur 1.png" />
+    <Content Include="Images\Testy bloku 3\Test 3.9\kontur 2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

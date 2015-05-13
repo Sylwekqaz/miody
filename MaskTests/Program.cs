@@ -14,6 +14,8 @@ namespace MaskTests
     {
         static void Main(string[] args)
         {
+            float asdasd = Color.Black.GetDistance(Color.White);
+            float adasdasd = Pollen.Mniszkowy.Color.GetDistance(Color.White);
 
             // przygotowanie testu 
             IBitmapHandler handler = new BitmapHandler();

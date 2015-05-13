@@ -233,6 +233,7 @@ namespace APP.Helpers
                 {
                     continue;
                 }
+                bitmap.SetPixel(fillValues.Node.X, fillValues.Node.Y, Color.Black);
                 int thisGapValue = gapBitmap.GetPixel(fillValues.Node.X, fillValues.Node.Y).R;
                 if (thisGapValue > fillValues.LastGapValue)
                 {
@@ -241,7 +242,7 @@ namespace APP.Helpers
 #endif
                     continue;
                 }
-                bitmap.SetPixel(fillValues.Node.X, fillValues.Node.Y, Color.Black);
+                
 
                 if (fillValues.Node.X + 1 < bitmap.Width)
                 {

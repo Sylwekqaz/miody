@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
+using APP.Helpers;
 
 namespace APP.Model
 {
@@ -75,16 +77,10 @@ namespace APP.Model
         }
 
 
-
-
-
+        private const float Tolerance = 0.07F;
         public static Pollen TryPrase(Color color) //zamieniamy  color->pylek
         {
-            if (KolorPylkowList.ContainsKey(color))
-            {
-                return KolorPylkowList[color];
-            }
-            return null;
+            return Values.FirstOrDefault(pollen => color.GetDistance(pollen.Color) < Tolerance);
         }
 
 

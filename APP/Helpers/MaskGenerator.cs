@@ -31,18 +31,23 @@ namespace APP.Helpers
 
             }
 
-
+#if DEBUG
+             HashSet<Pollen> debugPollens = new HashSet<Pollen>();
+#endif
             foreach (ContourPoint contourPoint in contour.ContourSet)
             {
                 bitmaps[contourPoint.Type].SetPixel(contourPoint.Location.X,contourPoint.Location.Y,Color.Black);
+#if DEBUG
+                debugPollens.Add(contourPoint.Type);
+#endif
             }
 
-            //foreach (Pollen pylek in Pollen.Values)
-            //{
-                bitmaps[/*pylek*/ Pollen.Rzepakowy].FloodFill(new Point(170, 130), 10);
+            foreach (Pollen pylek in Pollen.Values)
+            {
+                bitmaps[pylek].FloodFill(new Point(1, 1), 10);
 
 
-            //}
+            }
 
 
 
