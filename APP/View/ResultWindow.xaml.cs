@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using APP.Model;
+using System.Windows.Controls;
 
 namespace APP.View
 {
@@ -10,9 +11,18 @@ namespace APP.View
     /// </summary>
     public partial class ResultWindow : Window
     {
-        public ResultWindow(IEnumerable<Result> a , Bitmap bitmap)
+        public ResultWindow(IEnumerable<Result> resultsList , Bitmap bitmap)
         {
             InitializeComponent();
+
+            TextBlock textBlock = new TextBlock();
+            
+            foreach (var result in resultsList)
+            {                
+                textBlock.Inlines.Add(result.Title + ": " + result.D + "\n"); 
+            }
+
+            textBlock1.Text = textBlock.Text;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -25,5 +35,6 @@ namespace APP.View
             e.Cancel = true;
             this.Hide();            
         }
+
     }
 }

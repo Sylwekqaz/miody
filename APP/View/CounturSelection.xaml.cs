@@ -26,6 +26,8 @@ namespace APP.View
     /// </summary>
     public partial class CounturSelection : Window
     {
+        //private IContourSaver _contourSaver;  null kur** !
+
         private Brush brushColor;
         private Point? currentPoint = null;
         private List<int> przedzial;
@@ -137,12 +139,12 @@ namespace APP.View
             przedzial.Add(CanvasContour.Children.Count);
         }
 
-        private void CanvasContour_MouseLeave(object sender, MouseEventArgs e)
-        {
+        private void CanvasContour_MouseLeave(object sender, MouseEventArgs e) //wolny, bo sie duzo razy wykonuje
+        { 
             currentPoint = null;            
         }
 
-        private void CanvasContour_MouseEnter(object sender, MouseEventArgs e)
+        private void CanvasContour_MouseEnter(object sender, MouseEventArgs e) //wolny, bo sie duzo razy wykonuje
         {            
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -167,8 +169,9 @@ namespace APP.View
 
                 CanvasContourBackground.Opacity = 0;                
 
-                FileStream fs = new FileStream(path, FileMode.Create);
-                Rect prostokat = VisualTreeHelper.GetDescendantBounds(CanvasContour);
+              //  FileStream fs = new FileStream(path, FileMode.Create);
+                Rect prostokat = VisualTreeHelper.GetDescendantBounds(CanvasContour);  
+                //CanvasContour -> witdh -> 0        height -> 0 
 
                 RenderTargetBitmap bmp = new RenderTargetBitmap((int)prostokat.Width, (int)prostokat.Height, 96, 96, PixelFormats.Pbgra32);
 
@@ -183,14 +186,27 @@ namespace APP.View
 
                 bmp.Render(dv);
 
-           //     Bitmap bitmap = (Bitmap)bmp;  //to do
-               // IContourSaver  ContourSaver;
-             //   ContourSaver.SaveContour(path, bitmap);
-      
-                BitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bmp));
-                encoder.Save(fs);
-                fs.Close();
+
+                MemoryStream stream = new MemoryStream();
+                BitmapEncoder encoder2 = new BmpBitmapEncoder();
+                encoder2.Frames.Add(BitmapFrame.Create(bmp));
+                encoder2.Save(stream);
+                Bitmap bitmap = new Bitmap(stream);   //bitmapa z canvasa
+  
+  //  bitmap.Save(path);   //działa, bitmapa ok.
+                IBitmapHandler _conveter = new BitmapHandler();
+                ITxtSaver _txtSaver = new TxtSaver();
+                IBitmapSaver _bitmapSaver = new BitmapSaver();
+
+
+                IContourSaver _contourSavera = new ContourSaver(_bitmapSaver, _txtSaver, _conveter);
+     
+
+                Contour wynik = _conveter.LoadBitmap(bitmap);
+                _contourSavera.SaveContour(path, bitmap);
+
+
+                ////////
 
                 CanvasContourBackground.Opacity = 1;
             }

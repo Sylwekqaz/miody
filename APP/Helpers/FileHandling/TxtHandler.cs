@@ -47,6 +47,24 @@ namespace APP.Helpers.FileHandling
             while (reader.Peek() != -1)
         {
                  string readLine = reader.ReadLine();
+                
+                //test
+                 wynikContour.Bitmap = new Bitmap(400, 400);
+                //parametr is not valid, przyczyna:
+                 //http://stackoverflow.com/questions/6333681/c-sharp-parameter-is-not-valid-creating-new-bitmap
+
+
+                //ogolnie działa np. 
+                 //for (int i = 0; i < 35; i++)
+                 //{
+                 //    for (int j = 0; j < 35; j++)
+                 //    {
+                 //        wynikContour.Bitmap.SetPixel(i, j, Color.Red);
+                 //    }
+                 //}
+
+
+
                  if (readLine != null)
             {
                      line = readLine.Split(' ');
@@ -56,7 +74,10 @@ namespace APP.Helpers.FileHandling
                          Type =  (Pollen) line[2]     
  
                      };
-                     wynikContour.ContourSet.Add(point); 
+                     wynikContour.ContourSet.Add(point);
+                     //wynikContour.Bitmap = new Bitmap(35, 35);
+                     wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y, point.Type.Color.ToDrawingColor());
+                     //wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y, Color.Red);
                  }
             }
            

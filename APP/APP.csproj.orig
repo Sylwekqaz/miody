@@ -57,19 +57,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helpers\BitmapHelper.cs" />
-    <Compile Include="Helpers\ColorHelper.cs" />
+<<<<<<< HEAD
     <Compile Include="Helpers\FileHandling\ContourLoader.cs" />
-    <Compile Include="Helpers\FileHandling\ContourSaver.cs" />
-    <Compile Include="Helpers\MaskGenerator.cs" />
-    <Compile Include="Helpers\Measures\HausdorffDistance.cs" />
-    <Compile Include="Model\Pollen.cs" />
     <Compile Include="Helpers\FileHandling\TxtHandler.cs" />
     <Compile Include="Helpers\FileHandling\BitmapHandler.cs" />
     <Compile Include="Helpers\FileHandling\BitmapSaver.cs" />
+=======
+    <Compile Include="Helpers\FileHandling\BitmapLoader.cs" />
+    <Compile Include="Helpers\FileHandling\BitmapSaver.cs" />
+    <Compile Include="Helpers\FileHandling\TxtLoader.cs" />
+>>>>>>> master
     <Compile Include="Helpers\FileHandling\TxtSaver.cs" />
-    <Compile Include="Helpers\Measures\Miara1.cs" />
-    <Compile Include="Helpers\Measures\Miara3.cs" />
     <Compile Include="View\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>
@@ -85,10 +83,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\CounturHelper.cs" />
-    <Compile Include="Helpers\Measures\IComparison.cs" />
+    <Compile Include="Helpers\Miary\IComparasion.cs" />
     <Compile Include="Model\Contour.cs" />
     <Compile Include="Model\Mask.cs" />
-    <Compile Include="Model\ContourPoint.cs" />
+    <Compile Include="Model\CounturPoint.cs" />
     <Compile Include="Model\Result.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -131,7 +129,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
