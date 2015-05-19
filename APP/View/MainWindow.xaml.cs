@@ -40,7 +40,7 @@ namespace APP
         private void ContourSelectionOpen_Click(object sender, RoutedEventArgs e)
         {            
             if (ContourSelectionWindow == null)
-                ContourSelectionWindow = new CounturSelection(new Contour());
+                ContourSelectionWindow = new CounturSelection(new Contour(500,500)); // todo fixme
             ContourSelectionWindow.Show();
         }
 

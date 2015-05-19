@@ -3,27 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    class Miara3
+    class HammingDistance : IComparison
     {
-        //todo oganrąć ten burdel tutaj
-        static double miara3(int[,] tab1, int[,] tab2)
+        public Result GetResult(Contour a, Contour b)
+        {
+            int mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
+            int mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
+            int mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
+
+            double wynik = 1 - (mocRóżnicyAB + mocRóżnicyBA) / (a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
+            return new Result { Title = "1 - (względna odległość Hamminga)", D = wynik };
+        }
+        
+        private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
         {
             int licznik = 0;
-            double Result = licznik / tab1.Length;
-            for (int i = 0; i < tab1.GetLength(0); i++)
+
+            foreach (ContourPoint item in listaA)
             {
-                for (int j = 0; j < tab1.GetLength(1); j++)
+                bool IstniejeRówny = false;
+                foreach (ContourPoint item2 in listaB)
                 {
-                    if (tab1[i, j] != tab2[i, j])
+                    if (item.Type == item2.Type && item.Location == item2.Location)
                     {
-                        licznik++;
+                        IstniejeRówny = true;
                     }
                 }
+                if (!IstniejeRówny) licznik++;
             }
-            return Result;
+            return licznik;
         }
+
     }
 }

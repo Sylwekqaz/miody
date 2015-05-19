@@ -13,7 +13,7 @@ namespace APP.Helpers.FileHandling
 {
     public interface IBitmapHandler
     {
-        Contour LoadBitmap(Bitmap path);
+        Contour LoadBitmap(Bitmap bitmap);
     }
 
     public class BitmapHandler : IBitmapHandler
@@ -29,21 +29,38 @@ namespace APP.Helpers.FileHandling
         /// </returns>
         public Contour LoadBitmap(Bitmap bitmap)
         {
-            Contour wynikContour = new Contour();
+
+#if DEBUG
+            Bitmap tempBitmap = new Bitmap(bitmap.Width,bitmap.Height);
+            for (int w = 0; w < bitmap.Width; w++)
+            {
+                for (int h = 0; h < bitmap.Height; h++)
+                {
+                    tempBitmap.SetPixel(w,h,System.Drawing.Color.White);
+                }
+            }
+
+#endif
+
+
+            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
             wynikContour.Bitmap = bitmap;
             for (int i = 0; i < bitmap.Height; i++) 
             {
                 for (int j = 0; j < bitmap.Width; j++)
                 {
-                    var drawindColor = bitmap.GetPixel(j, i);
-                    Color pixelcolor = Color.FromArgb(drawindColor.A, drawindColor.R, drawindColor.G, drawindColor.B);
+                    var drawingColor = bitmap.GetPixel(j, i);
+                    Color pixelcolor = Color.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
                     if (Pollen.TryPrase(pixelcolor) != null)
                     {
                         ContourPoint point = new ContourPoint()
                         {
-                            Location = new Point(i, j),
+                            Location = new Point(j, i),
                             Type = Pollen.TryPrase(pixelcolor)
                         };
+#if DEBUG
+                        tempBitmap.SetPixel(j, i, drawingColor);
+#endif
                         wynikContour.ContourSet.Add(point);
                     }
                    

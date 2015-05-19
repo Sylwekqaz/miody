@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 
 namespace APP.Helpers.FileHandling
 {
-    class BitmapSaver
+
+    public interface IBitmapSaver
+    {
+        void SaveBitmap(Bitmap  bitmap, string file_name);
+    }
+
+    class BitmapSaver : IBitmapSaver
     {
         /// <summary>
         /// Metoda zapisuje bitmape do pliku
@@ -18,7 +24,7 @@ namespace APP.Helpers.FileHandling
         /// <param name="file_name">
         /// Nazwa pliku pod którą chcemy zapisać daną bitmapę
         /// </param>
-        public BitmapSaver(Bitmap  bitmap, string file_name)
+        public void SaveBitmap(Bitmap  bitmap, string file_name)
         {
             bitmap.Save(file_name); //format?
         }
