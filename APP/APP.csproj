@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\Measures\HammingDistance.cs" />
     <Compile Include="Helpers\PointHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\FileHandling\ContourLoader.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="Helpers\FileHandling\BitmapSaver.cs" />
     <Compile Include="Helpers\FileHandling\TxtSaver.cs" />
     <Compile Include="Helpers\Measures\Miara1.cs" />
-    <Compile Include="Helpers\Measures\Miara3.cs" />
     <Compile Include="View\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>
