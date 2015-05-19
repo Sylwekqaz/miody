@@ -77,7 +77,7 @@ namespace APP.Model
         }
 
 
-        private const float Tolerance = 0.1F;
+        private const float Tolerance = 30F;
         public static Pollen TryPrase(Color color) //zamieniamy  color->pylek
         {
             return Values.FirstOrDefault(pollen => color.GetDistance(pollen.Color) < Tolerance);

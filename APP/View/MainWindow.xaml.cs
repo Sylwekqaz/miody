@@ -55,15 +55,15 @@ namespace APP
                 result1.Title = "Miara1";
                 result1.D = Miara1.miara1(null, null);*/
 
-                HausdorffDistance miara2 = new HausdorffDistance();
+                IComparison miara2 = new HausdorffDistance();
                 Result result2 = miara2.GetResult(contour1, contour2);
 
-                HammingDistance miara3 = new HammingDistance();
-                Result result3 = miara3.GetResult(contour1, contour2);
+                //IComparison miara3 = new miar(); //todo 
+                //Result result3 = miara3.GetResult(contour1, contour2);
 
                 List<Result> results = new List<Result>();
                 results.Add(result2);
-                results.Add(result3);
+               // results.Add(result3);
 
                 if (ResultWindow == null)
                     ResultWindow = new ResultWindow(results, null);

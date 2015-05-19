@@ -35,11 +35,9 @@ namespace APP.Helpers.Measures
 
                     if (item.Type.Numer == item2.Type.Numer)
                     {
-                        System.Windows.Point point1 = new System.Windows.Point(item.Location.X, item.Location.Y);
-                        System.Windows.Point point2 = new System.Windows.Point(item2.Location.X, item2.Location.Y);
 
 
-                        double odleglosc = System.Windows.Point.Subtract(point1, point2).Length;
+                        double odleglosc = item.Location.GetDistance(item2.Location);
 
 
 

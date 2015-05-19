@@ -59,15 +59,15 @@ namespace APP.Helpers.FileHandling
                             Type = Pollen.TryPrase(pixelcolor)
                         };
 #if DEBUG
-                        tempBitmap.SetPixel(j, i, drawingColor);
+                        tempBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
 #endif
                         wynikContour.ContourSet.Add(point);
                     }
                    
                 }
             }
-       
 
+            var a = Pollen.Rzepakowy.Color.GetDistance(System.Drawing.Color.White);
             return wynikContour;
         }
     }
