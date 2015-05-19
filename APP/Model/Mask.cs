@@ -15,6 +15,6 @@ namespace APP.Model
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public IReadOnlyDictionary<Pollen,bool[,]>  MaskMap  { get; private set; }
+        public IReadOnlyDictionary<Pollen, bool[,]> MaskMap { get; private set; }
     }
 }

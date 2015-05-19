@@ -12,7 +12,8 @@ namespace APP.Helpers.FileHandling
     {
         void SaveTxt(Contour kontur, TextWriter writer);
     }
-    class  TxtSaver : ITxtSaver
+
+    internal class TxtSaver : ITxtSaver
     {
         /// <summary>
         /// Metoda zapisuje kontur do pliku tekstowego
@@ -23,22 +24,20 @@ namespace APP.Helpers.FileHandling
         /// <param name="writer">
         /// TextWriter umożliwiający zapis do pliku
         /// </param>
-        public  void SaveTxt(Contour kontur, TextWriter writer)
+        public void SaveTxt(Contour kontur, TextWriter writer)
         {
-           
             string linia;
             string pylek_nazwa;
             foreach (var item in kontur.ContourSet)
             {
                 if (item != null)
                 {
-                    pylek_nazwa = (Pollen)item.Type;
-                    linia = Convert.ToString(item.Location.X) + " " + Convert.ToString(item.Location.Y) + " " + Convert.ToString(pylek_nazwa);
+                    pylek_nazwa = (Pollen) item.Type;
+                    linia = Convert.ToString(item.Location.X) + " " + Convert.ToString(item.Location.Y) + " " +
+                            Convert.ToString(pylek_nazwa);
                     writer.WriteLine(linia);
-
                 }
             }
-
         }
     }
 }

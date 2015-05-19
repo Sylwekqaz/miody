@@ -10,7 +10,7 @@ namespace APP.Helpers
 {
     public static class PointHelper
     {
-        private static double GetDistance(double x1, double y1, double x2, double y2 )
+        private static double GetDistance(double x1, double y1, double x2, double y2)
         {
             return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
         }
@@ -34,9 +34,5 @@ namespace APP.Helpers
         {
             return GetDistance(p1.X, p1.Y, p2.X, p2.Y);
         }
-
-
-
-
     }
 }

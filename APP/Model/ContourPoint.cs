@@ -9,7 +9,7 @@ namespace APP.Model
 {
     public class ContourPoint
     {
-        public Pollen Type { get; set; }  // Typ Pyłku 
+        public Pollen Type { get; set; } // Typ Pyłku 
 
         public Point Location { get; set; }
 

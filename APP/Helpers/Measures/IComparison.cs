@@ -2,8 +2,8 @@
 
 namespace APP.Helpers.Measures
 {
-    interface IComparison
+    internal interface IComparison
     {
-        Result GetResult(Contour a,Contour b);
+        Result GetResult(Contour a, Contour b);
     }
 }

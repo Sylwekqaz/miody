@@ -18,7 +18,7 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -26,8 +26,8 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
             <MenuItem Header="Plik" Margin="10,0,0,0">
-                <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click"/>
-                <MenuItem Header="Wczytaj kontury..."/>
+                <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click" />
+                <MenuItem Header="Wczytaj kontury..." />
                 <Separator />
                 <MenuItem Header="Zastosuj algorytm" IsEnabled="False" />
                 <Separator />
@@ -38,22 +38,25 @@
                 <MenuItem Header="Zakończ" Click="Close_Click" />
             </MenuItem>
             <MenuItem Header="Edycja">
-                <MenuItem Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo"  />
+                <MenuItem Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
                 <MenuItem Header="Wyczyść" Click="MenuItem_Click" />
             </MenuItem>
-            <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click" Margin="0,0,10,0"/>
+            <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click"
+                      Margin="0,0,10,0" />
         </Menu>
-        
+
         <DockPanel Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <ListView DockPanel.Dock="Right" Name="ListColors" HorizontalAlignment="Right" VerticalAlignment="Stretch" Width="150" PreviewMouseLeftButtonUp="ListViewTypes_PreviewMouseLeftButtonUp_1" SelectionMode="Single" >
+            <ListView DockPanel.Dock="Right" Name="ListColors" HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                      Width="150" PreviewMouseLeftButtonUp="ListViewTypes_PreviewMouseLeftButtonUp_1"
+                      SelectionMode="Single">
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
                         <Setter Property="Visibility" Value="Collapsed" />
                     </Style>
                 </ListView.Resources>
-                <ListView.View>                    
-                    <GridView>                        
-                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}" />                        
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Name}" />
                         <GridViewColumn Header="Kolor" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -72,17 +75,20 @@
                 </ListView.View>
             </ListView>
 
-            <ScrollViewer Name="Scrolls" Margin="10,10,10,10" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">                
-                <Canvas  x:Name="CanvasContour" MouseMove="CanvasContour_MouseMove" MouseDown="CanvasContour_MouseDown" MouseUp="CanvasContour_MouseUp" MouseLeave="CanvasContour_MouseLeave" MouseEnter="CanvasContour_MouseEnter">                                        
+            <ScrollViewer Name="Scrolls" Margin="10,10,10,10" HorizontalScrollBarVisibility="Visible"
+                          VerticalScrollBarVisibility="Visible" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <Canvas x:Name="CanvasContour" MouseMove="CanvasContour_MouseMove" MouseDown="CanvasContour_MouseDown"
+                        MouseUp="CanvasContour_MouseUp" MouseLeave="CanvasContour_MouseLeave"
+                        MouseEnter="CanvasContour_MouseEnter">
                     <Canvas.LayoutTransform>
                         <ScaleTransform x:Name="CanvasContourScale" />
                     </Canvas.LayoutTransform>
                     <Canvas.Background>
-                        <ImageBrush x:Name="CanvasContourBackground"></ImageBrush>
+                        <ImageBrush x:Name="CanvasContourBackground" />
                     </Canvas.Background>
-                </Canvas>                
+                </Canvas>
             </ScrollViewer>
         </DockPanel>
-    
+
     </Grid>
 </Window>

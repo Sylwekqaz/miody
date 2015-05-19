@@ -236,7 +236,7 @@ namespace APP.Helpers
 
             Bitmap gp = gapBitmap;
             Queue<FloodFillValues> queue = new Queue<FloodFillValues>();
-            foreach (var node in nodes.OrderBy(point => gp.GetPixel(point.X,point.Y).R))
+            foreach (var node in nodes.OrderBy(point => gp.GetPixel(point.X, point.Y).R))
             {
                 queue.Enqueue(new FloodFillValues {Node = node, LastGapValue = 255});
             }

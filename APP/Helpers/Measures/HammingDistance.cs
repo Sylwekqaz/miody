@@ -3,7 +3,7 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    class HammingDistance : IComparison
+    internal class HammingDistance : IComparison
     {
         public Result GetResult(Contour a, Contour b)
         {
@@ -11,10 +11,11 @@ namespace APP.Helpers.Measures
             int mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
             int mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
 
-            double wynik = 1 - (mocRóżnicyAB + mocRóżnicyBA) / (a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
-            return new Result { Title = "1 - (względna odległość Hamminga)", D = wynik };
+            double wynik = 1 -
+                           (mocRóżnicyAB + mocRóżnicyBA)/(a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
+            return new Result {Title = "1 - (względna odległość Hamminga)", D = wynik};
         }
-        
+
         private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
         {
             int licznik = 0;
@@ -33,6 +34,5 @@ namespace APP.Helpers.Measures
             }
             return licznik;
         }
-
     }
 }

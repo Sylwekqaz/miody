@@ -9,7 +9,7 @@ namespace APP.Model
         {
             Width = width;
             Height = height;
-            ContourSet=new HashSet<ContourPoint>();
+            ContourSet = new HashSet<ContourPoint>();
         }
 
 

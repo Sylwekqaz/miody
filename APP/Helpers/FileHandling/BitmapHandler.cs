@@ -29,14 +29,13 @@ namespace APP.Helpers.FileHandling
         /// </returns>
         public Contour LoadBitmap(Bitmap bitmap)
         {
-
 #if DEBUG
-            Bitmap tempBitmap = new Bitmap(bitmap.Width,bitmap.Height);
+            Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height);
             for (int w = 0; w < bitmap.Width; w++)
             {
                 for (int h = 0; h < bitmap.Height; h++)
                 {
-                    tempBitmap.SetPixel(w,h,System.Drawing.Color.White);
+                    tempBitmap.SetPixel(w, h, System.Drawing.Color.White);
                 }
             }
 
@@ -45,7 +44,7 @@ namespace APP.Helpers.FileHandling
 
             Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
             wynikContour.Bitmap = bitmap;
-            for (int i = 0; i < bitmap.Height; i++) 
+            for (int i = 0; i < bitmap.Height; i++)
             {
                 for (int j = 0; j < bitmap.Width; j++)
                 {
@@ -63,7 +62,6 @@ namespace APP.Helpers.FileHandling
 #endif
                         wynikContour.ContourSet.Add(point);
                     }
-                   
                 }
             }
             return wynikContour;

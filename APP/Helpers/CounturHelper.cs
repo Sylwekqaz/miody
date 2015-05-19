@@ -5,9 +5,8 @@ using APP.Model;
 
 namespace APP.Helpers
 {
-    class CounturHelper
+    internal class CounturHelper
     {
-
         public IQueryable<ContourPoint> GetPointsInsideContur(Contour kontur)
         {
             throw new NotImplementedException();
@@ -17,6 +16,5 @@ namespace APP.Helpers
         {
             throw new NotImplementedException();
         }
-       
     }
 }

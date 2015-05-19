@@ -40,20 +40,19 @@ namespace APP
         }
 
         private void ContourSelectionOpen_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             if (ContourSelectionWindow == null)
-                ContourSelectionWindow = new CounturSelection(new Contour(500,500)); // todo fixme
+                ContourSelectionWindow = new CounturSelection(new Contour(500, 500)); // todo fixme
             ContourSelectionWindow.Show();
         }
 
         private void ResultOpen_Click(object sender, RoutedEventArgs e)
         {
-
             if (contour1 != null && contour2 != null)
             {
                 /*Result result1 = new Result();
-                result1.Title = "Miara1";
-                result1.D = Miara1.miara1(null, null);*/
+    result1.Title = "Miara1";
+    result1.D = Miara1.miara1(null, null);*/
 
                 HausdorffDistance miara2 = new HausdorffDistance();
                 Result result2 = miara2.GetResult(contour1, contour2);
@@ -65,10 +64,10 @@ namespace APP
                 results.Add(result2);
                 results.Add(result3);
 
-            if (ResultWindow == null)
+                if (ResultWindow == null)
                     ResultWindow = new ResultWindow(results, null);
-            ResultWindow.Show();
-        }
+                ResultWindow.Show();
+            }
             else MessageBox.Show("Wczytaj oba kontury!");
         }
 
@@ -87,14 +86,14 @@ namespace APP
 
             if (userClickedOK == true)
             {
-                contour1 = _contourLoader.LoadContour(openFileDialog1.FileName); 
+                contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
                 contour1.Bitmap.Save("C:\\Users\\Ja\\Desktop\\testotesto.bmp"); //test
                 Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    contour1.Bitmap.GetHbitmap(), 
-                    IntPtr.Zero, 
-                    System.Windows.Int32Rect.Empty, 
-                    BitmapSizeOptions.FromWidthAndHeight((int)contour1.Width, (int)contour1.Height)
-                );
+                    contour1.Bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight((int) contour1.Width, (int) contour1.Height)
+                    );
             }
         }
 
@@ -121,8 +120,8 @@ namespace APP
                     contour2.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
                     System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight((int)contour2.Width, (int)contour2.Height)
-                );
+                    BitmapSizeOptions.FromWidthAndHeight((int) contour2.Width, (int) contour2.Height)
+                    );
             }
         }
 
@@ -131,6 +130,5 @@ namespace APP
             contour2 = null;
             Contour2Image.Source = null;
         }
-
     }
 }

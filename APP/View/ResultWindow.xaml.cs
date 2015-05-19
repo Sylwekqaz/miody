@@ -11,15 +11,15 @@ namespace APP.View
     /// </summary>
     public partial class ResultWindow : Window
     {
-        public ResultWindow(IEnumerable<Result> resultsList , Bitmap bitmap)
+        public ResultWindow(IEnumerable<Result> resultsList, Bitmap bitmap)
         {
             InitializeComponent();
 
             TextBlock textBlock = new TextBlock();
-            
+
             foreach (var result in resultsList)
-            {                
-                textBlock.Inlines.Add(result.Title + ": " + result.D + "\n"); 
+            {
+                textBlock.Inlines.Add(result.Title + ": " + result.D + "\n");
             }
 
             textBlock1.Text = textBlock.Text;
@@ -33,8 +33,7 @@ namespace APP.View
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();            
+            this.Hide();
         }
-
     }
 }

@@ -27,6 +27,7 @@ namespace APP.Helpers.FileHandling
             _bitmapHandler = bitmapHandler;
             _txtHandler = txtHandler;
         }
+
         /// <summary>
         /// Metoda, która sprawdza na podstawie ścieżki do pliku, 
         /// czy mamy doczyniena z plikiem .txt  czy też bitmapą
@@ -40,7 +41,6 @@ namespace APP.Helpers.FileHandling
         /// </returns>
         public Contour LoadContour(string path)
         {
-           
             Contour loadedContour;
 
             if (path.EndsWith(".txt"))
@@ -55,6 +55,5 @@ namespace APP.Helpers.FileHandling
             }
             return loadedContour;
         }
-
     }
 }

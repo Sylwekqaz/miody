@@ -7,7 +7,7 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    class JaccardIndex : IComparison
+    internal class JaccardIndex : IComparison
     {
         public Result GetResult(Contour a, Contour b)
         {
@@ -18,9 +18,10 @@ namespace APP.Helpers.Measures
             int mocB = MocZbioru(MaskaB);
             int mocCzęściWspólnej = MocCzęściWspólnej(MaskaA, MaskaB);
             int mocSumy = mocA + mocB - mocCzęściWspólnej;
-            double wynik = mocCzęściWspólnej / mocSumy;
-            return new Result { Title = "Indeks Jaccarda", D = wynik };
+            double wynik = mocCzęściWspólnej/mocSumy;
+            return new Result {Title = "Indeks Jaccarda", D = wynik};
         }
+
         public int MocZbioru(Mask a)
         {
             IReadOnlyDictionary<Pollen, bool[,]> A = a.MaskMap;
@@ -28,7 +29,6 @@ namespace APP.Helpers.Measures
             int licznik = 0;
             foreach (KeyValuePair<Pollen, bool[,]> item1 in A)
             {
-
                 for (int i = 0; i < item1.Value.GetLength(0); i++)
                 {
                     for (int j = 0; j < item1.Value.GetLength(1); j++)
@@ -39,10 +39,10 @@ namespace APP.Helpers.Measures
                         }
                     }
                 }
-
             }
             return licznik;
         }
+
         public int MocCzęściWspólnej(Mask a, Mask b)
         {
             IReadOnlyDictionary<Pollen, bool[,]> A = a.MaskMap;
@@ -70,8 +70,5 @@ namespace APP.Helpers.Measures
             }
             return licznik;
         }
-
     }
-    }
-
-
+}

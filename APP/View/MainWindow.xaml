@@ -7,33 +7,35 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Background="WhiteSmoke">
+        <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" />
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
             <MenuItem Header="Stwórz kontur" Click="ContourSelectionOpen_Click" Margin="10,0,0,0" />
-            <MenuItem Header="Porównaj kontury" Click="ResultOpen_Click" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+            <MenuItem Header="Porównaj kontury" Click="ResultOpen_Click" HorizontalAlignment="Right" Margin="0,0,10,0" />
         </Menu>
 
         <TabControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto">
             <TabItem Header="Kontur 1">
                 <Grid>
-                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top"  Background="WhiteSmoke">
-                        <MenuItem Header="Wczytaj" Click="LoadContour1_Click"/>
-                        <MenuItem Header="Wyczyść" Click="ClearContour1_Click"/>
+                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="WhiteSmoke">
+                        <MenuItem Header="Wczytaj" Click="LoadContour1_Click" />
+                        <MenuItem Header="Wyczyść" Click="ClearContour1_Click" />
                     </Menu>
-                    <Image Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0, 30, 0, 0"/>
+                    <Image Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                           Margin="0, 30, 0, 0" />
                 </Grid>
             </TabItem>
             <TabItem Header="Kontur 2">
                 <Grid>
-                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top"  Background="WhiteSmoke">
-                        <MenuItem Header="Wczytaj" Click="LoadContour2_Click"/>
-                        <MenuItem Header="Wyczyść" Click="ClearContour2_Click"/>
+                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="WhiteSmoke">
+                        <MenuItem Header="Wczytaj" Click="LoadContour2_Click" />
+                        <MenuItem Header="Wyczyść" Click="ClearContour2_Click" />
                     </Menu>
-                    <Image Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0, 30, 0, 0" />
+                    <Image Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                           Margin="0, 30, 0, 0" />
                 </Grid>
             </TabItem>
         </TabControl>

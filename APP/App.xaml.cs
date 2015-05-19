@@ -30,11 +30,10 @@ namespace APP
             _container = new StandardKernel();
 
             //Helpers
-                //File FileHandling
-                    _container.Bind<IBitmapHandler>().To<BitmapHandler>();
-                    _container.Bind<ITxtHandler>().To<TxtHandler>();
-                    _container.Bind<IContourLoader>().To<ContourLoader>().InSingletonScope();
-
+            //File FileHandling
+            _container.Bind<IBitmapHandler>().To<BitmapHandler>();
+            _container.Bind<ITxtHandler>().To<TxtHandler>();
+            _container.Bind<IContourLoader>().To<ContourLoader>().InSingletonScope();
         }
 
         private void ComposeObjects()
