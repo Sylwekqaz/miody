@@ -14,12 +14,11 @@ namespace MaskTests
     {
         static void Main(string[] args)
         {
-            float asdasd = Color.Black.GetDistance(Color.White);
-            float adasdasd = Pollen.Mniszkowy.Color.GetDistance(Color.White);
+
 
             // przygotowanie testu 
             IBitmapHandler handler = new BitmapHandler();
-            Contour contour = handler.LoadBitmap(new Bitmap(@"..\..\Images\conturUnclosed.png"));
+            Contour contour = handler.LoadBitmap(new Bitmap(@"..\..\Images\kontur 2.bmp"));
             MaskGenerator generator = new MaskGenerator();
 
 

@@ -70,12 +70,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace APP.Helpers
 {
     public static class BitmapHelper
     {
+        #region Blur
+
         public static void Blur(this Bitmap sourceImage, int radius)
         {
             var rct = new Rectangle(0, 0, sourceImage.Width, sourceImage.Height);
@@ -180,6 +183,18 @@ namespace APP.Helpers
             sourceImage.UnlockBits(bits);
         }
 
+        private static int min(int a, int b)
+        {
+            return Math.Min(a, b);
+        }
+
+        private static int max(int a, int b)
+        {
+            return Math.Max(a, b);
+        }
+
+        #endregion
+
         public static void Reduce(this Bitmap sourceImage, int radius)
         {
             throw new NotImplementedException();
@@ -188,48 +203,55 @@ namespace APP.Helpers
 
         public static void Clear(this Bitmap sourceImage, Color color)
         {
-            for (int x = 0; x < sourceImage.Width; x++)
-            {
-                for (int y = 0; y < sourceImage.Height; y++)
-                {
-                    sourceImage.SetPixel(x,y,color);
-                }
-            }
+            Graphics.FromImage(sourceImage).Clear(color);
         }
 
-        public static void FloodFill(this Bitmap bitmap,  Point node, int gapSize)
+        #region FloodFill
+
+        public static void FloodFill(this Bitmap bitmap, Point node, int gapSize)
         {
-#if DEBUG
-            Bitmap debugBitmap = new Bitmap(bitmap.Width, bitmap.Height);
-            debugBitmap.SetPixel(node.X,node.Y,Color.DarkOrange);
-            
-#endif
-            Bitmap gapBitmap = new Bitmap(bitmap.Width, bitmap.Height);
-            gapBitmap.Clear(Color.White);
+            Bitmap gapBitmap;
+            FloodFill(bitmap, node, gapSize, out gapBitmap);
+        }
+
+        public static void FloodFill(this Bitmap bitmap, Point node, int gapSize, out Bitmap gapBitmap)
+        {
+            FloodFill(bitmap, new[] {node}, gapSize, out gapBitmap);
+        }
+
+        public static void FloodFill(this Bitmap bitmap, IEnumerable<Point> nodes, int gapSize)
+        {
+            Bitmap gapBitmap;
+            FloodFill(bitmap, nodes, gapSize, out gapBitmap);
+        }
+
+        public static void FloodFill(this Bitmap bitmap, IEnumerable<Point> nodes, int gapSize, out Bitmap gapBitmap)
+        {
+            Rectangle dimensionRectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
             //gapBitmap = (Bitmap)bitmap.Clone();
-            Graphics gapGraphics = Graphics.FromImage(gapBitmap);
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                for (int y = 0; y < bitmap.Height; y++)
-                {
-                    if (bitmap.GetPixel(x, y).ToArgb() == Color.Black.ToArgb())
-                    {
-                        gapBitmap.SetPixel(x, y, Color.Black);
-                        //var rec = new Rectangle(new Point(x - gapSize, y - gapSize), new Size(2 * gapSize, 2 * gapSize));
-                        //gapGraphics.FillEllipse(new SolidBrush(Color.Black), rec);
-                    }
-                }
-            }
+
+            gapBitmap = (Bitmap) bitmap.Clone();
+
             gapBitmap.Blur(gapSize);
 
-
+            Bitmap gp = gapBitmap;
             Queue<FloodFillValues> queue = new Queue<FloodFillValues>();
-            queue.Enqueue(new FloodFillValues {Node = node, LastGapValue = 255});
+            foreach (var node in nodes.OrderBy(point => gp.GetPixel(point.X,point.Y).R))
+            {
+                queue.Enqueue(new FloodFillValues {Node = node, LastGapValue = 255});
+            }
+
 
             while (queue.Count > 0)
             {
                 FloodFillValues fillValues = queue.Dequeue();
-                if (bitmap.GetPixel(fillValues.Node.X, fillValues.Node.Y).ToArgb() == Color.Black.ToArgb())
+
+                if (!dimensionRectangle.Contains(fillValues.Node))
+                {
+                    continue;
+                }
+
+                if (bitmap.GetPixel(fillValues.Node.X, fillValues.Node.Y).R == 0)
                 {
                     continue;
                 }
@@ -237,12 +259,9 @@ namespace APP.Helpers
                 int thisGapValue = gapBitmap.GetPixel(fillValues.Node.X, fillValues.Node.Y).R;
                 if (thisGapValue > fillValues.LastGapValue)
                 {
-#if DEBUG
-                    debugBitmap.SetPixel(fillValues.Node.X, fillValues.Node.Y,Color.Chartreuse);
-#endif
                     continue;
                 }
-                
+
 
                 if (fillValues.Node.X + 1 < bitmap.Width)
                 {
@@ -286,15 +305,6 @@ namespace APP.Helpers
             public int LastGapValue { get; set; }
         }
 
-
-        private static int min(int a, int b)
-        {
-            return Math.Min(a, b);
-        }
-
-        private static int max(int a, int b)
-        {
-            return Math.Max(a, b);
-        }
+        #endregion
     }
 }

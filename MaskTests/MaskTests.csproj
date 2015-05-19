@@ -76,6 +76,7 @@
   <ItemGroup>
     <Content Include="Images\conturUnclosed.png" />
     <Content Include="Images\conturUnclosed1.png" />
+    <Content Include="Images\kontur 2.bmp" />
     <Content Include="Images\Testy bloku 3\Test 3.10\kontur 1.png" />
     <Content Include="Images\Testy bloku 3\Test 3.10\kontur 2.png" />
     <Content Include="Images\Testy bloku 3\Test 3.11\kontur 1.bmp" />
