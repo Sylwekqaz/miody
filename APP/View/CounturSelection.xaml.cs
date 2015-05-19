@@ -26,6 +26,8 @@ namespace APP.View
     /// </summary>
     public partial class CounturSelection : Window
     {
+        private IContourSaver _contourSaver;
+
         private Brush brushColor;
         private Point? currentPoint = null;
         private List<int> przedzial;
@@ -212,13 +214,13 @@ namespace APP.View
             if (listView != null)
             {
                 var item = listView.SelectedItem;
-                if (item != null)
-                {
+            if (item != null)
+            {
                     System.Windows.Media.Color color = (System.Windows.Media.Color)((Pollen)item);
                     System.Windows.Media.Color mediaColor = System.Windows.Media.Color.FromArgb(color.A,color.R,color.G,color.B);
                     brushColor = new SolidColorBrush(mediaColor);
                 }
-            }
+            }            
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

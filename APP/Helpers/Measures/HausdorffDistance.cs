@@ -98,14 +98,14 @@ namespace APP.Helpers.Measures
 
             
             double sup = SupremumList(new List<double>() { pierwszeSupremum, drugieSupremum });
-
+            
             Result obj = new Result();
 
             obj.Title = "Metryka Hausdorffa";
 
             obj.D = sup / HausdorffDistance.BitmapDiagonal(a.Bitmap);    //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
 
-
+            
             return obj;
 
 
