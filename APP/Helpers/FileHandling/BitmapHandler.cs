@@ -66,8 +66,6 @@ namespace APP.Helpers.FileHandling
                    
                 }
             }
-
-            var a = Pollen.Rzepakowy.Color.GetDistance(System.Drawing.Color.White);
             return wynikContour;
         }
     }

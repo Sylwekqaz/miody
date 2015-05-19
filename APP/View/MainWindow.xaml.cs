@@ -55,20 +55,20 @@ namespace APP
                 result1.Title = "Miara1";
                 result1.D = Miara1.miara1(null, null);*/
 
-                IComparison miara2 = new HausdorffDistance();
+                HausdorffDistance miara2 = new HausdorffDistance();
                 Result result2 = miara2.GetResult(contour1, contour2);
 
-                //IComparison miara3 = new miar(); //todo 
-                //Result result3 = miara3.GetResult(contour1, contour2);
+                HammingDistance miara3 = new HammingDistance();
+                Result result3 = miara3.GetResult(contour1, contour2);
 
                 List<Result> results = new List<Result>();
                 results.Add(result2);
-               // results.Add(result3);
+                results.Add(result3);
 
-                if (ResultWindow == null)
+            if (ResultWindow == null)
                     ResultWindow = new ResultWindow(results, null);
-                ResultWindow.Show();
-            }
+            ResultWindow.Show();
+        }
             else MessageBox.Show("Wczytaj oba kontury!");
         }
 
@@ -88,7 +88,7 @@ namespace APP
             if (userClickedOK == true)
             {
                 contour1 = _contourLoader.LoadContour(openFileDialog1.FileName); 
-
+                contour1.Bitmap.Save("C:\\Users\\Ja\\Desktop\\testotesto.bmp"); //test
                 Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                     contour1.Bitmap.GetHbitmap(), 
                     IntPtr.Zero, 

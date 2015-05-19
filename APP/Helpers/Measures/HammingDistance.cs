@@ -1,51 +1,38 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using APP.Model;
 
 namespace APP.Helpers.Measures
 {
     class HammingDistance : IComparison
     {
-        int _licznik;
-        protected HashSet<ContourPoint> ListaWspólnych(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB) //todo refactor name
+        public Result GetResult(Contour a, Contour b)
         {
-            HashSet<ContourPoint> listaC = new HashSet<ContourPoint>();
+            int mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
+            int mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
+            int mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
+
+            double wynik = 1 - (mocRóżnicyAB + mocRóżnicyBA) / (a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
+            return new Result { Title = "1 - (względna odległość Hamminga)", D = wynik };
+        }
+        
+        private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
+        {
+            int licznik = 0;
 
             foreach (ContourPoint item in listaA)
             {
+                bool istniejeRówny = false;
                 foreach (ContourPoint item2 in listaB)
                 {
                     if (item.Type == item2.Type && item.Location == item2.Location)
                     {
-                        listaC.Add(item);
-                    }
-                    else
-                    {
-                        _licznik++;
+                        istniejeRówny = true;
                     }
                 }
+                if (!istniejeRówny) licznik++;
             }
-            return listaC;
-        }
-        public double Measure(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
-        {
-            _licznik = 0;
-            HashSet<ContourPoint> listaC = ListaWspólnych(listaA, listaB);
-            double wynik = _licznik / (listaA.Count + listaB.Count - listaC.Count);
-            _licznik = 0;
-            return wynik;
+            return licznik;
         }
 
-        public Result GetResult(Contour a, Contour b)
-        {
-            Result result = new Result
-            {
-                Title = "Hamming Distance", 
-                D = Measure(a.ContourSet, b.ContourSet)
-            };
-
-            return result;
-
-
-        }
     }
 }

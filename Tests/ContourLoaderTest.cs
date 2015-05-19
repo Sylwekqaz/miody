@@ -14,7 +14,7 @@ namespace Tests
         public void LoadTxt_ValidData()
         {
             // przygotowanie testu 
-            Contour tempContour = new Contour(10,10);
+            Contour tempContour = new Contour();
 
             IBitmapHandler bitmapHandler = Substitute.For<IBitmapHandler>();
             bitmapHandler.LoadBitmap(Arg.Any<Bitmap>()).Returns(tempContour);

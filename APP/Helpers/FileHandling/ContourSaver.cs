@@ -30,12 +30,12 @@ namespace APP.Helpers.FileHandling
         }
 
 
-        public void SaveContour(string path, Bitmap bitmap)
+        public void SaveContour(string path, Bitmap bitmap)    
         {
 
-           // Contour WynikContour;
+           Contour WynikContour;
 
-            if (path.EndsWith(".txt"))
+           if (path.EndsWith(".txt ")) //sciezka jaka.  tu ze spacja raczej ok.
             {
                 TextWriter writer = new StreamWriter(path);
                 Contour tmp = _bitmapHandler.LoadBitmap(bitmap);
