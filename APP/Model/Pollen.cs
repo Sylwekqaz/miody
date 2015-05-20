@@ -19,60 +19,60 @@ namespace APP.Model
         }
 
 
-        public static readonly Pollen Kasztan = new Pollen("Kasztanowy", Colors.Blue);
+        //public static readonly Pollen Kasztan = new Pollen("Kasztanowy", Colors.Blue);
 
-        public static readonly Pollen Rzepak = new Pollen("Rzepakowy", Colors.Crimson);
+        //public static readonly Pollen Rzepak = new Pollen("Rzepakowy", Colors.Crimson);
 
-        public static readonly Pollen Komonica = new Pollen("Komonica", Colors.Cyan);
+        //public static readonly Pollen Komonica = new Pollen("Komonica", Colors.Cyan);
 
-        public static readonly Pollen Lipa = new Pollen("Lipowy", Colors.DeepPink);
+        //public static readonly Pollen Lipa = new Pollen("Lipowy", Colors.DeepPink);
 
-        public static readonly Pollen Akacja = new Pollen("Akacjowy", Colors.Gold);
+        //public static readonly Pollen Akacja = new Pollen("Akacjowy", Colors.Gold);
 
-        public static readonly Pollen Mniszek = new Pollen("Mniszkowy", Colors.Gray);
+        //public static readonly Pollen Mniszek = new Pollen("Mniszkowy", Colors.Gray);
 
-        public static readonly Pollen Wrzos = new Pollen("Wrzosowy", Colors.Indigo);
+        //public static readonly Pollen Wrzos = new Pollen("Wrzosowy", Colors.Indigo);
 
-        public static readonly Pollen Facelia = new Pollen("Faceliowy", Colors.Coral);
+        //public static readonly Pollen Facelia = new Pollen("Faceliowy", Colors.Coral);
 
-        public static readonly Pollen Malina = new Pollen("Malinowy", Colors.Magenta);
+        //public static readonly Pollen Malina = new Pollen("Malinowy", Colors.Magenta);
 
-        public static readonly Pollen Wierzba = new Pollen("Wierzbowy", Colors.Lime);
+        //public static readonly Pollen Wierzba = new Pollen("Wierzbowy", Colors.Lime);
 
-        public static readonly Pollen Nawloc = new Pollen("Nawłociowy", Colors.Navy);
+        //public static readonly Pollen Nawloc = new Pollen("Nawłociowy", Colors.Navy);
 
-        public static readonly Pollen KoniczynaB = new Pollen("Koniczynowy (biala)", Colors.Orange);
+        //public static readonly Pollen KoniczynaB = new Pollen("Koniczynowy (biala)", Colors.Orange);
 
-        public static readonly Pollen KoniczynaC = new Pollen("Koniczynowy (czerwona)", Colors.Linen);
+        //public static readonly Pollen KoniczynaC = new Pollen("Koniczynowy (czerwona)", Colors.Linen);
 
-        public static readonly Pollen Blawatek = new Pollen("Blawatkowy", Colors.Teal);
+        //public static readonly Pollen Blawatek = new Pollen("Blawatkowy", Colors.Teal);
 
-        public static readonly Pollen Szczaw = new Pollen("Szczawiowy", Colors.Maroon);
+        //public static readonly Pollen Szczaw = new Pollen("Szczawiowy", Colors.Maroon);
 
-        public static readonly Pollen Manuka = new Pollen("Manukowy", Colors.SkyBlue);
+        //public static readonly Pollen Manuka = new Pollen("Manukowy", Colors.SkyBlue);
 
-        public static readonly Pollen Kapustowa = new Pollen("Kapustowate", Colors.Olive);
+        //public static readonly Pollen Kapustowa = new Pollen("Kapustowate", Colors.Olive);
 
-        public static readonly Pollen Krwawnik = new Pollen("Krwawnikowy", Colors.DarkSlateGray);
+        //public static readonly Pollen Krwawnik = new Pollen("Krwawnikowy", Colors.DarkSlateGray);
 
-        public static readonly Pollen Sliwa = new Pollen("Sliwowy", Colors.YellowGreen);
+        //public static readonly Pollen Sliwa = new Pollen("Sliwowy", Colors.YellowGreen);
 
-        public static readonly Pollen Kruszyna = new Pollen("Kruszynowy", Colors.Salmon);
+        //public static readonly Pollen Kruszyna = new Pollen("Kruszynowy", Colors.Salmon);
 
-        public static readonly Pollen Slonecznik = new Pollen("Slonecznikowy", Colors.Plum);
+        //public static readonly Pollen Slonecznik = new Pollen("Slonecznikowy", Colors.Plum);
 
-        public static readonly Pollen Ostrozen = new Pollen("Ostrozeniowy", Colors.Red);
+        //public static readonly Pollen Ostrozen = new Pollen("Ostrozeniowy", Colors.Red);
 
-        public static readonly Pollen Wiaz = new Pollen("Wiazowy", Colors.Sienna);
+        //public static readonly Pollen Wiaz = new Pollen("Wiazowy", Colors.Sienna);
 
-        public static readonly Pollen Wyka = new Pollen("Wykowy", Colors.Black);
+        //public static readonly Pollen Wyka = new Pollen("Wykowy", Colors.Black);
 
         public readonly int Numer;
         public string Name { get; private set; }
         public Color Color { get; private set; }
 
 
-        private Pollen(string name, Color color)
+        public Pollen(string name, Color color)
         {
             //try
             //{

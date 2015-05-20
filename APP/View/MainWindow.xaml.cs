@@ -9,6 +9,7 @@ using APP.Helpers.Measures;
 using APP.Model;
 using Autofac;
 using Microsoft.Win32;
+using System.IO;
 
 namespace APP.View
 {
@@ -29,6 +30,12 @@ namespace APP.View
             _comparisons = comparisons;
             InitializeComponent();
 
+
+            TextReader writer = new StreamReader(
+             "C:\\Users\\Ja\\Desktop\\miody-Poprawki_dobre\\tes.txt"); //poprawic sciezke
+            LoadPollenDB.Load_DB(writer);
+         // Console.WriteLine(Pollen.Values);  // test
+   
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 

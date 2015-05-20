@@ -61,7 +61,7 @@ namespace APP.Helpers.FileHandling
                 }
             }
 
-            var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);
+        //    var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);  no chyba nie
 
             return wynikContour;
         }
