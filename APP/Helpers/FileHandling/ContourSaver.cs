@@ -26,14 +26,11 @@ namespace APP.Helpers.FileHandling
 
         public void SaveContour(string path, Bitmap bitmap)
         {
-            if (path.EndsWith(".txt ")) //sciezka jaka.  tu ze spacja raczej ok.
+            if (Path.GetExtension(path).Contains("txt"))
             {
                 TextWriter writer = new StreamWriter(path);
                 Contour tmp = _bitmapHandler.LoadBitmap(bitmap);
                 _txtSaver.SaveTxt(tmp, writer);
-                //Contour tmpasa = new Contour(
-                //StreamReader reader = new StreamReader(path);
-                //WynikContour = _txtSaver.SaveTxt(WynikContour,  );
             }
             else
             {
