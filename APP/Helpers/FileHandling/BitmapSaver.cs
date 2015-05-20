@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace APP.Helpers.FileHandling
 {
     public interface IBitmapSaver
     {
-        void SaveBitmap(Bitmap bitmap, string file_name);
+        void SaveBitmap(Bitmap bitmap, string fileName);
     }
 
     internal class BitmapSaver : IBitmapSaver
@@ -20,12 +15,12 @@ namespace APP.Helpers.FileHandling
         /// <param name="bitmap">
         /// Bitmapa, którą chcemy zapisać 
         /// </param>
-        /// <param name="file_name">
+        /// <param name="fileName">
         /// Nazwa pliku pod którą chcemy zapisać daną bitmapę
         /// </param>
-        public void SaveBitmap(Bitmap bitmap, string file_name)
+        public void SaveBitmap(Bitmap bitmap, string fileName)
         {
-            bitmap.Save(file_name); //format?
+            bitmap.Save(fileName); //format?
         }
     }
 }

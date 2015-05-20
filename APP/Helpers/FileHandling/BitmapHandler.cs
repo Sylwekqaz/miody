@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Media;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using APP.Model;
-using Color = System.Windows.Media.Color;
 
 namespace APP.Helpers.FileHandling
 {
@@ -35,24 +27,28 @@ namespace APP.Helpers.FileHandling
             {
                 for (int h = 0; h < bitmap.Height; h++)
                 {
-                    tempBitmap.SetPixel(w, h, System.Drawing.Color.White);
+                    tempBitmap.SetPixel(w, h, Color.White);
                 }
             }
 
 #endif
 
 
-            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
-            wynikContour.Bitmap = bitmap;
+            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height)
+            {
+                Bitmap = bitmap
+            };
+
             for (int i = 0; i < bitmap.Height; i++)
             {
                 for (int j = 0; j < bitmap.Width; j++)
                 {
                     var drawingColor = bitmap.GetPixel(j, i);
-                    Color pixelcolor = Color.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
+                    System.Windows.Media.Color pixelcolor = System.Windows.Media.Color.FromArgb(drawingColor.A,
+                        drawingColor.R, drawingColor.G, drawingColor.B);
                     if (Pollen.TryPrase(pixelcolor) != null)
                     {
-                        ContourPoint point = new ContourPoint()
+                        ContourPoint point = new ContourPoint
                         {
                             Location = new Point(j, i),
                             Type = Pollen.TryPrase(pixelcolor)
@@ -64,6 +60,9 @@ namespace APP.Helpers.FileHandling
                     }
                 }
             }
+
+            var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);
+
             return wynikContour;
         }
     }

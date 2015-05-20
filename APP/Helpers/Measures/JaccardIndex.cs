@@ -5,7 +5,7 @@ namespace APP.Helpers.Measures
 {
     internal class JaccardIndex : IComparison
     {
-        private MaskGenerator _maskGenerator;
+        private readonly MaskGenerator _maskGenerator;
 
         public JaccardIndex(MaskGenerator maskGenerator)
         {
@@ -23,7 +23,7 @@ namespace APP.Helpers.Measures
             int mocCzęściWspólnej = MocCzęściWspólnej(maskaA, maskaB);
             int mocSumy = mocA + mocB - mocCzęściWspólnej;
 
-            double wynik = mocCzęściWspólnej/(double)mocSumy;
+            double wynik = mocCzęściWspólnej/(double) mocSumy;
             return new Result {Title = "Indeks Jaccarda", D = wynik};
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using APP.Helpers;
@@ -75,25 +74,25 @@ namespace APP.Model
 
         private Pollen(string name, Color color)
         {
-            try
-            {
-                this.Numer = _values.Count + 1;
-                this.Name = name;
-                this.Color = color;
+            //try
+            //{
+                Numer = _values.Count + 1;
+                Name = name;
+                Color = color;
                 KolorPylkowList.Add(color, this);
                 NazwyPylkowList.Add(name, this);
                 NumberList.Add(Numer, this);
 
                 _values.Add(this);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
         }
 
 
-        private const float Tolerance = 30F;
+        private const double Tolerance = 20;
 
         public static Pollen TryPrase(Color color) //zamieniamy  color->pylek
         {

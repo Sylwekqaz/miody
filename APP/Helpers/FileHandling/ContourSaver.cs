@@ -1,11 +1,6 @@
-﻿using APP.Model;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using APP.Model;
 
 namespace APP.Helpers.FileHandling
 {
@@ -16,9 +11,9 @@ namespace APP.Helpers.FileHandling
 
     internal class ContourSaver : IContourSaver
     {
-        private ITxtSaver _txtSaver;
-        private IBitmapSaver _bitmapSaver;
-        private IBitmapHandler _bitmapHandler;
+        private readonly ITxtSaver _txtSaver;
+        private readonly IBitmapSaver _bitmapSaver;
+        private readonly IBitmapHandler _bitmapHandler;
 
 
         public ContourSaver(IBitmapSaver bitmapSaver, ITxtSaver txtSaver, IBitmapHandler bitmapHandler)
@@ -31,8 +26,6 @@ namespace APP.Helpers.FileHandling
 
         public void SaveContour(string path, Bitmap bitmap)
         {
-            Contour WynikContour;
-
             if (path.EndsWith(".txt ")) //sciezka jaka.  tu ze spacja raczej ok.
             {
                 TextWriter writer = new StreamWriter(path);

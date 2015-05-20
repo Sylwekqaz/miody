@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -65,12 +65,13 @@
     <Compile Include="Helpers\FileHandling\ContourSaver.cs" />
     <Compile Include="Helpers\MaskGenerator.cs" />
     <Compile Include="Helpers\Measures\HausdorffDistance.cs" />
+    <Compile Include="IoC.cs" />
     <Compile Include="Model\Pollen.cs" />
     <Compile Include="Helpers\FileHandling\TxtHandler.cs" />
     <Compile Include="Helpers\FileHandling\BitmapHandler.cs" />
     <Compile Include="Helpers\FileHandling\BitmapSaver.cs" />
     <Compile Include="Helpers\FileHandling\TxtSaver.cs" />
-    <Compile Include="Helpers\Measures\Miara1.cs" />
+    <Compile Include="Helpers\Measures\JaccardIndex.cs" />
     <Compile Include="View\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>

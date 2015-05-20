@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Effects;
 using APP.Model;
 
 namespace APP.Helpers
@@ -60,7 +54,7 @@ namespace APP.Helpers
                 tempBitmap.FloodFill(nodes, 10, out gapBitmap);
 
 
-                bitmaps[pollen].FloodFill(SearchCountur(bitmaps[pollen], tempBitmap, gapBitmap), 10);
+                bitmaps[pollen].FloodFill(SearchCountur(bitmaps[pollen], tempBitmap), 10);
 
 
                 for (int h = 0; h < height; h++)
@@ -76,9 +70,8 @@ namespace APP.Helpers
             return mask;
         }
 
-        private IEnumerable<Point> SearchCountur(Bitmap bitmap, Bitmap tempBitmap, Bitmap blurBitmap) //todo rename
+        private IEnumerable<Point> SearchCountur(Bitmap bitmap, Bitmap tempBitmap) //todo rename
         {
-            var minValue = new {point = new Point(0, 0), value = (byte) 0};
             for (int h = 0; h < bitmap.Height; h++)
             {
                 for (int w = 0; w < bitmap.Width; w++)

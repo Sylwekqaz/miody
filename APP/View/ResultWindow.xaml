@@ -15,7 +15,7 @@
             <MenuItem Header="Zapisz zdjęcie" IsEnabled="False" />
             <MenuItem Header="Zapisz rezultat" IsEnabled="False" />
         </Menu>
-        <TextBlock Name="textBlock1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+        <TextBlock Name="TextBlock1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
                    TextWrapping="Wrap">
             Miara 1: <TextBlock Name="ResultText1">sdfsdfsdfsdf</TextBlock><LineBreak />
             Miara 2: <TextBlock Name="ResultText2">aaaaaaaaaaaa</TextBlock><LineBreak />

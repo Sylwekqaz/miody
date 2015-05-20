@@ -1,11 +1,7 @@
-﻿using APP.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using APP.Model;
 
 namespace APP.Helpers.FileHandling
 {
@@ -67,11 +63,11 @@ namespace APP.Helpers.FileHandling
                 if (readLine != null)
                 {
                     line = readLine.Split(' ');
-                    ContourPoint point = new ContourPoint()
+                    ContourPoint point = new ContourPoint
                     {
                         // kazda linijka to odpowiednio współrzędna: X Y Typ pyłku ;rozna ilosc spacji
                         Location = new Point(int.Parse(line[0]), int.Parse(line[1])),
-                        Type = (Pollen) line[2]
+                        Type = line[2]
                     };
                     wynikContour.ContourSet.Add(point);
                     //wynikContour.Bitmap = new Bitmap(35, 35);

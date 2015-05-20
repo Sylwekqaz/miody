@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Windows.Input;
-using System.Windows.Controls;
-using System.IO;
-using System.Collections.Generic;
-using Microsoft.Win32;
+using APP.Helpers.FileHandling;
 using APP.Model;
-using APP.Helpers;
+using Microsoft.Win32;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
+using Path = System.IO.Path;
 using Point = System.Windows.Point;
-using System.Drawing;
-using APP.Helpers.FileHandling;
 
 namespace APP.View
 {
@@ -23,20 +25,23 @@ namespace APP.View
     /// </summary>
     public partial class CounturSelection : Window
     {
-        private IContourSaver _contourSaver;
+        private readonly IContourSaver _contourSaver;
+        private readonly IBitmapHandler _conveter;
 
-        private Brush brushColor;
-        private Point? currentPoint = null;
-        private List<int> przedzial;
 
-        private string saveFileName = "Bitmapa";
+        private Brush _brushColor;
+        private Point? _currentPoint;
+        private readonly List<int> _przedzial;
 
-        public CounturSelection(Contour a)
+        private string _saveFileName = "Bitmapa";
+
+        public CounturSelection(IContourSaver contourSaver, IBitmapHandler conveter)
         {
+            _contourSaver = contourSaver;
+            _conveter = conveter;
             InitializeComponent();
 
-            przedzial = new List<int>();
-            przedzial.Add(0);
+            _przedzial = new List<int> {0};
 
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
 
@@ -46,19 +51,21 @@ namespace APP.View
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             // sprawdzić czy zapisano zmiany
-            this.Hide();
+            Hide();
         }
 
         private void LoadContours_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                FilterIndex = 1
+            };
 
-            openFileDialog1.Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ";
-            openFileDialog1.FilterIndex = 1;
 
-            bool? userClickedOK = openFileDialog1.ShowDialog();
+            bool? userClickedOk = openFileDialog1.ShowDialog();
 
-            if (userClickedOK == true)
+            if (userClickedOk == true)
             {
                 BitmapImage bitmapImage = new BitmapImage(new Uri(openFileDialog1.FileName));
 
@@ -70,14 +77,16 @@ namespace APP.View
 
         private void LoadBackground_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "Obrazy (*.jpeg;*.jpg;*.bmp;*.png)|*.jpeg;*.jpg;*.bmp;*.png",
+                FilterIndex = 1
+            };
 
-            openFileDialog1.Filter = "Obrazy (*.jpeg;*.jpg;*.bmp;*.png)|*.jpeg;*.jpg;*.bmp;*.png";
-            openFileDialog1.FilterIndex = 1;
 
-            bool? userClickedOK = openFileDialog1.ShowDialog();
+            bool? userClickedOk = openFileDialog1.ShowDialog();
 
-            if (userClickedOK == true)
+            if (userClickedOk == true)
             {
                 BitmapImage bitmapImage = new BitmapImage(new Uri(openFileDialog1.FileName));
 
@@ -89,79 +98,81 @@ namespace APP.View
 
         private void TabelaKolorowShow_Click(object sender, RoutedEventArgs e)
         {
-            if (ListColors.Visibility == Visibility.Collapsed)
-                ListColors.Visibility = Visibility.Visible;
-            else
-                ListColors.Visibility = Visibility.Collapsed;
+            ListColors.Visibility = ListColors.Visibility == Visibility.Collapsed
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
-        private void CanvasContour_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void CanvasContour_MouseMove(object sender, MouseEventArgs e)
         {
-            if (currentPoint != null)
+            if (_currentPoint != null)
             {
-                if (brushColor == null) return;
+                if (_brushColor == null) return;
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    Line line = new Line();
+                    Line line = new Line
+                    {
+                        Stroke = _brushColor,
+                        StrokeThickness = 1,
+                        X1 = _currentPoint.Value.X,
+                        Y1 = _currentPoint.Value.Y,
+                        X2 = e.GetPosition(CanvasContour).X,
+                        Y2 = e.GetPosition(CanvasContour).Y,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
 
-                    line.Stroke = brushColor;
-                    line.StrokeThickness = 1;
-                    line.X1 = currentPoint.Value.X;
-                    line.Y1 = currentPoint.Value.Y;
-                    line.X2 = e.GetPosition(CanvasContour).X;
-                    line.Y2 = e.GetPosition(CanvasContour).Y;
-
-                    line.HorizontalAlignment = HorizontalAlignment.Left;
-                    line.VerticalAlignment = VerticalAlignment.Center;
 
                     line.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
 
-                    currentPoint = e.GetPosition(CanvasContour);
+                    _currentPoint = e.GetPosition(CanvasContour);
 
                     CanvasContour.Children.Add(line);
                 }
             }
         }
 
-        private void CanvasContour_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void CanvasContour_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
-                currentPoint = e.GetPosition(CanvasContour);
+                _currentPoint = e.GetPosition(CanvasContour);
         }
 
-        private void CanvasContour_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void CanvasContour_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            currentPoint = null;
-            przedzial.Add(CanvasContour.Children.Count);
+            _currentPoint = null;
+            _przedzial.Add(CanvasContour.Children.Count);
         }
 
         private void CanvasContour_MouseLeave(object sender, MouseEventArgs e) //wolny, bo sie duzo razy wykonuje
         {
-            currentPoint = null;
+            _currentPoint = null;
         }
 
         private void CanvasContour_MouseEnter(object sender, MouseEventArgs e) //wolny, bo sie duzo razy wykonuje
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                currentPoint = e.GetPosition(CanvasContour);
+                _currentPoint = e.GetPosition(CanvasContour);
             }
         }
 
         private void SaveContours_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                FilterIndex = 1,
+                FileName = _saveFileName
+            };
 
-            saveFileDialog1.Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.FileName = saveFileName;
 
-            bool? userClickedOK = saveFileDialog1.ShowDialog();
+            bool? userClickedOk = saveFileDialog1.ShowDialog();
 
-            if (userClickedOK == true)
+            if (userClickedOk == true)
             {
                 string path = saveFileDialog1.FileName;
-                saveFileName = System.IO.Path.GetFileName(path);
+                _saveFileName = Path.GetFileName(path);
 
                 CanvasContourBackground.Opacity = 0;
 
@@ -178,7 +189,7 @@ namespace APP.View
                 {
                     VisualBrush vb = new VisualBrush(CanvasContour);
                     dc.DrawRectangle(Brushes.White, null, new Rect(prostokat.Size));
-                    dc.DrawRectangle(vb, null, new Rect(new System.Windows.Point(), prostokat.Size));
+                    dc.DrawRectangle(vb, null, new Rect(new Point(), prostokat.Size));
                 }
 
                 bmp.Render(dv);
@@ -191,16 +202,10 @@ namespace APP.View
                 Bitmap bitmap = new Bitmap(stream); //bitmapa z canvasa
 
                 //  bitmap.Save(path);   //działa, bitmapa ok.
-                IBitmapHandler _conveter = new BitmapHandler();
-                ITxtSaver _txtSaver = new TxtSaver();
-                IBitmapSaver _bitmapSaver = new BitmapSaver();
 
 
-                IContourSaver _contourSavera = new ContourSaver(_bitmapSaver, _txtSaver, _conveter);
-
-
-                Contour wynik = _conveter.LoadBitmap(bitmap);
-                _contourSavera.SaveContour(path, bitmap);
+                Contour wynik = _conveter.LoadBitmap(bitmap); //todo usunąć jak nie używane
+                _contourSaver.SaveContour(path, bitmap);
 
 
                 ////////
@@ -227,35 +232,35 @@ namespace APP.View
                 var item = listView.SelectedItem;
                 if (item != null)
                 {
-                    System.Windows.Media.Color color = (System.Windows.Media.Color) ((Pollen) item);
-                    System.Windows.Media.Color mediaColor = System.Windows.Media.Color.FromArgb(color.A, color.R,
+                    Color color = (Color) ((Pollen) item);
+                    Color mediaColor = Color.FromArgb(color.A, color.R,
                         color.G, color.B);
-                    brushColor = new SolidColorBrush(mediaColor);
+                    _brushColor = new SolidColorBrush(mediaColor);
                 }
             }
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();
+            Hide();
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (przedzial.Count >= 2)
+            if (_przedzial.Count >= 2)
             {
-                CanvasContour.Children.RemoveRange(przedzial[przedzial.Count - 2],
-                    przedzial[przedzial.Count - 1] - przedzial[przedzial.Count - 2]);
-                przedzial.RemoveRange(przedzial.Count - 1, 1);
+                CanvasContour.Children.RemoveRange(_przedzial[_przedzial.Count - 2],
+                    _przedzial[_przedzial.Count - 1] - _przedzial[_przedzial.Count - 2]);
+                _przedzial.RemoveRange(_przedzial.Count - 1, 1);
             }
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             CanvasContour.Children.Clear();
-            przedzial.Clear();
-            przedzial.Add(0);
+            _przedzial.Clear();
+            _przedzial.Add(0);
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

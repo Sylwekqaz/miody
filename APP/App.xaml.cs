@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using System.Windows;
 using APP.Helpers.FileHandling;
-using Ninject;
+using APP.View;
+using Autofac;
 
 namespace APP
 {
@@ -15,8 +11,6 @@ namespace APP
     /// </summary>
     public partial class App : Application
     {
-        private IKernel _container;
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -27,18 +21,20 @@ namespace APP
 
         private void ConfigureContainer()
         {
-            _container = new StandardKernel();
+            var  builder  = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly());
 
-            //Helpers
-            //File FileHandling
-            _container.Bind<IBitmapHandler>().To<BitmapHandler>();
-            _container.Bind<ITxtHandler>().To<TxtHandler>();
-            _container.Bind<IContourLoader>().To<ContourLoader>().InSingletonScope();
+            var container = builder.Build();
+                
+
+
+            IoC.Initialize(container);
         }
 
         private void ComposeObjects()
         {
-            Current.MainWindow = _container.Get<MainWindow>();
+            Current.MainWindow = IoC.Resolve<MainWindow>();
         }
     }
 }

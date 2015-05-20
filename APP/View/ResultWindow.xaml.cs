@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
-using APP.Model;
 using System.Windows.Controls;
+using APP.Helpers.Measures;
+using APP.Model;
 
 namespace APP.View
 {
@@ -11,29 +14,32 @@ namespace APP.View
     /// </summary>
     public partial class ResultWindow : Window
     {
-        public ResultWindow(IEnumerable<Result> resultsList, Bitmap bitmap)
+        public ResultWindow(IEnumerable<IComparison> comparisons,Contour a , Contour b)
         {
             InitializeComponent();
 
             TextBlock textBlock = new TextBlock();
+
+            var resultsList = comparisons.Select(comparison => comparison.GetResult(a, b));
+
 
             foreach (var result in resultsList)
             {
                 textBlock.Inlines.Add(result.Title + ": " + result.D + "\n");
             }
 
-            textBlock1.Text = textBlock.Text;
+            TextBlock1.Text = textBlock.Text;
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            Hide();
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            this.Hide();
+            Hide();
         }
     }
 }

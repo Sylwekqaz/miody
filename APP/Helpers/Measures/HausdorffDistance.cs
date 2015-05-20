@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using APP.Model;
 using System.Drawing;
-
+using APP.Model;
 
 namespace APP.Helpers.Measures
 {
@@ -23,7 +19,7 @@ namespace APP.Helpers.Measures
 
             foreach (ContourPoint item in listaA)
             {
-                double minOdleglosc = 100000000;
+                double minOdleglosc = double.MaxValue;
 
                 foreach (ContourPoint item2 in listaB)
                 {
@@ -38,7 +34,7 @@ namespace APP.Helpers.Measures
                         }
                     }
                 }
-                if (minOdleglosc != 100000000)
+                if (minOdleglosc != double.MaxValue)
                 {
                     listaInfimum.Add(minOdleglosc);
                 }
@@ -73,13 +69,13 @@ namespace APP.Helpers.Measures
             double drugieSupremum = SupremumList(listaInfimumYA);
 
 
-            double sup = SupremumList(new List<double>() {pierwszeSupremum, drugieSupremum});
+            double sup = SupremumList(new List<double> {pierwszeSupremum, drugieSupremum});
 
             Result obj = new Result();
 
             obj.Title = "Metryka Hausdorffa";
 
-            obj.D = sup/HausdorffDistance.BitmapDiagonal(a.Bitmap);
+            obj.D = sup/BitmapDiagonal(a.Bitmap);
                 //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
 
 

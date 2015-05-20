@@ -1,11 +1,6 @@
-﻿using APP.Model;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using APP.Model;
 
 namespace APP.Helpers.FileHandling
 {
@@ -19,8 +14,8 @@ namespace APP.Helpers.FileHandling
         // BitmapHandler -> przyjmuje plik, jesli jest .jpg  i go zmienia na kontur
         : IContourLoader
     {
-        private ITxtHandler _txtHandler;
-        private IBitmapHandler _bitmapHandler;
+        private readonly ITxtHandler _txtHandler;
+        private readonly IBitmapHandler _bitmapHandler;
 
         public ContourLoader(IBitmapHandler bitmapHandler, ITxtHandler txtHandler)
         {

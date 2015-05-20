@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MColor = System.Windows.Media.Color;
 using DColor = System.Drawing.Color;
 
@@ -32,7 +28,7 @@ namespace APP.Helpers
         {
             // compute the Euclidean distance between the two colors
             // note, that the alpha-component is not used in this example
-            double dr = Math.Pow(Convert.ToDouble((color1).R) - color2.R, 2.0);
+            double dr = Math.Pow(color1.R - color2.R, 2.0);
             double dg = Math.Pow(Convert.ToDouble((color1).G) - color2.G, 2.0);
             double db = Math.Pow(Convert.ToDouble((color1).B) - color2.B, 2.0);
             // it is not necessary to compute the square root

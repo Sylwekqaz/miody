@@ -1,72 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Drawing;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-
-//namespace APP.Helpers
-//{
-//    static class BitmapBlurHelper
-//    {
-//        public static Bitmap Blur(this Bitmap image, Int32 blurSize)
-//        {
-//            Rectangle rectangle = new Rectangle(0,0,image.Width,image.Height);
-//            return Blur(image, rectangle, blurSize);
-//        }
-
-//        public static Bitmap Blur(this Bitmap image, Rectangle rectangle, Int32 blurSize)
-//        {
-//            Bitmap blurred = new Bitmap(image.Width, image.Height);
-
-//            // make an exact copy of the bitmap provided
-//            using (Graphics graphics = Graphics.FromImage(blurred))
-//                graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height),
-//                    new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
-
-//            // look at every pixel in the blur rectangle
-//            for (Int32 xx = rectangle.X; xx < rectangle.X + rectangle.Width; xx++)
-//            {
-//                for (Int32 yy = rectangle.Y; yy < rectangle.Y + rectangle.Height; yy++)
-//                {
-//                    Int32 avgR = 0, avgG = 0, avgB = 0;
-//                    Int32 blurPixelCount = 0;
-
-//                    // average the color of the red, green and blue for each pixel in the
-//                    // blur size while making sure you don't go outside the image bounds
-//                    for (Int32 x = xx; (x < xx + blurSize && x < image.Width); x++)
-//                    {
-//                        for (Int32 y = yy; (y < yy + blurSize && y < image.Height); y++)
-//                        {
-//                            Color pixel = blurred.GetPixel(x, y);
-
-//                            avgR += pixel.R;
-//                            avgG += pixel.G;
-//                            avgB += pixel.B;
-
-//                            blurPixelCount++;
-//                        }
-//                    }
-
-//                    avgR = avgR / blurPixelCount;
-//                    avgG = avgG / blurPixelCount;
-//                    avgB = avgB / blurPixelCount;
-
-//                    // now that we know the average for the blur size, set each pixel to that color
-//                    for (Int32 x = xx; x < xx + blurSize && x < image.Width && x < rectangle.Width; x++)
-//                        for (Int32 y = yy; y < yy + blurSize && y < image.Height && y < rectangle.Height; y++)
-//                            blurred.SetPixel(x, y, Color.FromArgb(avgR, avgG, avgB));
-//                }
-//            }
-
-//            return blurred;
-//        }
-//    }
-//}
-
-
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -100,8 +32,8 @@ namespace APP.Helpers
             var g = new int[wh];
             var b = new int[wh];
             int rsum, gsum, bsum, x, y, i, p1, p2, yi;
-            var vmin = new int[max(w, h)];
-            var vmax = new int[max(w, h)];
+            var vmin = new int[Max(w, h)];
+            var vmax = new int[Max(w, h)];
 
             var dv = new int[256*div];
             for (i = 0; i < 256*div; i++)
@@ -117,7 +49,7 @@ namespace APP.Helpers
                 rsum = gsum = bsum = 0;
                 for (i = -radius; i <= radius; i++)
                 {
-                    int p = source[yi + min(wm, max(i, 0))];
+                    int p = source[yi + Min(wm, Max(i, 0))];
                     rsum += (p & 0xff0000) >> 16;
                     gsum += (p & 0x00ff00) >> 8;
                     bsum += p & 0x0000ff;
@@ -130,8 +62,8 @@ namespace APP.Helpers
 
                     if (y == 0)
                     {
-                        vmin[x] = min(x + radius + 1, wm);
-                        vmax[x] = max(x - radius, 0);
+                        vmin[x] = Min(x + radius + 1, wm);
+                        vmax[x] = Max(x - radius, 0);
                     }
                     p1 = source[yw + vmin[x]];
                     p2 = source[yw + vmax[x]];
@@ -151,7 +83,7 @@ namespace APP.Helpers
                 int yp = -radius*w;
                 for (i = -radius; i <= radius; i++)
                 {
-                    yi = max(0, yp) + x;
+                    yi = Max(0, yp) + x;
                     rsum += r[yi];
                     gsum += g[yi];
                     bsum += b[yi];
@@ -163,8 +95,8 @@ namespace APP.Helpers
                     dest[yi] = (int) (0xff000000u | (uint) (dv[rsum] << 16) | (uint) (dv[gsum] << 8) | (uint) dv[bsum]);
                     if (x == 0)
                     {
-                        vmin[y] = min(y + radius + 1, hm)*w;
-                        vmax[y] = max(y - radius, 0)*w;
+                        vmin[y] = Min(y + radius + 1, hm)*w;
+                        vmax[y] = Max(y - radius, 0)*w;
                     }
                     p1 = x + vmin[y];
                     p2 = x + vmax[y];
@@ -183,12 +115,12 @@ namespace APP.Helpers
             sourceImage.UnlockBits(bits);
         }
 
-        private static int min(int a, int b)
+        private static int Min(int a, int b)
         {
             return Math.Min(a, b);
         }
 
-        private static int max(int a, int b)
+        private static int Max(int a, int b)
         {
             return Math.Max(a, b);
         }

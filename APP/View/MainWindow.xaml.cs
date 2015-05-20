@@ -1,133 +1,113 @@
-﻿using APP.Model;
-using APP.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using APP.Helpers.FileHandling;
-using Microsoft.Win32;
 using APP.Helpers.Measures;
+using APP.Model;
+using Autofac;
+using Microsoft.Win32;
 
-namespace APP
+namespace APP.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ContourLoader _contourLoader;
+        private readonly ContourLoader _contourLoader;
+        private readonly IEnumerable<IComparison> _comparisons;
 
-        private Window ContourSelectionWindow;
-        private Window ResultWindow;
+        private Window _contourSelectionWindow;
+        private Window _resultWindow;
 
-        public MainWindow(ContourLoader contourLoader)
+        public MainWindow(ContourLoader contourLoader, IEnumerable<IComparison> comparisons)
         {
             _contourLoader = contourLoader;
+            _comparisons = comparisons;
             InitializeComponent();
 
-            Application.Current.ShutdownMode = System.Windows.ShutdownMode.OnMainWindowClose;
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 
         private void ContourSelectionOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (ContourSelectionWindow == null)
-                ContourSelectionWindow = new CounturSelection(new Contour(500, 500)); // todo fixme
-            ContourSelectionWindow.Show();
+            _contourSelectionWindow = IoC.Resolve<CounturSelection>();
+            _contourSelectionWindow.Show();
         }
 
         private void ResultOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (contour1 != null && contour2 != null)
+            if (_contour1 != null && _contour2 != null)
             {
-                /*Result result1 = new Result();
-    result1.Title = "Miara1";
-    result1.D = Miara1.miara1(null, null);*/
-
-                HausdorffDistance miara2 = new HausdorffDistance();
-                Result result2 = miara2.GetResult(contour1, contour2);
-
-                HammingDistance miara3 = new HammingDistance();
-                Result result3 = miara3.GetResult(contour1, contour2);
-
-                List<Result> results = new List<Result>();
-                results.Add(result2);
-                results.Add(result3);
-
-                if (ResultWindow == null)
-                    ResultWindow = new ResultWindow(results, null);
-                ResultWindow.Show();
+                _resultWindow = IoC.Resolve<ResultWindow>(new[] { new NamedParameter("a", _contour1), new NamedParameter("b", _contour2) });// new ResultWindow(results));
+                _resultWindow.Show();
             }
             else MessageBox.Show("Wczytaj oba kontury!");
         }
 
 
-        private Contour contour1 = null;
-        private Contour contour2 = null;
+        private Contour _contour1;
+        private Contour _contour2;
 
         private void LoadContour1_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt";
-            openFileDialog1.FilterIndex = 1;
-
-            bool? userClickedOK = openFileDialog1.ShowDialog();
-
-            if (userClickedOK == true)
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
-                contour1.Bitmap.Save("C:\\Users\\Ja\\Desktop\\testotesto.bmp"); //test
-                Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    contour1.Bitmap.GetHbitmap(),
+                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt",
+                FilterIndex = 1
+            };
+
+
+            bool? userClickedOk = openFileDialog1.ShowDialog();
+
+            if (userClickedOk == true)
+            {
+                _contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    _contour1.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight((int) contour1.Width, (int) contour1.Height)
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(_contour1.Width, _contour1.Height)
                     );
             }
         }
 
         private void ClearContour1_Click(object sender, RoutedEventArgs e)
         {
-            contour1 = null;
+            _contour1 = null;
             Contour1Image.Source = null;
         }
 
         private void LoadContour2_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt";
-            openFileDialog1.FilterIndex = 1;
-
-            bool? userClickedOK = openFileDialog1.ShowDialog();
-
-            if (userClickedOK == true)
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt",
+                FilterIndex = 1
+            };
 
-                Contour2Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    contour2.Bitmap.GetHbitmap(),
+
+            bool? userClickedOk = openFileDialog1.ShowDialog();
+
+            if (userClickedOk == true)
+            {
+                _contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+
+                Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    _contour2.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight((int) contour2.Width, (int) contour2.Height)
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(_contour2.Width, _contour2.Height)
                     );
             }
         }
 
         private void ClearContour2_Click(object sender, RoutedEventArgs e)
         {
-            contour2 = null;
+            _contour2 = null;
             Contour2Image.Source = null;
         }
     }
