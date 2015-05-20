@@ -7,9 +7,9 @@ namespace APP.Helpers.Measures
     {
         public Result GetResult(Contour a, Contour b)
         {
-            int mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
-            int mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
-            int mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
+            double mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
+            double mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
+            double mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
 
             double wynik = 1 -
                            (mocRóżnicyAB + mocRóżnicyBA)/(a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);

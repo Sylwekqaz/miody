@@ -75,7 +75,7 @@ namespace APP.Helpers.Measures
 
             obj.Title = "Metryka Hausdorffa";
 
-            obj.D = sup/BitmapDiagonal(a.Bitmap);
+            obj.D = 1 - sup/BitmapDiagonal(a.Bitmap);
                 //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
 
 
