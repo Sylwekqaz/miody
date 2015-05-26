@@ -23,11 +23,13 @@ namespace APP.View
     /// <summary>
     /// Interaction logic for CounturSelection.xaml
     /// </summary>
-    public partial class CounturSelection : Window
+    public partial class ContourSelection : Window
     {
         private readonly IContourSaver _contourSaver;
         private readonly IBitmapHandler _conveter;
 
+        private Contour contour = null;
+        public MainWindow mainWindow;
 
         private Brush _brushColor;
         private Point? _currentPoint;
@@ -35,7 +37,7 @@ namespace APP.View
 
         private string _saveFileName = "Bitmapa";
 
-        public CounturSelection(IContourSaver contourSaver, IBitmapHandler conveter)
+        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter)
         {
             _contourSaver = contourSaver;
             _conveter = conveter;
@@ -204,7 +206,7 @@ namespace APP.View
                 //  bitmap.Save(path);   //działa, bitmapa ok.
 
 
-                Contour wynik = _conveter.LoadBitmap(bitmap); //todo usunąć jak nie używane
+                contour = _conveter.LoadBitmap(bitmap);
                 _contourSaver.SaveContour(path, bitmap);
 
 
@@ -216,12 +218,28 @@ namespace APP.View
 
         private void SaveContourAndLoad1_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            SaveContours_Click(null, null);
+
+            mainWindow._contour1 = contour;
+            mainWindow.Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                contour.Bitmap.GetHbitmap(),
+                IntPtr.Zero,
+                System.Windows.Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
+            );
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            SaveContours_Click(null, null);
+
+            mainWindow._contour2 = contour;
+            mainWindow.Contour2Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                contour.Bitmap.GetHbitmap(),
+                IntPtr.Zero,
+                System.Windows.Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
+            );
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)

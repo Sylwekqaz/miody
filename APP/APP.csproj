@@ -76,8 +76,8 @@
     <Compile Include="View\ResultWindow.xaml.cs">
       <DependentUpon>ResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CounturSelection.xaml.cs">
-      <DependentUpon>CounturSelection.xaml</DependentUpon>
+    <Compile Include="View\ContourSelection.xaml.cs">
+      <DependentUpon>ContourSelection.xaml</DependentUpon>
     </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -101,7 +101,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\CounturSelection.xaml">
+    <Page Include="View\ContourSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

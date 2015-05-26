@@ -5,21 +5,35 @@
 
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Name="ResultImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="15" />
+        </Grid.RowDefinitions>
 
-        <Menu Grid.Column="1" Background="WhiteSmoke">
-            <MenuItem Header="Zapisz zdjęcie" IsEnabled="False" />
+        <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="Zapisz zdjęcie" IsEnabled="False" Margin="10,0,0,0" />
             <MenuItem Header="Zapisz rezultat" IsEnabled="False" />
         </Menu>
-        <TextBlock Name="TextBlock1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
-                   TextWrapping="Wrap">
-            Miara 1: <TextBlock Name="ResultText1">sdfsdfsdfsdf</TextBlock><LineBreak />
-            Miara 2: <TextBlock Name="ResultText2">aaaaaaaaaaaa</TextBlock><LineBreak />
-            Miara 3: <TextBlock Name="ResultText3">ccccccccccccc</TextBlock><LineBreak />
+        
+        <Image Grid.Row="1" Name="ResultImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        
+        <TextBlock Grid.Row="2" Name="TextBlock1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16">
+           Trwa obliczanie...
         </TextBlock>
+        
+        <TextBlock Grid.Row="2" Name="TextBlockTitle" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-400,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
+        </TextBlock>
+        <TextBlock Grid.Row="2" Name="TextBlockResult" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="200,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
+        </TextBlock>
+        
+        <ProgressBar Grid.Row="3" Name="ResultBar" Minimum="0" Maximum="100"></ProgressBar>
+        
     </Grid>
 </Window>

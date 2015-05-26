@@ -20,6 +20,8 @@ namespace APP.View
         private Contour _a;
         private Contour _b;
 
+        private BackgroundWorker _worker;
+
         public ResultWindow(IEnumerable<IComparison> comparisons, Contour a, Contour b)
         {
             InitializeComponent();
@@ -29,13 +31,14 @@ namespace APP.View
 
             _worker = new BackgroundWorker();
             _worker.WorkerReportsProgress = true;
-
+            
+            _worker.ProgressChanged += _worker_ProgressChanged;
+            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
 
             _worker.DoWork += Policz;
 
-
             _worker.RunWorkerAsync();
-        }
+        }        
 
         private void Policz(object sender, DoWorkEventArgs args)
         {
@@ -51,20 +54,38 @@ namespace APP.View
 
 
             TextBlock1.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-            {
-                TextBlock textBlock = new TextBlock();
-
+            {                
+                TextBlockTitle.Inlines.Clear();
+                TextBlockResult.Inlines.Clear();
+             
                 foreach (var result in resultsList)
-                {
-                    textBlock.Inlines.Add(result.Title + ": " + result.D + "\n");
-                }
+                {                   
+                    TextBlockTitle.Inlines.Add(result.Title + ":");
+                    TextBlockResult.Inlines.Add(""+result.D);
 
-                TextBlock1.Text = textBlock.Text;
+                    if (resultsList.IndexOf(result) != resultsList.Count - 1)
+                    {
+                        TextBlockTitle.Inlines.Add("\n");
+                        TextBlockResult.Inlines.Add("\n");
+                    }
+                }
+                
             }));
+        }       
+
+        void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ResultBar.Visibility = Visibility.Collapsed;            
+            
+            TextBlock1.Visibility = Visibility.Collapsed;
+            TextBlockTitle.Visibility = Visibility.Visible;
+            TextBlockResult.Visibility = Visibility.Visible;
         }
 
-
-        private BackgroundWorker _worker;
+        void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            ResultBar.Value = e.ProgressPercentage;
+        }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {

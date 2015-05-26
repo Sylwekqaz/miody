@@ -21,8 +21,11 @@ namespace APP.View
         private readonly ContourLoader _contourLoader;
         private readonly IEnumerable<IComparison> _comparisons;
 
-        private Window _contourSelectionWindow;
-        private Window _resultWindow;
+        private ContourSelection _contourSelectionWindow;
+        private ResultWindow _resultWindow;
+
+        public Contour _contour1;
+        public Contour _contour2;
 
         public MainWindow(ContourLoader contourLoader, IEnumerable<IComparison> comparisons)
         {
@@ -31,8 +34,7 @@ namespace APP.View
             InitializeComponent();
 
 
-            TextReader writer = new StreamReader(
-             "C:\\Users\\Ja\\Desktop\\miody-Poprawki_dobre\\tes.txt"); //poprawic sciezke
+            TextReader writer = new StreamReader(@"../../../tes.txt"); //poprawic sciezke
             LoadPollenDB.Load_DB(writer);
          // Console.WriteLine(Pollen.Values);  // test
    
@@ -41,7 +43,8 @@ namespace APP.View
 
         private void ContourSelectionOpen_Click(object sender, RoutedEventArgs e)
         {
-            _contourSelectionWindow = IoC.Resolve<CounturSelection>();
+            _contourSelectionWindow = IoC.Resolve<ContourSelection>();
+            _contourSelectionWindow.mainWindow = this;
             _contourSelectionWindow.Show();
         }
 
@@ -53,11 +56,7 @@ namespace APP.View
                 _resultWindow.Show();
             }
             else MessageBox.Show("Wczytaj oba kontury!");
-        }
-
-
-        private Contour _contour1;
-        private Contour _contour2;
+        }        
 
         private void LoadContour1_Click(object sender, RoutedEventArgs e)
         {
