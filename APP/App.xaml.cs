@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using APP.Helpers.FileHandling;
+using APP.Helpers.Measures;
 using APP.View;
 using Autofac;
 
@@ -24,6 +25,12 @@ namespace APP
             var  builder  = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).AsImplementedInterfaces();
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly());
+
+            builder.RegisterType<HammingDistance>().As<Comparison>();
+            builder.RegisterType<HausdorffDistance>().As<Comparison>();
+            builder.RegisterType<JaccardIndex>().As<Comparison>();
+
+
 
             var container = builder.Build();
                 

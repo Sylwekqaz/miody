@@ -3,9 +3,14 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    internal class HammingDistance : IComparison
+    internal class HammingDistance : Comparison
     {
-        public Result GetResult(Contour a, Contour b)
+        public HammingDistance()
+        {
+            Scale = 5;
+        }
+
+        public override Result GetResult(Contour a, Contour b)
         {
             double mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
             double mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);

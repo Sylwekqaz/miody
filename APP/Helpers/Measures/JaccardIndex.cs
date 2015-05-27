@@ -3,36 +3,60 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    internal class JaccardIndex : IComparison
+    internal class JaccardIndex : Comparison
     {
+
+
         private readonly MaskGenerator _maskGenerator;
+
+
+        void SubProgresChanged()
+        {
+            Progres = (_maskAComplete ? 40:0) + _maskGenerator.Progres * 0.4;
+          
+        }
+
+        private bool _maskAComplete;
+
 
         public JaccardIndex(MaskGenerator maskGenerator)
         {
             _maskGenerator = maskGenerator;
+            _maskGenerator.ProgresChanged = SubProgresChanged;
+            Scale = 90;
+
         }
 
-        public Result GetResult(Contour a, Contour b)
+        public override Result GetResult(Contour a, Contour b)
         {
+            _maskAComplete = false;
+            _progres = 0;
+            
             Mask maskaA = _maskGenerator.GenerateMask(a);
+            _maskAComplete = true;
             Mask maskaB = _maskGenerator.GenerateMask(b);
 
-            int mocA = MocZbioru(maskaA);
-            int mocB = MocZbioru(maskaB);
+            int mocA = MocZbioru(maskaA.MaskMap);
+            int mocB = MocZbioru(maskaB.MaskMap);
 
-            int mocCzęściWspólnej = MocCzęściWspólnej(maskaA, maskaB);
+            int mocCzęściWspólnej = MocCzęściWspólnej(maskaA.MaskMap, maskaB.MaskMap);
             int mocSumy = mocA + mocB - mocCzęściWspólnej;
 
             double wynik = mocCzęściWspólnej/(double) mocSumy;
+
+            Progres = 100;
             return new Result {Title = "Indeks Jaccarda", D = wynik};
+            
         }
 
-        public int MocZbioru(Mask a)
+
+
+        public int MocZbioru(IReadOnlyDictionary<Pollen, bool[,]> a)
         {
-            IReadOnlyDictionary<Pollen, bool[,]> A = a.MaskMap;
+            
 
             int licznik = 0;
-            foreach (KeyValuePair<Pollen, bool[,]> item1 in A)
+            foreach (KeyValuePair<Pollen, bool[,]> item1 in a)
             {
                 for (int i = 0; i < item1.Value.GetLength(0); i++)
                 {
@@ -48,15 +72,14 @@ namespace APP.Helpers.Measures
             return licznik;
         }
 
-        public int MocCzęściWspólnej(Mask a, Mask b)
+        public int MocCzęściWspólnej(IReadOnlyDictionary<Pollen, bool[,]> a, IReadOnlyDictionary<Pollen, bool[,]> b)
         {
-            IReadOnlyDictionary<Pollen, bool[,]> A = a.MaskMap;
-            IReadOnlyDictionary<Pollen, bool[,]> B = b.MaskMap;
+            
             int licznik = 0;
 
-            foreach (KeyValuePair<Pollen, bool[,]> item1 in A)
+            foreach (KeyValuePair<Pollen, bool[,]> item1 in a)
             {
-                var item2 = B[item1.Key];
+                var item2 = b[item1.Key];
 
 
                 for (int i = 0; i < item1.Value.GetLength(0); i++)

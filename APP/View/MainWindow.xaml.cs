@@ -19,7 +19,7 @@ namespace APP.View
     public partial class MainWindow : Window
     {
         private readonly ContourLoader _contourLoader;
-        private readonly IEnumerable<IComparison> _comparisons;
+        private readonly IEnumerable<Comparison> _comparisons;
 
         private ContourSelection _contourSelectionWindow;
         private ResultWindow _resultWindow;
@@ -27,7 +27,7 @@ namespace APP.View
         public Contour _contour1;
         public Contour _contour2;
 
-        public MainWindow(ContourLoader contourLoader, IEnumerable<IComparison> comparisons)
+        public MainWindow(ContourLoader contourLoader, IEnumerable<Comparison> comparisons)
         {
             _contourLoader = contourLoader;
             _comparisons = comparisons;

@@ -5,8 +5,13 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
-    internal class HausdorffDistance : IComparison
+    internal class HausdorffDistance : Comparison
     {
+        public HausdorffDistance()
+        {
+            Scale = 5;
+        }
+
         public static double BitmapDiagonal(Bitmap bitmap)
         {
             return Math.Sqrt(Math.Pow(bitmap.Height, 2) + Math.Pow(bitmap.Width, 2));
@@ -59,7 +64,7 @@ namespace APP.Helpers.Measures
         }
 
 
-        public Result GetResult(Contour a, Contour b)
+        public override Result GetResult(Contour a, Contour b)
         {
             List<double> listaInfimumXB = InfimumList(a.ContourSet, b.ContourSet);
             List<double> listaInfimumYA = InfimumList(b.ContourSet, a.ContourSet);

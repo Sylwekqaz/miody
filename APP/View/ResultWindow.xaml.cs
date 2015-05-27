@@ -16,13 +16,13 @@ namespace APP.View
     /// </summary>
     public partial class ResultWindow : Window
     {
-        private IEnumerable<IComparison> _comparisons;
+        private IEnumerable<Comparison> _comparisons;
         private Contour _a;
         private Contour _b;
 
         private BackgroundWorker _worker;
 
-        public ResultWindow(IEnumerable<IComparison> comparisons, Contour a, Contour b)
+        public ResultWindow(IEnumerable<Comparison> comparisons, Contour a, Contour b)
         {
             InitializeComponent();
             _comparisons = comparisons;
@@ -42,14 +42,11 @@ namespace APP.View
 
         private void Policz(object sender, DoWorkEventArgs args)
         {
-            var resultsList = new List<Result>(); //_comparisons.Select(comparison => comparison.GetResult(_a, _b));
-            int i = 0;
-            foreach (IComparison comparison in _comparisons)
+            var resultsList = new List<Result>();
+            foreach (Comparison comparison in _comparisons)
             {
+                comparison.ProgresChanged += ComparisonProgresChanged;
                 resultsList.Add(comparison.GetResult(_a, _b));
-                i++;
-
-                ((BackgroundWorker) sender).ReportProgress(i*100/_comparisons.Count());
             }
 
 
@@ -71,7 +68,15 @@ namespace APP.View
                 }
                 
             }));
-        }       
+        }
+
+        void ComparisonProgresChanged()
+        {
+            int sumScales = _comparisons.Sum(comparison => comparison.Scale);
+            _worker.ReportProgress((int) _comparisons.Sum(comparison => comparison.Progres*comparison.Scale/sumScales));
+        }
+
+
 
         void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

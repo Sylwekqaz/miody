@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using APP.Model;
 
@@ -7,8 +9,26 @@ namespace APP.Helpers
 {
     public class MaskGenerator
     {
+
+        private double _progres;
+        public double Progres
+        {
+            get { return _progres; }
+            private set
+            {
+                _progres = value;
+                ProgresChanged();
+            }
+        }
+
+        public Action ProgresChanged { get; set; }
+
+
+
+
         public Mask GenerateMask(Contour contour)
         {
+            _progres = 0;
             int height = contour.Height;
             int width = contour.Width;
 
@@ -23,19 +43,17 @@ namespace APP.Helpers
                 bitmaps.Add(pylek, bitmap);
             }
 
-#if DEBUG
-            HashSet<Pollen> debugPollens = new HashSet<Pollen>();
-#endif
+
+            HashSet<Pollen> pollens = new HashSet<Pollen>();
             foreach (ContourPoint contourPoint in contour.ContourSet)
             {
                 bitmaps[contourPoint.Type].SetPixel(contourPoint.Location.X, contourPoint.Location.Y, Color.Black);
-#if DEBUG
-                debugPollens.Add(contourPoint.Type);
-#endif
+                pollens.Add(contourPoint.Type);
+
             }
             Mask mask = new Mask(height, width);
 
-            Parallel.ForEach(Pollen.Values, pollen =>
+            Parallel.ForEach(pollens, pollen =>
             {
                 Bitmap tempBitmap = (Bitmap) bitmaps[pollen].Clone();
                 List<Point> nodes = new List<Point>();
@@ -64,6 +82,9 @@ namespace APP.Helpers
                         mask.MaskMap[pollen][h, w] = bitmaps[pollen].GetPixel(w, h).R == 0;
                     }
                 }
+
+                Progres += ((double) 100/pollens.Count());
+
             });
 
 

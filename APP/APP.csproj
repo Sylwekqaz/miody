@@ -88,7 +88,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\CounturHelper.cs" />
-    <Compile Include="Helpers\Measures\IComparison.cs" />
+    <Compile Include="Helpers\Measures\Comparison.cs" />
     <Compile Include="Model\Contour.cs" />
     <Compile Include="Model\Mask.cs" />
     <Compile Include="Model\ContourPoint.cs" />
