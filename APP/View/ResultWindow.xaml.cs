@@ -62,7 +62,7 @@ namespace APP.View
                 foreach (var result in resultsList)
                 {                   
                     TextBlockTitle.Inlines.Add(result.Title + ":");
-                    TextBlockResult.Inlines.Add(""+result.D);
+                    TextBlockResult.Inlines.Add(""+result.D +"%");
 
                     if (resultsList.IndexOf(result) != resultsList.Count - 1)
                     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using APP.Model;
+using System;
 
 namespace APP.Helpers.Measures
 {
@@ -42,10 +43,10 @@ namespace APP.Helpers.Measures
             int mocCzęściWspólnej = MocCzęściWspólnej(maskaA.MaskMap, maskaB.MaskMap);
             int mocSumy = mocA + mocB - mocCzęściWspólnej;
 
-            double wynik = mocCzęściWspólnej/(double) mocSumy;
+            double wynik = Math.Round((mocCzęściWspólnej / (double)mocSumy) * 100, 2);
 
             Progres = 100;
-            return new Result {Title = "Indeks Jaccarda", D = wynik};
+            return new Result {Title = "Miara 1 (oparta na Indeksie Jaccarda)", D = wynik};
             
         }
 

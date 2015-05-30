@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using APP.Model;
+using System;
 
 namespace APP.Helpers.Measures
 {
@@ -16,9 +17,10 @@ namespace APP.Helpers.Measures
             double mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
             double mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
 
-            double wynik = 1 -
-                           (mocRóżnicyAB + mocRóżnicyBA)/(a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej);
-            return new Result {Title = "1 - (względna odległość Hamminga)", D = wynik};
+            double wynik = (1 -
+                           (mocRóżnicyAB + mocRóżnicyBA)/(a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej))*100;
+            wynik = Math.Round(wynik, 2);
+            return new Result {Title = "Miara 3 (oparta na odległości Hamminga)", D = wynik};
         }
 
         private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)

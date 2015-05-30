@@ -70,7 +70,7 @@ namespace APP.Helpers.Measures
             List<double> listaInfimumYA = InfimumList(b.ContourSet, a.ContourSet);
 
             if (listaInfimumXB.Count == 0 || listaInfimumYA.Count == 0)
-                return new Result() { D = 0, Title = "Metryka Hausdorffa" };
+                return new Result() { D = 0, Title = "Miara 2 (oparta na metryce Hausdorffa)" };
 
             double pierwszeSupremum = SupremumList(listaInfimumXB);
             double drugieSupremum = SupremumList(listaInfimumYA);
@@ -80,9 +80,9 @@ namespace APP.Helpers.Measures
 
             Result obj = new Result();
 
-            obj.Title = "Metryka Hausdorffa";
+            obj.Title = "Miara 2 (oparta na metryce Hausdorffa)";
 
-            obj.D = 1 - sup/BitmapDiagonal(a.Bitmap);
+            obj.D = Math.Round((1 - sup / BitmapDiagonal(a.Bitmap)) * 100, 2);
                 //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
 
 
