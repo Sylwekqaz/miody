@@ -13,8 +13,8 @@ namespace APP.Model
         }
 
 
-        public int Width { get; private set; }
-        public int Height { get; private set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public HashSet<ContourPoint> ContourSet { get; set; }
         public Bitmap Bitmap { get; set; } // todo zrobić aby kontur miał rozmiar bitmapy
     }

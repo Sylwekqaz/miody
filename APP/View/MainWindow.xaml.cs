@@ -52,6 +52,7 @@ namespace APP.View
         {
             if (_contour1 != null && _contour2 != null)
             {
+                SetContourSizes();
                 _resultWindow = IoC.Resolve<ResultWindow>(new[] { new NamedParameter("a", _contour1), new NamedParameter("b", _contour2) });// new ResultWindow(results));
                 _resultWindow.Show();
             }
@@ -115,6 +116,16 @@ namespace APP.View
         {
             _contour2 = null;
             Contour2Image.Source = null;
+        }
+        
+        private void SetContourSizes()
+        {
+            int width = Math.Max(_contour1.Width, _contour2.Width);
+            int height = Math.Max(_contour1.Height, _contour2.Height);
+            _contour1.Width = width;
+            _contour1.Height = height;
+            _contour2.Width = width;
+            _contour2.Height = height;
         }
     }
 }
