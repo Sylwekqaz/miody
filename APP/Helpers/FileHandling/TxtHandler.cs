@@ -35,8 +35,8 @@ namespace APP.Helpers.FileHandling
         //parametr is not valid, przyczyna:
         //http://stackoverflow.com/questions/6333681/c-sharp-parameter-is-not-valid-creating-new-bitmap
 
-            IEnumerable<Pollen> pylki = Pollen.Values;   
-         
+            IEnumerable<Pollen> pylki = Pollen.Values;
+            
             double podobienstwo = 0;
        //     Contour wynikContour = new Contour(0, 0);    //todo- zrobic te wysokosc i szerokosc do konturu
             
@@ -69,7 +69,7 @@ namespace APP.Helpers.FileHandling
                             ContourPoint point = new ContourPoint()
                             {
                          Location = new Point(int.Parse(line[0]), int.Parse(line[1])),
-                         Type =  (Pollen) line[2]     
+                         Type = (Pollen)((string)MatchFinder(pylki, line[2]).ToList<object>()[0]) 
                           
                      };
 
@@ -80,6 +80,7 @@ namespace APP.Helpers.FileHandling
                 }
             }           
             reader.Close();
+            było = false;
             return wynikContour;           
         }
 
