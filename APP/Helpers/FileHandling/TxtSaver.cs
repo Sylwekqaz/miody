@@ -32,6 +32,7 @@ namespace APP.Helpers.FileHandling
                     writer.WriteLine(linia);
                 }
             }
+            writer.Close();
         }
     }
 }

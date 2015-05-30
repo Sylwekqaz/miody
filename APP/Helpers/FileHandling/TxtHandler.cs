@@ -31,11 +31,30 @@ namespace APP.Helpers.FileHandling
             //Pylek kolorp = KnownColor.ActiveCaption;
             //Pylek nazwo = "rzepakowy";
             //string name;
-       
+
+        //test
+ //       int w = int.Parse(line[0]);
+   //     int h = int.Parse(line[1]);
+
+        Contour wynikContour = new Contour(1000, 1000);
+        wynikContour.Bitmap = new Bitmap(1000, 1000);
+        //parametr is not valid, przyczyna:
+        //http://stackoverflow.com/questions/6333681/c-sharp-parameter-is-not-valid-creating-new-bitmap
+
+
+        //ogolnie działa np. 
+        //for (int i = 0; i < 35; i++)
+        //{
+        //    for (int j = 0; j < 35; j++)
+        //    {
+        //        wynikContour.Bitmap.SetPixel(i, j, Color.Red);
+        //    }
+        //}
+
             IEnumerable<Pollen> pylki = Pollen.Values;   
             string[] line;
             double podobienstwo = 0;
-            Contour wynikContour = new Contour(0, 0);    //todo- zrobic te wysokosc i szerokosc do konturu
+       //     Contour wynikContour = new Contour(0, 0);    //todo- zrobic te wysokosc i szerokosc do konturu
             
             while (reader.Peek() != -1)
         {
