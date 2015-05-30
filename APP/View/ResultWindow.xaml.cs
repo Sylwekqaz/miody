@@ -131,8 +131,7 @@ namespace APP.View
             TextBlockResult.Visibility = Visibility.Visible;
             
             ResultImage.Visibility = Visibility.Visible;
-            menuItem1.IsEnabled = true;
-            menuItem2.IsEnabled = true;
+            
 
 
         }
