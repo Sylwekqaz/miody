@@ -69,6 +69,8 @@ namespace APP.Helpers.Measures
             List<double> listaInfimumXB = InfimumList(a.ContourSet, b.ContourSet);
             List<double> listaInfimumYA = InfimumList(b.ContourSet, a.ContourSet);
 
+            if (listaInfimumXB.Count == 0 || listaInfimumYA.Count == 0)
+                return new Result() { D = 0, Title = "Metryka Hausdorffa" };
 
             double pierwszeSupremum = SupremumList(listaInfimumXB);
             double drugieSupremum = SupremumList(listaInfimumYA);
