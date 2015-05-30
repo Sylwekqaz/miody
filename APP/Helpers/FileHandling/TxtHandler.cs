@@ -15,6 +15,7 @@ namespace APP.Helpers.FileHandling
 
     public class TxtHandler : ITxtHandler
     {
+        bool było = false;
         /// <summary>
         /// Metoda odczytuje z pliku txt dane linijka po linijce
         /// dodając do wynikowego konturu  ContourPoint 
@@ -27,75 +28,59 @@ namespace APP.Helpers.FileHandling
         /// </returns>
         public Contour LoadTxt(TextReader reader)
     {
-            //Pylek numero = 1;
-            //Pylek kolorp = KnownColor.ActiveCaption;
-            //Pylek nazwo = "rzepakowy";
-            //string name;
-
         //test
- //       int w = int.Parse(line[0]);
-   //     int h = int.Parse(line[1]);
+        Contour wynikContour = new Contour(1000,1000);
 
-        Contour wynikContour = new Contour(1000, 1000);
-        wynikContour.Bitmap = new Bitmap(1000, 1000);
+       
         //parametr is not valid, przyczyna:
         //http://stackoverflow.com/questions/6333681/c-sharp-parameter-is-not-valid-creating-new-bitmap
 
-
-        //ogolnie działa np. 
-        //for (int i = 0; i < 35; i++)
-        //{
-        //    for (int j = 0; j < 35; j++)
-        //    {
-        //        wynikContour.Bitmap.SetPixel(i, j, Color.Red);
-        //    }
-        //}
-
             IEnumerable<Pollen> pylki = Pollen.Values;   
-            string[] line;
+         
             double podobienstwo = 0;
        //     Contour wynikContour = new Contour(0, 0);    //todo- zrobic te wysokosc i szerokosc do konturu
             
             while (reader.Peek() != -1)
         {
-
+            string[] line;
+            int w=0;
+            int h=0;
+           
                  string readLine = reader.ReadLine();
-
-                line = readLine.Split(' ');
-
+                 line = readLine.Split(' ');
+                 if (było == false)
+                 {
+                     było = true;
+                      w = int.Parse(line[0]);
+                      h = int.Parse(line[1]);
+                      wynikContour = new Contour(w + 10, h + 10);
+                      wynikContour.Bitmap = new Bitmap(w + 10, h + 10);
+                 }
+            
+               
+                
                  if (readLine != null)
             {
                     if (line.Length > 2)
                     {
-
-
                         podobienstwo = (double)MatchFinder(pylki, line[2]).ToList<object>()[1];
-
                         if (podobienstwo > 0.55)
                         {
                             ContourPoint point = new ContourPoint()
                             {
                          Location = new Point(int.Parse(line[0]), int.Parse(line[1])),
                          Type =  (Pollen) line[2]     
- 
+                          
                      };
 
                      wynikContour.ContourSet.Add(point); 
-                    //wynikContour.Bitmap = new Bitmap(35, 35);
                     wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y, point.Type.Color.ToDrawingColor());
-                    //wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y, Color.Red);
-                 }
-
-
+                        }
                     }
                 }
-            }
-           
+            }           
             reader.Close();
-            return wynikContour;
-            
-            
-           
+            return wynikContour;           
         }
 
         protected IEnumerable<object> MatchFinder(IEnumerable<Pollen> obj, string line)
@@ -105,8 +90,6 @@ namespace APP.Helpers.FileHandling
 
             foreach (Pollen item in obj)
             {
-
-
                 double odleglosc = item.Name.CompareToString(line);
 
                 if (odleglosc != 1)
@@ -117,8 +100,6 @@ namespace APP.Helpers.FileHandling
                         max = odleglosc;
                         podejrzanyTypPylku = item.Name;
                     }
-
-
                 }
                 else
                 {
