@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace APP.Helpers.FileHandling
 {
@@ -17,6 +18,14 @@ namespace APP.Helpers.FileHandling
             {
                 result.SetPixel(item.Location.X, item.Location.Y, item.Type.Color.ToDrawingColor());
             }
+            if (contour.ContourSet.Count<=0)
+            {
+                MessageBoxResult msg =
+     MessageBox.Show("Niestety złe kolory, elo.",
+     "napis jakis", MessageBoxButton.OK, MessageBoxImage.Question);
+            }
+        
+
             return result;
 
         }
