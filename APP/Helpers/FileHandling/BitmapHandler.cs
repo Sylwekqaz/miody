@@ -21,17 +21,17 @@ namespace APP.Helpers.FileHandling
         /// </returns>
         public Contour LoadBitmap(Bitmap bitmap)
         {
-#if DEBUG
-            Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height);
-            for (int w = 0; w < bitmap.Width; w++)
-            {
-                for (int h = 0; h < bitmap.Height; h++)
-                {
-                    tempBitmap.SetPixel(w, h, Color.White);
-                }
-            }
+//#if DEBUG
+//            Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height);
+//            for (int w = 0; w < bitmap.Width; w++)
+//            {
+//                for (int h = 0; h < bitmap.Height; h++)
+//                {
+//                    tempBitmap.SetPixel(w, h, Color.White);
+//                }
+//            }
 
-#endif
+//#endif
 
 
             Contour wynikContour = new Contour(bitmap.Width, bitmap.Height)
@@ -53,9 +53,9 @@ namespace APP.Helpers.FileHandling
                             Location = new Point(j, i),
                             Type = Pollen.TryPrase(pixelcolor)
                         };
-#if DEBUG
-                        tempBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
-#endif
+//#if DEBUG
+//                        tempBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
+//#endif
                         wynikContour.ContourSet.Add(point);
                     }
                 }

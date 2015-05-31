@@ -22,8 +22,12 @@ namespace APP.Helpers.FileHandling
         /// </param>
         public void SaveTxt(Contour kontur, TextWriter writer)
         {
+            writer.Write(kontur.Height);
+            writer.Write(" ");
+            writer.WriteLine(kontur.Width);
             foreach (var item in kontur.ContourSet)
             {
+                
                 if (item != null)
                 {
                     string pylekNazwa = item.Type;
@@ -32,6 +36,7 @@ namespace APP.Helpers.FileHandling
                     writer.WriteLine(linia);
                 }
             }
+            writer.Close();
         }
     }
 }

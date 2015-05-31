@@ -56,9 +56,9 @@ namespace APP.Helpers.Measures
             if (listaInfimum.Count == 0)
             {
                 return null;
-            }
+                }
             return listaInfimum.Max();
-        }
+            }
 
 
         public override Result GetResult(Contour a, Contour b)
@@ -66,6 +66,8 @@ namespace APP.Helpers.Measures
             List<double> listaInfimumXB = InfimumList(a.ContourSet, b.ContourSet);
             List<double> listaInfimumYA = InfimumList(b.ContourSet, a.ContourSet);
 
+            if (listaInfimumXB.Count == 0 || listaInfimumYA.Count == 0)
+                return new Result() { D = 0, Title = "Miara 2 (oparta na metryce Hausdorffa)" };
 
             double? pierwszeSupremum = SupremumList(listaInfimumXB);
             double? drugieSupremum = SupremumList(listaInfimumYA);
@@ -77,14 +79,14 @@ namespace APP.Helpers.Measures
             {
                 double sup = Math.Max(pierwszeSupremum.Value, drugieSupremum.Value);
                 //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
-                obj.D = 1 - sup / BitmapDiagonal(a.Bitmap);
+                obj.D = 100 - Math.Round((100*sup) / BitmapDiagonal(a.Bitmap),2);
             }
             else
             {
                 obj.D = 0;
             }
             obj.Title = "Metryka Hausdorffa";
-            
+
             return obj;
 
 
