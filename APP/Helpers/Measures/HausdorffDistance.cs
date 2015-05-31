@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using APP.Model;
 
 namespace APP.Helpers.Measures
@@ -28,7 +29,7 @@ namespace APP.Helpers.Measures
 
                 foreach (ContourPoint item2 in listaB)
                 {
-                    if (item.Type.Numer == item2.Type.Numer)
+                    if (item.Type == item2.Type)
                     {
                         double odleglosc = item.Location.GetDistance(item2.Location);
 
@@ -50,17 +51,13 @@ namespace APP.Helpers.Measures
         }
 
 
-        protected double SupremumList(IList<double> listaInfimum)
+        protected double? SupremumList(IList<double> listaInfimum)
         {
-            double max = listaInfimum[0];
-            foreach (double item in listaInfimum)
+            if (listaInfimum.Count == 0)
             {
-                if (item > max)
-                {
-                    max = item;
-                }
+                return null;
             }
-            return max;
+            return listaInfimum.Max();
         }
 
 
@@ -70,20 +67,24 @@ namespace APP.Helpers.Measures
             List<double> listaInfimumYA = InfimumList(b.ContourSet, a.ContourSet);
 
 
-            double pierwszeSupremum = SupremumList(listaInfimumXB);
-            double drugieSupremum = SupremumList(listaInfimumYA);
+            double? pierwszeSupremum = SupremumList(listaInfimumXB);
+            double? drugieSupremum = SupremumList(listaInfimumYA);
 
-
-            double sup = SupremumList(new List<double> {pierwszeSupremum, drugieSupremum});
 
             Result obj = new Result();
 
-            obj.Title = "Metryka Hausdorffa";
-
-            obj.D = 1 - sup/BitmapDiagonal(a.Bitmap);
+            if (pierwszeSupremum.HasValue && drugieSupremum.HasValue)
+            {
+                double sup = Math.Max(pierwszeSupremum.Value, drugieSupremum.Value);
                 //zakladam ze oba kontury maja tych samych rozmiarow bitmape, bo jesli nie, to wedle ktorej bitmapy liczyc przekatna?
-
-
+                obj.D = 1 - sup / BitmapDiagonal(a.Bitmap);
+            }
+            else
+            {
+                obj.D = 0;
+            }
+            obj.Title = "Metryka Hausdorffa";
+            
             return obj;
 
 
