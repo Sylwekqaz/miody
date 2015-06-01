@@ -13,7 +13,7 @@ namespace APP.Helpers.FileHandling
     {
         public static Bitmap Result(Contour contour)
         {
-            Bitmap result = new Bitmap(contour.Height, contour.Width);
+            Bitmap result = new Bitmap(contour.Width, contour.Height);
             foreach (var item in contour.ContourSet)
             {
                 result.SetPixel(item.Location.X, item.Location.Y, item.Type.Color.ToDrawingColor());
