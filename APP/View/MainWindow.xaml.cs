@@ -63,7 +63,7 @@ namespace APP.View
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1
             };
 
@@ -79,6 +79,8 @@ namespace APP.View
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromWidthAndHeight(_contour1.Width, _contour1.Height)
                     );
+
+                ListBoxContour1.ItemsSource = _contour1.ContourSet;
             }
         }
 
@@ -92,7 +94,7 @@ namespace APP.View
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1
             };
 
@@ -109,6 +111,8 @@ namespace APP.View
                     Int32Rect.Empty,
                     BitmapSizeOptions.FromWidthAndHeight(_contour2.Width, _contour2.Height)
                     );
+
+                ListBoxContour2.ItemsSource = _contour2.ContourSet;                       
             }
         }
 

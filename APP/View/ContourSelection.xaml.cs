@@ -54,13 +54,13 @@ namespace APP.View
         {
             // sprawdzić czy zapisano zmiany
             Hide();
-        }
-
+        }  
+       
         private void LoadContours_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1
             };
 
@@ -68,12 +68,8 @@ namespace APP.View
             bool? userClickedOk = openFileDialog1.ShowDialog();
 
             if (userClickedOk == true)
-            {
-                BitmapImage bitmapImage = new BitmapImage(new Uri(openFileDialog1.FileName));
-
-                CanvasContour.Width = bitmapImage.Width;
-                CanvasContour.Height = bitmapImage.Height;
-                CanvasContourBackground.ImageSource = bitmapImage;
+            {                
+                // todo                
             }
         }
 
@@ -163,7 +159,7 @@ namespace APP.View
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1,
                 FileName = _saveFileName
             };
@@ -227,6 +223,7 @@ namespace APP.View
                 System.Windows.Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
             );
+            mainWindow.ListBoxContour1.ItemsSource = contour.ContourSet;
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
@@ -240,6 +237,7 @@ namespace APP.View
                 System.Windows.Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
             );
+            mainWindow.ListBoxContour2.ItemsSource = contour.ContourSet;
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)

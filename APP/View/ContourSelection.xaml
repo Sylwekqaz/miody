@@ -27,7 +27,7 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Plik" Margin="10,0,0,0">
                 <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click" />
-                <MenuItem Header="Wczytaj kontury..." />
+                <MenuItem Header="Wczytaj kontury..." Click="LoadContours_Click" />
                 <Separator />
                 <MenuItem Header="Zastosuj algorytm" IsEnabled="False" />
                 <Separator />
@@ -84,7 +84,7 @@
                         <ScaleTransform x:Name="CanvasContourScale" />
                     </Canvas.LayoutTransform>
                     <Canvas.Background>
-                        <ImageBrush x:Name="CanvasContourBackground" />
+                        <ImageBrush x:Name="CanvasContourBackground" />                        
                     </Canvas.Background>
                 </Canvas>
             </ScrollViewer>

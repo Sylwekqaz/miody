@@ -1,43 +1,69 @@
 ﻿<Window x:Class="APP.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="780" Width="1100" WindowStartupLocation="CenterScreen" Background="WhiteSmoke">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60*" />
+            <ColumnDefinition Width="225" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="225" />
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.ColumnSpan="4" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                    <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <MenuItem Header="Stwórz kontur" Click="ContourSelectionOpen_Click" Margin="10,0,0,0" />
-            <MenuItem Header="Porównaj kontury" Click="ResultOpen_Click" HorizontalAlignment="Right" Margin="0,0,10,0" />
+            <MenuItem Header="Stwórz kontur" Click="ContourSelectionOpen_Click" Margin="0,0,0,0" />
+            <MenuItem Header="Porównaj kontury" Click="ResultOpen_Click" FontWeight="Bold" />
         </Menu>
 
-        <TabControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" Height="Auto">
-            <TabItem Header="Kontur 1">
-                <Grid>
-                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="WhiteSmoke">
-                        <MenuItem Header="Wczytaj" Click="LoadContour1_Click" />
-                        <MenuItem Header="Wyczyść" Click="ClearContour1_Click" />
-                    </Menu>
-                    <Image Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                           Margin="0, 30, 0, 0" />
-                </Grid>
-            </TabItem>
-            <TabItem Header="Kontur 2">
-                <Grid>
-                    <Menu HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="WhiteSmoke">
-                        <MenuItem Header="Wczytaj" Click="LoadContour2_Click" />
-                        <MenuItem Header="Wyczyść" Click="ClearContour2_Click" />
-                    </Menu>
-                    <Image Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                           Margin="0, 30, 0, 0" />
-                </Grid>
-            </TabItem>
-        </TabControl>
+        <Menu Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="Wczytaj...">
+                <MenuItem Header="Wczytaj kontur 1" Click="LoadContour1_Click" />
+                <MenuItem Header="Wczytaj kontur 2" Click="LoadContour2_Click" />
+            </MenuItem>
+            <MenuItem Header="Wyczyść...">
+                <MenuItem Header="Wyczyść kontur 1" Click="ClearContour1_Click" />
+                <MenuItem Header="Wyczyść kontur 2" Click="ClearContour2_Click" />
+            </MenuItem>
+        </Menu>
+
+        <Image Grid.Column="0" Grid.Row="2" Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Image Grid.Column="0" Grid.Row="3" Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                
+        <ListView Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
+                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
+                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>                    
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour2" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
+                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
+                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </Window>
