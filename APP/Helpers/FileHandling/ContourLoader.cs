@@ -46,7 +46,10 @@ namespace APP.Helpers.FileHandling
             else
             {
                 Bitmap bitmap = new Bitmap(path);
+                
                 loadedContour = _bitmapHandler.LoadBitmap(bitmap);
+                bitmap = BitmapFromContour.Result(loadedContour);
+                loadedContour.Bitmap = bitmap;
             }
             return loadedContour;
         }

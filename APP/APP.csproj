@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\FileHandling\BitmapFromContour.cs" />
     <Compile Include="Helpers\FileHandling\LoadPollenDB.cs" />
     <Compile Include="Helpers\Measures\HammingDistance.cs" />
     <Compile Include="Helpers\PointHelper.cs" />

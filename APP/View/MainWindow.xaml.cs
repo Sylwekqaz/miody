@@ -59,7 +59,7 @@ namespace APP.View
             else MessageBox.Show("Wczytaj oba kontury!");
         }        
 
-        private void LoadContour1_Click(object sender, RoutedEventArgs e)
+        private void LoadContour1_Click(object sender, RoutedEventArgs e) //open Contour1
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
@@ -74,6 +74,7 @@ namespace APP.View
             {
                 _contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
                 Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    
                     _contour1.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
