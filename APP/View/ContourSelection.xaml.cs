@@ -5,7 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Ink;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -17,6 +19,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace APP.View
 {
@@ -27,6 +30,7 @@ namespace APP.View
     {
         private readonly IContourSaver _contourSaver;
         private readonly IBitmapHandler _conveter;
+        private readonly IContourLoader _contourLoader;
 
         private Contour contour = null;
         public MainWindow mainWindow;
@@ -39,10 +43,11 @@ namespace APP.View
 
         private bool _saveRequired = false;
 
-        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter)
+        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
         {
             _contourSaver = contourSaver;
             _conveter = conveter;
+            _contourLoader = contourLoader;
             InitializeComponent();
 
             _przedzial = new List<int> {0};
@@ -63,6 +68,28 @@ namespace APP.View
        
         private void LoadContours_Click(object sender, RoutedEventArgs e)
         {
+            if (_saveRequired)
+            {
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                        return;
+                        break;
+                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
+                       return;
+                        break;
+                    case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
+                        SaveContours_Click(null, null);
+                        break;
+
+                    case MessageBoxResult.No: //nic nie robimy więc zamyka się okno
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
@@ -73,8 +100,37 @@ namespace APP.View
             bool? userClickedOk = openFileDialog1.ShowDialog();
 
             if (userClickedOk == true)
-            {                
-                // todo                
+            {
+
+                var loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+                var image  = Imaging.CreateBitmapSourceFromHBitmap(
+                    loadContour.Bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(loadContour.Width, loadContour.Height)
+                    );
+
+               
+
+
+                CanvasContour.Children.Clear();
+                _przedzial.Clear();
+                _przedzial.Add(0);
+
+                CanvasContour.Height = image.Height;
+                CanvasContour.Width = image.Width;
+
+                Rectangle rectangle = new Rectangle()
+                {
+                    Fill = new ImageBrush(image),
+                    Width = image.Width,
+                    Height = image.Height,
+                };
+
+
+                rectangle.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Unspecified);
+
+                CanvasContour.Children.Add(rectangle);           
             }
         }
 
@@ -342,6 +398,9 @@ namespace APP.View
                     CanvasContourScale.ScaleY = 1;
                 }
             }
+
+
+            
             e.Handled = true;
         }
 
