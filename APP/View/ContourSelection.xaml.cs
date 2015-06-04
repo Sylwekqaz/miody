@@ -37,6 +37,8 @@ namespace APP.View
 
         private string _saveFileName = "Bitmapa";
 
+        private bool _saveRequired = false;
+
         public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter)
         {
             _contourSaver = contourSaver;
@@ -48,6 +50,9 @@ namespace APP.View
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
 
             ListColors.ItemsSource = values;
+
+            
+
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -108,6 +113,7 @@ namespace APP.View
                 if (_brushColor == null) return;
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
+
                     Line line = new Line
                     {
                         Stroke = _brushColor,
@@ -133,7 +139,14 @@ namespace APP.View
         private void CanvasContour_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
+            {
                 _currentPoint = e.GetPosition(CanvasContour);
+                if (_brushColor!=null)
+                {
+                    _saveRequired = true;
+                }
+                
+            }
         }
 
         private void CanvasContour_MouseUp(object sender, MouseButtonEventArgs e)
@@ -169,6 +182,7 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
+                
                 string path = saveFileDialog1.FileName;
                 _saveFileName = Path.GetFileName(path);
 
@@ -204,6 +218,8 @@ namespace APP.View
 
                 contour = _conveter.LoadBitmap(bitmap);
                 _contourSaver.SaveContour(path, bitmap);
+
+                _saveRequired = false;
 
 
                 ////////
@@ -258,8 +274,33 @@ namespace APP.View
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
+            if (_saveRequired)
+            {
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
+                        SaveContours_Click(null, null);
+                        break;
+
+                    case MessageBoxResult.No: //nic nie robimy więc zamyka się okno
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }  
+            }
+            
+
+
+
+           // e.Cancel = true;
+            //Hide();
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -303,5 +344,9 @@ namespace APP.View
             }
             e.Handled = true;
         }
+
+        
+
+       
     }
 }
