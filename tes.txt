@@ -11,7 +11,7 @@ Malina Magenta
 Wierzba Lime
 Nawloc Navy
 KoniczynaBiala Orange
-KonicznyaCzerwona SeaGreen
+KoniczynaCzerwona SeaGreen
 ChaberBlawatek Teal
 Szczaw Maroon
 Manuka SkyBlue

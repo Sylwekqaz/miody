@@ -22,17 +22,12 @@ namespace APP.Helpers.FileHandling
         /// Kamil
         public Contour LoadBitmap(Bitmap bitmap)
         {
-//#if DEBUG
-//            Bitmap tempBitmap = new Bitmap(bitmap.Width, bitmap.Height);
-//            for (int w = 0; w < bitmap.Width; w++)
-//            {
-//                for (int h = 0; h < bitmap.Height; h++)
-//                {
-//                    tempBitmap.SetPixel(w, h, Color.White);
-//                }
-//            }
 
-//#endif
+            Bitmap contourBitmap = new Bitmap(bitmap.Width, bitmap.Height);
+            contourBitmap.MakeTransparent();
+            contourBitmap.Clear(Color.Transparent);
+
+
 
 
             Contour wynikContour = new Contour(bitmap.Width, bitmap.Height)
@@ -45,25 +40,23 @@ namespace APP.Helpers.FileHandling
                 for (int j = 0; j < bitmap.Width; j++)
                 {
                     var drawingColor = bitmap.GetPixel(j, i);
-                    System.Windows.Media.Color pixelcolor = System.Windows.Media.Color.FromArgb(drawingColor.A,
-                        drawingColor.R, drawingColor.G, drawingColor.B);
-                    if (Pollen.TryPrase(pixelcolor) != null)
+                    if (Pollen.TryPrase(drawingColor.ToMediaColor()) != null)
                     {
                         ContourPoint point = new ContourPoint
                         {
                             Location = new Point(j, i),
-                            Type = Pollen.TryPrase(pixelcolor)
+                            Type = Pollen.TryPrase(drawingColor.ToMediaColor())
                         };
-//#if DEBUG
-//                        tempBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
-//#endif
+
+                        contourBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
+
                         wynikContour.ContourSet.Add(point);
                     }
                 }
             }
 
         //    var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);  no chyba nie
-
+            wynikContour.Bitmap = contourBitmap;
             return wynikContour;
         }
     }

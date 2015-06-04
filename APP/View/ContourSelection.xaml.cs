@@ -5,7 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Ink;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -17,6 +19,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Color = System.Windows.Media.Color;
 using Path = System.IO.Path;
 using Point = System.Windows.Point;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace APP.View
 {
@@ -27,6 +30,7 @@ namespace APP.View
     {
         private readonly IContourSaver _contourSaver;
         private readonly IBitmapHandler _conveter;
+        private readonly IContourLoader _contourLoader;
 
         private Contour contour = null;
         public MainWindow mainWindow;
@@ -37,10 +41,13 @@ namespace APP.View
 
         private string _saveFileName = "Bitmapa";
 
-        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter)
+        private bool _saveRequired = false;
+
+        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
         {
             _contourSaver = contourSaver;
             _conveter = conveter;
+            _contourLoader = contourLoader;
             InitializeComponent();
 
             _przedzial = new List<int> {0};
@@ -48,19 +55,44 @@ namespace APP.View
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
 
             ListColors.ItemsSource = values;
+
+            
+
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             // sprawdzić czy zapisano zmiany
             Hide();
-        }
-
+        }  
+       
         private void LoadContours_Click(object sender, RoutedEventArgs e)
         {
+            if (_saveRequired)
+            {
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                        return;
+                        break;
+                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
+                       return;
+                        break;
+                    case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
+                        SaveContours_Click(null, null);
+                        break;
+
+                    case MessageBoxResult.No: //nic nie robimy więc zamyka się okno
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1
             };
 
@@ -69,11 +101,36 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                BitmapImage bitmapImage = new BitmapImage(new Uri(openFileDialog1.FileName));
 
-                CanvasContour.Width = bitmapImage.Width;
-                CanvasContour.Height = bitmapImage.Height;
-                CanvasContourBackground.ImageSource = bitmapImage;
+                var loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+                var image  = Imaging.CreateBitmapSourceFromHBitmap(
+                    loadContour.Bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(loadContour.Width, loadContour.Height)
+                    );
+
+               
+
+
+                CanvasContour.Children.Clear();
+                _przedzial.Clear();
+                _przedzial.Add(0);
+
+                CanvasContour.Height = image.Height;
+                CanvasContour.Width = image.Width;
+
+                Rectangle rectangle = new Rectangle()
+                {
+                    Fill = new ImageBrush(image),
+                    Width = image.Width,
+                    Height = image.Height,
+                };
+
+
+                rectangle.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Unspecified);
+
+                CanvasContour.Children.Add(rectangle);           
             }
         }
 
@@ -112,6 +169,7 @@ namespace APP.View
                 if (_brushColor == null) return;
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
+
                     Line line = new Line
                     {
                         Stroke = _brushColor,
@@ -137,7 +195,14 @@ namespace APP.View
         private void CanvasContour_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
+            {
                 _currentPoint = e.GetPosition(CanvasContour);
+                if (_brushColor!=null)
+                {
+                    _saveRequired = true;
+                }
+                
+            }
         }
 
         private void CanvasContour_MouseUp(object sender, MouseButtonEventArgs e)
@@ -168,7 +233,7 @@ namespace APP.View
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
             {
-                Filter = "Bitmapa (*.bmp)|*.bmp|Plik konturu (*.txt)|*.txt ",
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
                 FilterIndex = 1,
                 FileName = _saveFileName
             };
@@ -177,6 +242,7 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
+                
                 string path = saveFileDialog1.FileName;
                 _saveFileName = Path.GetFileName(path);
 
@@ -207,6 +273,8 @@ namespace APP.View
                 contour = _conveter.LoadBitmap(bitmap);
                 _contourSaver.SaveContour(path, bitmap);
 
+                _saveRequired = false;
+
 
                 CanvasContourBackground.Opacity = 1;
             }
@@ -216,26 +284,28 @@ namespace APP.View
         {
             SaveContours_Click(null, null);
 
-            mainWindow._contour1 = contour;
+            mainWindow.Contour1 = contour;
             mainWindow.Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                 contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
                 System.Windows.Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
             );
+            mainWindow.ListBoxContour1.ItemsSource = contour.ContourSet;
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
         {
             SaveContours_Click(null, null);
 
-            mainWindow._contour2 = contour;
+            mainWindow.Contour2 = contour;
             mainWindow.Contour2Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                 contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
                 System.Windows.Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
             );
+            mainWindow.ListBoxContour2.ItemsSource = contour.ContourSet;
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
@@ -256,8 +326,33 @@ namespace APP.View
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
+            if (_saveRequired)
+            {
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
+                        SaveContours_Click(null, null);
+                        break;
+
+                    case MessageBoxResult.No: //nic nie robimy więc zamyka się okno
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }  
+            }
+            
+
+
+
+           // e.Cancel = true;
+            //Hide();
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -299,7 +394,14 @@ namespace APP.View
                     CanvasContourScale.ScaleY = 1;
                 }
             }
+
+
+            
             e.Handled = true;
         }
+
+        
+
+       
     }
 }
