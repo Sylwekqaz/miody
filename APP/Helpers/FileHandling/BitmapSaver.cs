@@ -18,9 +18,10 @@ namespace APP.Helpers.FileHandling
         /// <param name="fileName">
         /// Nazwa pliku pod którą chcemy zapisać daną bitmapę
         /// </param>
+        /// Kamil
         public void SaveBitmap(Bitmap bitmap, string fileName)
         {
-            bitmap.Save(fileName); //format?
+            bitmap.Save(fileName); 
         }
     }
 }

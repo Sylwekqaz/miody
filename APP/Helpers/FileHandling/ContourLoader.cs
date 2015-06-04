@@ -8,10 +8,13 @@ namespace APP.Helpers.FileHandling
     {
         Contour LoadContour(string path);
     }
-
-    public class ContourLoader // przyjmuje sting path(sciezke do pliku) ->  zwraca kontur.
-        // TxtHandler -> przyjmuje plik, jesli jest txt i go zmienia na kontur
-        // BitmapHandler -> przyjmuje plik, jesli jest .jpg  i go zmienia na kontur
+    /// <summary>
+    /// przyjmuje string o nazwie path(sciezke do pliku) ->  zwraca kontur.
+    // TxtHandler -> przyjmuje plik, jesli jest txt i go zmienia na kontur
+    // BitmapHandler -> przyjmuje plik i zmienia go na kontur
+    /// </summary>
+    /// Kamil
+    public class ContourLoader
         : IContourLoader
     {
         private readonly ITxtHandler _txtHandler;
@@ -34,6 +37,7 @@ namespace APP.Helpers.FileHandling
         /// <returns>
         /// zwraca kontur
         /// </returns>
+        /// Kamil
         public Contour LoadContour(string path)
         {
             Contour loadedContour;

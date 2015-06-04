@@ -26,6 +26,7 @@ namespace APP.Helpers.FileHandling
         /// <returns>
         /// Zwraca kontur
         /// </returns>
+        /// Kamil
         public Contour LoadTxt(TextReader reader)
     {
         //test

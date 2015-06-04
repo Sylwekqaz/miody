@@ -23,7 +23,12 @@ namespace APP.Helpers.FileHandling
             _bitmapHandler = bitmapHandler;
         }
 
-
+        /// <summary>
+        /// Zapisujemy Kontur jako bitmape lub plik tekstowy w zależności od wybranej opcji
+        /// </summary>
+        /// <param name="path">ścieżka - podaje nam gdzie mamy zapisać plik</param>
+        /// <param name="bitmap">Bitmapa, na której podstawie zapiszemy nasz kontur</param>
+        /// Kamil
         public void SaveContour(string path, Bitmap bitmap)
         {
             if (Path.GetExtension(path).Contains("txt"))

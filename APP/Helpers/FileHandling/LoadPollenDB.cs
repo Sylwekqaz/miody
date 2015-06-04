@@ -11,7 +11,11 @@ namespace APP.Helpers.FileHandling
 {
     class LoadPollenDB
     {
-
+        /// <summary>
+        /// Odczytuje baze danych pyłków z pliku tekstowego
+        /// </summary>
+        /// <param name="reader">Parametr odpowiedzialny za przeczytanie pliku</param>
+        /// Kamil
         public static void Load_DB(TextReader reader)
         {
             while (reader.Peek() != -1)

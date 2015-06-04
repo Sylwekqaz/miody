@@ -5,13 +5,26 @@ using DColor = System.Drawing.Color;
 
 namespace APP.Helpers
 {
+    /// <summary>
+    /// Zamienia Media Color na Drawing Color
+    /// </summary>
+    /// <param name="color"> Przyjmuję parametr System.Windows.Media.Color który chcemy zamienić</param>
+    /// <returns> Zwraca Drawing Color </returns>
+    /// Kamil
     public static class ColorHelper
+        
     {
         public static DColor ToDrawingColor(this MColor color)
         {
             return DColor.FromArgb(color.A, color.R, color.G, color.B);
         }
 
+        /// <summary>
+        /// Zamienia Drawing Color na Media Color
+        /// </summary>
+        /// <param name="color"> Przyjmuję parametr System.Drawing.Color który chcemy zamienić</param>
+        /// <returns> Zwraca Media Color </returns>
+        /// Kamil
 
         public static MColor ToMediaColor(this DColor color)
         {

@@ -11,6 +11,12 @@ namespace APP.Helpers.FileHandling
 {
     class BitmapFromContour
     {
+        /// <summary>
+        /// Otrzymujemy Bitmape z Konturu.
+        /// </summary>
+        /// <param name="contour">Przyjmuje parametr instancji Contour</param>
+        /// <returns> Zwraca Bitmape</returns>
+        /// Kamil
         public static Bitmap Result(Contour contour)
         {
             Bitmap result = new Bitmap(contour.Width, contour.Height);

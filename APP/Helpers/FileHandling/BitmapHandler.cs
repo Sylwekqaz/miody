@@ -19,6 +19,7 @@ namespace APP.Helpers.FileHandling
         /// <returns>
         /// Zwraca Kontur
         /// </returns>
+        /// Kamil
         public Contour LoadBitmap(Bitmap bitmap)
         {
 //#if DEBUG

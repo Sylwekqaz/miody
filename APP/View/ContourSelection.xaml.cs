@@ -158,7 +158,12 @@ namespace APP.View
                 _currentPoint = e.GetPosition(CanvasContour);
             }
         }
-
+        /// <summary>
+        /// Metoda zapisująca Kontur do pliku
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// Kamil
         private void SaveContours_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
@@ -167,7 +172,6 @@ namespace APP.View
                 FilterIndex = 1,
                 FileName = _saveFileName
             };
-
 
             bool? userClickedOk = saveFileDialog1.ShowDialog();
 
@@ -178,9 +182,7 @@ namespace APP.View
 
                 CanvasContourBackground.Opacity = 0;
 
-                //  FileStream fs = new FileStream(path, FileMode.Create);
                 Rect prostokat = VisualTreeHelper.GetDescendantBounds(CanvasContour);
-                //CanvasContour -> witdh -> 0        height -> 0 
 
                 RenderTargetBitmap bmp = new RenderTargetBitmap((int) prostokat.Width, (int) prostokat.Height, 96, 96,
                     PixelFormats.Pbgra32);
@@ -196,21 +198,15 @@ namespace APP.View
 
                 bmp.Render(dv);
 
-
                 MemoryStream stream = new MemoryStream();
                 BitmapEncoder encoder2 = new BmpBitmapEncoder();
                 encoder2.Frames.Add(BitmapFrame.Create(bmp));
                 encoder2.Save(stream);
-                Bitmap bitmap = new Bitmap(stream); //bitmapa z canvasa
-
-                //  bitmap.Save(path);   //działa, bitmapa ok.
-
+                Bitmap bitmap = new Bitmap(stream); 
 
                 contour = _conveter.LoadBitmap(bitmap);
                 _contourSaver.SaveContour(path, bitmap);
 
-
-                ////////
 
                 CanvasContourBackground.Opacity = 1;
             }

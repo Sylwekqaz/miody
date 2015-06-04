@@ -20,6 +20,7 @@ namespace APP.Helpers.FileHandling
         /// <param name="writer">
         /// TextWriter umożliwiający zapis do pliku
         /// </param>
+        /// Kamil
         public void SaveTxt(Contour kontur, TextWriter writer)
         {
             writer.Write(kontur.Height);
