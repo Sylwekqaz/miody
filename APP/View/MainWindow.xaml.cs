@@ -23,9 +23,42 @@ namespace APP.View
 
         private ContourSelection _contourSelectionWindow;
         private ResultWindow _resultWindow;
+        private Contour _contour1;
+        private Contour _contour2;
 
-        public Contour _contour1;
-        public Contour _contour2;
+        public Contour Contour1
+        {
+            get { return _contour1; }
+            set
+            {
+                _contour1 = value;
+                if (_contour1 != null && _contour2 != null)
+                {
+                    GetResultButton.IsEnabled = true;
+                }
+                else
+                {
+                    GetResultButton.IsEnabled = false;
+                }
+            }
+        }
+
+        public Contour Contour2
+        {
+            get { return _contour2; }
+            set
+            {
+                _contour2 = value;
+                if (_contour1 != null && _contour2 != null)
+                {
+                    GetResultButton.IsEnabled = true;
+                }
+                else
+                {
+                    GetResultButton.IsEnabled = false;
+                }
+            }
+        }
 
         public MainWindow(ContourLoader contourLoader, IEnumerable<Comparison> comparisons)
         {
@@ -50,10 +83,10 @@ namespace APP.View
 
         private void ResultOpen_Click(object sender, RoutedEventArgs e)
         {
-            if (_contour1 != null && _contour2 != null)
+            if (Contour1 != null && Contour2 != null)
             {
                 SetContourSizes();
-                _resultWindow = IoC.Resolve<ResultWindow>(new[] { new NamedParameter("a", _contour1), new NamedParameter("b", _contour2) });// new ResultWindow(results));
+                _resultWindow = IoC.Resolve<ResultWindow>(new[] { new NamedParameter("a", Contour1), new NamedParameter("b", Contour2) });// new ResultWindow(results));
                 _resultWindow.Show();
             }
             else MessageBox.Show("Wczytaj oba kontury!");
@@ -72,21 +105,21 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                _contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                Contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
                 Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    _contour1.Bitmap.GetHbitmap(),
+                    Contour1.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(_contour1.Width, _contour1.Height)
+                    BitmapSizeOptions.FromWidthAndHeight(Contour1.Width, Contour1.Height)
                     );
 
-                ListBoxContour1.ItemsSource = _contour1.ContourSet;
+                ListBoxContour1.ItemsSource = Contour1.ContourSet;
             }
         }
 
         private void ClearContour1_Click(object sender, RoutedEventArgs e)
         {
-            _contour1 = null;
+            Contour1 = null;
             Contour1Image.Source = null;
         }
 
@@ -103,33 +136,33 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                _contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                Contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
 
                 Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    _contour2.Bitmap.GetHbitmap(),
+                    Contour2.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
                     Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(_contour2.Width, _contour2.Height)
+                    BitmapSizeOptions.FromWidthAndHeight(Contour2.Width, Contour2.Height)
                     );
 
-                ListBoxContour2.ItemsSource = _contour2.ContourSet;                       
+                ListBoxContour2.ItemsSource = Contour2.ContourSet;                       
             }
         }
 
         private void ClearContour2_Click(object sender, RoutedEventArgs e)
         {
-            _contour2 = null;
+            Contour2 = null;
             Contour2Image.Source = null;
         }
         
         private void SetContourSizes()
         {
-            int width = Math.Max(_contour1.Width, _contour2.Width);
-            int height = Math.Max(_contour1.Height, _contour2.Height);
-            _contour1.Width = width;
-            _contour1.Height = height;
-            _contour2.Width = width;
-            _contour2.Height = height;
+            int width = Math.Max(Contour1.Width, Contour2.Width);
+            int height = Math.Max(Contour1.Height, Contour2.Height);
+            Contour1.Width = width;
+            Contour1.Height = height;
+            Contour2.Width = width;
+            Contour2.Height = height;
         }
     }
 }

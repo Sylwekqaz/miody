@@ -232,7 +232,7 @@ namespace APP.View
         {
             SaveContours_Click(null, null);
 
-            mainWindow._contour1 = contour;
+            mainWindow.Contour1 = contour;
             mainWindow.Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                 contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
@@ -246,7 +246,7 @@ namespace APP.View
         {
             SaveContours_Click(null, null);
 
-            mainWindow._contour2 = contour;
+            mainWindow.Contour2 = contour;
             mainWindow.Contour2Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                 contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
