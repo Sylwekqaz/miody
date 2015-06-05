@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using APP.Helpers;
@@ -25,6 +26,25 @@ namespace APP.Model
         public readonly int Numer;
         public string Name { get; private set; }
         public Color Color { get; private set; }
+
+
+        static Pollen()
+        {
+            TextReader reader = new StreamReader(@"Pollen.cfg");
+            while (reader.Peek() != -1)
+            {
+                string readLine = reader.ReadLine();
+                string[] line = readLine.Split(' ');
+                if (readLine != null)
+                {
+                    line = readLine.Split(' ');
+                    string name = line[0];
+                    Color color = (Color)ColorConverter.ConvertFromString(line[1]);
+                    // vartable[line[0]] = new Pollen(name, color);
+                    new Pollen(name, color);
+                }
+            }
+        }
 
         public Pollen(string name, Color color)
         {

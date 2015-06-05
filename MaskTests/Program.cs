@@ -17,7 +17,7 @@ namespace MaskTests
             Console.WriteLine(1/2);
 
             // przygotowanie testu 
-            IBitmapHandler handler = new BitmapHandler();
+            IBitmapHandler handler = new BitmapHandler(new ErrorLog());
             Contour contour = handler.LoadBitmap(new Bitmap(@"..\..\Images\kontur 2.bmp"));
             MaskGenerator generator = new MaskGenerator();
 

@@ -10,6 +10,14 @@ namespace APP.Helpers.FileHandling
 
     public class BitmapHandler : IBitmapHandler
     {
+        private IErrorLog Log;
+        private bool _error = false;
+
+        public BitmapHandler(IErrorLog log)
+        {
+            Log = log;
+        }
+
         /// <summary>
         /// Metoda odczytuje z bitmapy dane, tworząc kontur
         /// </summary>
@@ -40,22 +48,32 @@ namespace APP.Helpers.FileHandling
                 for (int j = 0; j < bitmap.Width; j++)
                 {
                     var drawingColor = bitmap.GetPixel(j, i);
-                    if (Pollen.TryPrase(drawingColor.ToMediaColor()) != null)
+
+                    var pollen = Pollen.TryPrase(drawingColor.ToMediaColor());
+                    if (pollen != null)
                     {
                         ContourPoint point = new ContourPoint
                         {
                             Location = new Point(j, i),
-                            Type = Pollen.TryPrase(drawingColor.ToMediaColor())
+                            Type = pollen
                         };
 
                         contourBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
 
                         wynikContour.ContourSet.Add(point);
                     }
+                    else if (drawingColor.ToArgb() != -1)
+                    {
+                        _error = true;
+                    }
                 }
             }
 
         //    var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);  no chyba nie
+            if (_error)
+            {
+               Log.Log("Podczas wczytywania bitmapy program napotkał piksele których nie mógł rozpoznać");
+            }
             wynikContour.Bitmap = contourBitmap;
             return wynikContour;
         }

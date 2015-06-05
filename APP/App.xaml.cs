@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
+using APP.Helpers;
 using APP.Helpers.FileHandling;
 using APP.Helpers.Measures;
 using APP.View;
@@ -29,6 +30,8 @@ namespace APP
             builder.RegisterType<HammingDistance>().As<Comparison>();
             builder.RegisterType<HausdorffDistance>().As<Comparison>();
             builder.RegisterType<JaccardIndex>().As<Comparison>();
+
+            builder.RegisterType<ErrorLog>().As<IErrorLog>().SingleInstance();
 
 
 

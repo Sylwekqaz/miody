@@ -58,8 +58,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\BitmapHelper.cs" />
+    <Compile Include="Helpers\ErrorLog.cs" />
     <Compile Include="Helpers\FileHandling\BitmapFromContour.cs" />
-    <Compile Include="Helpers\FileHandling\LoadPollenDB.cs" />
     <Compile Include="Helpers\Measures\HammingDistance.cs" />
     <Compile Include="Helpers\PointHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
@@ -126,6 +126,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Pollen.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

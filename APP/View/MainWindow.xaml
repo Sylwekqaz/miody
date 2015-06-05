@@ -44,18 +44,8 @@
 
         <Image Grid.Column="0" Grid.Row="2" Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         <Image Grid.Column="0" Grid.Row="3" Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                
-        <ListView Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour1">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
-                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
-                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>                    
-                </GridView>
-            </ListView.View>
-        </ListView>
 
-        <ListView Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour2" >
+        <ListView Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour1" Margin="0,0,0,118">
             <ListView.View>
                 <GridView>
                     <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
@@ -64,6 +54,17 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <ListView Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour2" Margin="0,0,0,118" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
+                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
+                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListBox Name="ErrorBox" Grid.Column="1" HorizontalAlignment="Left" Height="113" Margin="0,232,0,0" Grid.Row="3" VerticalAlignment="Top" Width="455" Grid.ColumnSpan="3"/>
 
     </Grid>
 </Window>
