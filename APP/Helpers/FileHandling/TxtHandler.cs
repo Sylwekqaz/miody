@@ -66,7 +66,7 @@ namespace APP.Helpers.FileHandling
 
                 if (readLine != null)
                 {
-                    if (line.Length >2)
+                    if (line.Length > 2)
                     {
                         podobienstwo = (double) MatchFinder(pylki, line[2]).ToList<object>()[1];
                         if (podobienstwo > 0.55)
