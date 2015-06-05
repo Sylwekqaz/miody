@@ -32,10 +32,17 @@ namespace APP.Helpers.Measures
         {
             _maskAComplete = false;
             _progres = 0;
-            
-            Mask maskaA = _maskGenerator.GenerateMask(a);
+            if (a.Mask == null)
+            {
+                a.Mask = _maskGenerator.GenerateMask(a);
+            }
+            Mask maskaA = a.Mask;
             _maskAComplete = true;
-            Mask maskaB = _maskGenerator.GenerateMask(b);
+            if (b.Mask == null)
+            {
+                b.Mask = _maskGenerator.GenerateMask(b);
+            }
+            Mask maskaB = b.Mask;
 
             int mocA = MocZbioru(maskaA.MaskMap);
             int mocB = MocZbioru(maskaB.MaskMap);
