@@ -17,5 +17,7 @@ namespace APP.Model
         public int Height { get; set; }
         public HashSet<ContourPoint> ContourSet { get; set; }
         public Bitmap Bitmap { get; set; } // todo zrobić aby kontur miał rozmiar bitmapy
+
+        public Mask Mask { get; set; }
     }
 }
