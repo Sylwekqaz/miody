@@ -13,13 +13,8 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
-            <Menu.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </Menu.ItemsPanel>
-            <MenuItem Header="Zapisz zdjęcie" IsEnabled="False" Margin="10,0,0,0" />
-            <MenuItem Header="Zapisz rezultat" IsEnabled="False" />
+            <MenuItem Name="ImageSaveButton" Header="Zapisz zdjęcie" IsEnabled="False" Margin="10,5,0,0" Click="SaveImage_Click" />
+            <MenuItem Name="ResultSaveButton" Header="Zapisz rezultat" IsEnabled="False" Margin="0,5,0,0" Click="SaveResult_Click"/>
         </Menu>
         
         <Image Grid.Row="1" Name="ResultImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

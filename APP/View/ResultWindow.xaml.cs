@@ -12,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.IO;
+using APP.Helpers.FileHandling;
 
 namespace APP.View
 {
@@ -25,6 +26,10 @@ namespace APP.View
         private Contour _b;
 
         private BackgroundWorker _worker;
+
+        private readonly IContourSaver _contourSaver;
+        private string _saveFileName = "Bitmapa";
+        private string _resultFileString = "";
 
         public ResultWindow(IEnumerable<Comparison> comparisons, Contour a, Contour b)
         {
@@ -69,6 +74,8 @@ namespace APP.View
                         TextBlockTitle.Inlines.Add("\n");
                         TextBlockResult.Inlines.Add("\n");
                     }
+
+                    _resultFileString += result.Title + ": " + result.D + "%\n";
                 }
                 
             }));
@@ -131,8 +138,9 @@ namespace APP.View
             TextBlockResult.Visibility = Visibility.Visible;
             
             ResultImage.Visibility = Visibility.Visible;
-            
 
+            ImageSaveButton.IsEnabled = true;
+            ResultSaveButton.IsEnabled = true;
 
         }
 
@@ -154,7 +162,48 @@ namespace APP.View
             Hide();
         }
 
-       
+        private void SaveImage_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png",
+                FilterIndex = 1,
+                FileName = _saveFileName
+            };
+
+            bool? userClickedOk = saveFileDialog1.ShowDialog();
+
+            if (userClickedOk == true)
+            {
+                string path = saveFileDialog1.FileName;
+                Bitmap bitmap = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
+
+                bitmap.Save(path);
+            }
+        }
+
+        private void SaveResult_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "Plik tekstowy (*.txt)|*.txt",
+                FilterIndex = 1,
+                FileName = _saveFileName
+            };
+
+            bool? userClickedOk = saveFileDialog1.ShowDialog();
+
+            if (userClickedOk == true)
+            {
+                string path = saveFileDialog1.FileName;
+                TextWriter writer = new StreamWriter(path);
+
+                writer.WriteLine(_resultFileString);
+                
+                writer.Close();
+            }
+            
+        }
 
     }
 }
