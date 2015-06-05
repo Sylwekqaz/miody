@@ -59,7 +59,6 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\BitmapHelper.cs" />
     <Compile Include="Helpers\ErrorLog.cs" />
-    <Compile Include="Helpers\FileHandling\BitmapFromContour.cs" />
     <Compile Include="Helpers\Measures\HammingDistance.cs" />
     <Compile Include="Helpers\PointHelper.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />

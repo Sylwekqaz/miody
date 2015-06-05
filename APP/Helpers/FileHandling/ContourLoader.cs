@@ -52,7 +52,7 @@ namespace APP.Helpers.FileHandling
                 Bitmap bitmap = new Bitmap(path);
                 
                 loadedContour = _bitmapHandler.LoadBitmap(bitmap);
-                loadedContour.Bitmap = bitmap;
+               
             }
             return loadedContour;
         }
