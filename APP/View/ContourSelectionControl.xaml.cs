@@ -40,6 +40,8 @@ namespace APP.View
 
         private bool _saveRequired;
 
+        BackgroundWorker worker = new AbortableBackgroundWorker();
+
         public ContourSelectionControl(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
         {
             _contourSaver = contourSaver;
@@ -96,6 +98,7 @@ namespace APP.View
             if (userClickedOk == true)
             {
                 Contour loadContour;
+
                 try
                 {
                     loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
@@ -105,6 +108,7 @@ namespace APP.View
                     MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
                 var image  = Imaging.CreateBitmapSourceFromHBitmap(
                     loadContour.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
@@ -119,8 +123,11 @@ namespace APP.View
                 _przedzial.Clear();
                 _przedzial.Add(0);
 
-                CanvasContour.Height = image.Height;
-                CanvasContour.Width = image.Width;
+
+                // chyba niepotrzebnie zmienia...
+
+                //CanvasContour.Height = image.Height;
+                //CanvasContour.Width = image.Width;
 
                 Rectangle rectangle = new Rectangle
                 {
@@ -225,6 +232,19 @@ namespace APP.View
                 _currentPoint = e.GetPosition(CanvasContour);
             }
         }
+
+
+        private void SavingProcess()
+        {
+            ResultText.Text = "Trwa zapisywanie...";
+            ResultText.Visibility = Visibility.Visible;
+        }
+        private void SavingProcessEnd()
+        {
+            ResultText.Visibility = Visibility.Collapsed;
+        }
+
+
         /// <summary>
         /// Metoda zapisująca Kontur do pliku
         /// </summary>
@@ -264,6 +284,7 @@ namespace APP.View
                     dc.DrawRectangle(vb, null, new Rect(new Point(), prostokat.Size));
                 }
 
+
                 bmp.Render(dv);
 
                 MemoryStream stream = new MemoryStream();
@@ -272,11 +293,24 @@ namespace APP.View
                 encoder2.Save(stream);
                 Bitmap bitmap = new Bitmap(stream); 
 
-                _contour = _conveter.LoadBitmap(bitmap);
-                _contourSaver.SaveContour(path, bitmap);
 
-                _saveRequired = false;
+                worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                {
 
+                    System.Windows.Threading.Dispatcher Disp = ResultText.Dispatcher;
+
+                    Disp.Invoke(SavingProcess);
+
+                    _contour = _conveter.LoadBitmap(bitmap);
+                    _contourSaver.SaveContour(path, bitmap);
+
+                    _saveRequired = false;
+
+                    Disp.Invoke(SavingProcessEnd);
+
+                };
+
+                worker.RunWorkerAsync();
 
                 CanvasContourBackground.Opacity = 1;
             }
@@ -366,12 +400,18 @@ namespace APP.View
             }
         }
 
+        // funkcja Wyczyść tło
         private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CanvasContourBackground.ImageSource = null;
+        }
+
+        // funkcja Wyczyść kontury
+        private void MenuItem2_Click(object sender, RoutedEventArgs e)
         {
             CanvasContour.Children.Clear();
             _przedzial.Clear();
             _przedzial.Add(0);
-            CanvasContourBackground.ImageSource = null;
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

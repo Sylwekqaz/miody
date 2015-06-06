@@ -16,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
@@ -34,7 +35,8 @@
             </MenuItem>
             <MenuItem Header="Edycja">
                 <MenuItem Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
-                <MenuItem Header="Wyczyść" Click="MenuItem_Click" />
+                <MenuItem Header="Wyczyść tło" Click="MenuItem_Click" />
+                <MenuItem Header="Wyczyść kontury" Click="MenuItem2_Click" />
             </MenuItem>
             <MenuItem Header="Wróć >>" Click="MenuItem_OnClick"></MenuItem>
             <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click"
@@ -85,6 +87,9 @@
                 </Canvas>
             </ScrollViewer>
         </DockPanel>
+
+        <TextBlock Grid.Row="2" FontSize="20" Name="ResultText" Text="Trwa zapisywanie..." HorizontalAlignment="Center" Visibility="Collapsed"></TextBlock>
+        
 
     </Grid>
 </ContentControl>
