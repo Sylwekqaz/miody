@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
-using APP.Helpers.FileHandling;
-using APP.Helpers.Measures;
-using APP.Model;
-using Autofac;
-using Microsoft.Win32;
-using System.IO;
-using System.Windows.Threading;
-using APP.Helpers;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Markup;
+using System.Windows.Media.Animation;
 
 namespace APP.View
 {
@@ -21,180 +14,133 @@ namespace APP.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IErrorLog _errorLog;
-        private readonly ContourLoader _contourLoader;
-        private readonly IEnumerable<Comparison> _comparisons;
+        private MainControl _mainControl;
+        private ContourSelectionControl _contourSelectionControl;
+        private ResultControl _resultControl;
 
-        private ContourSelection _contourSelectionWindow;
-        private ResultWindow _resultWindow;
-        private Contour _contour1;
-        private Contour _contour2;
-
-        public Contour Contour1
+        public MainWindow(MainControl mainControl, ContourSelectionControl contourSelectionControl, ResultControl resultControl)
         {
-            get { return _contour1; }
-            set
-            {
-                _contour1 = value;
-                if (_contour1 != null && _contour2 != null)
-                {
-                    GetResultButton.IsEnabled = true;
-                }
-                else
-                {
-                    GetResultButton.IsEnabled = false;
-                }
-            }
-        }
-
-        public Contour Contour2
-        {
-            get { return _contour2; }
-            set
-            {
-                _contour2 = value;
-                if (_contour1 != null && _contour2 != null)
-                {
-                    GetResultButton.IsEnabled = true;
-                }
-                else
-                {
-                    GetResultButton.IsEnabled = false;
-                }
-            }
-        }
-
-        public MainWindow(ContourLoader contourLoader, IEnumerable<Comparison> comparisons, IErrorLog errorLog)
-        {
-            _contourLoader = contourLoader;
-            _comparisons = comparisons;
-            _errorLog = errorLog;
-
-            _errorLog.Changed +=
-                () =>
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        (Action) (() => { ErrorBox.ItemsSource = _errorLog.GetLog(); }));
-
-
             InitializeComponent();
-
-
-            //TextReader writer = new StreamReader(@"../../Pollen.cfg"); //poprawic sciezke
-            //LoadPollenDB.Load_DB(writer);
-            // Console.WriteLine(Pollen.Values);  // test
-
-            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            MainControl = mainControl;
+            ContourSelectionControl = contourSelectionControl;
+            ResultControl = resultControl;
         }
 
-        private void ContourSelectionOpen_Click(object sender, RoutedEventArgs e)
+        public MainControl MainControl
         {
-            _contourSelectionWindow = IoC.Resolve<ContourSelection>();
-            _contourSelectionWindow.mainWindow = this;
-            _contourSelectionWindow.Show();
-        }
-
-        private void ResultOpen_Click(object sender, RoutedEventArgs e)
-        {
-            if (Contour1 != null && Contour2 != null)
+            get { return _mainControl; }
+            set
             {
-                SetContourSizes();
-                _resultWindow =
-                    IoC.Resolve<ResultWindow>(new[]
-                    {new NamedParameter("a", Contour1), new NamedParameter("b", Contour2)});
-                    // new ResultWindow(results));
-                _resultWindow.Show();
-            }
-            else MessageBox.Show("Wczytaj oba kontury!");
-        }
-
-        private void LoadContour1_Click(object sender, RoutedEventArgs e) //open Contour1
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog
-            {
-                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
-                FilterIndex = 1
-            };
-
-
-            bool? userClickedOk = openFileDialog1.ShowDialog();
-
-            if (userClickedOk == true)
-            {
-               
-                try
-                {
-                    Contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    Contour1.Bitmap.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(Contour1.Width, Contour1.Height)
-                    );
-
-                ListBoxContour1.ItemsSource = Contour1.ContourSet;
+                _mainControl = value;
+                _mainControl.MainWindow = this;
+                _mainControl.HorizontalAlignment = HorizontalAlignment.Stretch;
+                _mainControl.VerticalAlignment = VerticalAlignment.Stretch;
+                MainWindowContainer.Children.Add(_mainControl);
             }
         }
 
-        private void ClearContour1_Click(object sender, RoutedEventArgs e)
+        public ContourSelectionControl ContourSelectionControl
         {
-            Contour1 = null;
-            Contour1Image.Source = null;
-        }
-
-        private void LoadContour2_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            get { return _contourSelectionControl; }
+            set
             {
-                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png|Plik konturu (*.txt)|*.txt",
-                FilterIndex = 1
-            };
-
-
-            bool? userClickedOk = openFileDialog1.ShowDialog();
-
-            if (userClickedOk == true)
-            {
-                try
-                {
-                    Contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    Contour2.Bitmap.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(Contour2.Width, Contour2.Height)
-                    );
-
-                ListBoxContour2.ItemsSource = Contour2.ContourSet;
+                _contourSelectionControl = value;
+                _contourSelectionControl.MainWindow = this;
+                _contourSelectionControl.HorizontalAlignment = HorizontalAlignment.Stretch;
+                _contourSelectionControl.VerticalAlignment = VerticalAlignment.Stretch;
+                ContourSelectionControlCointainer.Children.Add(_contourSelectionControl);
             }
         }
 
-        private void ClearContour2_Click(object sender, RoutedEventArgs e)
+        public ResultControl ResultControl
         {
-            Contour2 = null;
-            Contour2Image.Source = null;
+            get { return _resultControl; }
+            set
+            {
+                _resultControl = value;
+                _resultControl.MainWindow = this;
+                _resultControl.HorizontalAlignment = HorizontalAlignment.Stretch;
+                _resultControl.VerticalAlignment = VerticalAlignment.Stretch;
+                ResultControlCointainer.Children.Add(_resultControl);
+            }
         }
 
-        private void SetContourSizes()
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            int width = Math.Max(Contour1.Width, Contour2.Width);
-            int height = Math.Max(Contour1.Height, Contour2.Height);
-            Contour1.Width = width;
-            Contour1.Height = height;
-            Contour2.Width = width;
-            Contour2.Height = height;
+            object senderValue = ((Button)sender).Content;
+            var viewNumber = Convert.ToInt32(senderValue);
+            ChangeView(viewNumber);
+        }
+
+        public void ChangeView(int viewNumber)
+        {
+            this.Resources["TargetGridAnimation"] = ((double) -(viewNumber - 1));
+            ((Storyboard)Resources["Storyboard"]).Begin();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            ContourSelectionControl.OnClosing(e);
         }
     }
+
+    #region Converters
+    public class MyltiplyConverter : MarkupExtension, IValueConverter
+    {
+        private static MyltiplyConverter _instance;
+
+        #region IValueConverter Members
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return System.Convert.ToDouble(value) * System.Convert.ToDouble(parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+
+        #endregion
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return _instance ?? (_instance = new MyltiplyConverter());
+        }
+    }
+
+    public class LeftMarginConverter : MarkupExtension, IValueConverter, IMultiValueConverter
+    {
+        private static LeftMarginConverter _instance;
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return new Thickness(System.Convert.ToDouble(value) * System.Convert.ToDouble(parameter), 0, 0, 0);
+        }
+
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return _instance ?? (_instance = new LeftMarginConverter());
+        }
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double multiply = 1;
+            foreach (object value in values)
+            {
+                multiply *= System.Convert.ToDouble(value);
+            }
+            return new Thickness(multiply, 0, 0, 0);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+    #endregion
 }

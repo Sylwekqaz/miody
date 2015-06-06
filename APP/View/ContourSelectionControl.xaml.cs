@@ -5,7 +5,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -26,24 +25,22 @@ namespace APP.View
     /// <summary>
     /// Interaction logic for CounturSelection.xaml
     /// </summary>
-    public partial class ContourSelection : Window
+    public partial class ContourSelectionControl : ContentControl
     {
         private readonly IContourSaver _contourSaver;
         private readonly IBitmapHandler _conveter;
         private readonly IContourLoader _contourLoader;
 
-        private Contour contour = null;
-        public MainWindow mainWindow;
-
+        private Contour _contour;
         private Brush _brushColor;
         private Point? _currentPoint;
         private readonly List<int> _przedzial;
 
         private string _saveFileName = "Bitmapa";
 
-        private bool _saveRequired = false;
+        private bool _saveRequired;
 
-        public ContourSelection(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
+        public ContourSelectionControl(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
         {
             _contourSaver = contourSaver;
             _conveter = conveter;
@@ -60,12 +57,9 @@ namespace APP.View
 
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            // sprawdzić czy zapisano zmiany
-            Hide();
-        }  
-       
+        public MainWindow MainWindow { get; set; }
+
+
         private void LoadContours_Click(object sender, RoutedEventArgs e)
         {
             if (_saveRequired)
@@ -128,11 +122,11 @@ namespace APP.View
                 CanvasContour.Height = image.Height;
                 CanvasContour.Width = image.Width;
 
-                Rectangle rectangle = new Rectangle()
+                Rectangle rectangle = new Rectangle
                 {
                     Fill = new ImageBrush(image),
                     Width = image.Width,
-                    Height = image.Height,
+                    Height = image.Height
                 };
 
 
@@ -278,7 +272,7 @@ namespace APP.View
                 encoder2.Save(stream);
                 Bitmap bitmap = new Bitmap(stream); 
 
-                contour = _conveter.LoadBitmap(bitmap);
+                _contour = _conveter.LoadBitmap(bitmap);
                 _contourSaver.SaveContour(path, bitmap);
 
                 _saveRequired = false;
@@ -292,28 +286,26 @@ namespace APP.View
         {
             SaveContours_Click(null, null);
 
-            mainWindow.Contour1 = contour;
-            mainWindow.Contour1Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                contour.Bitmap.GetHbitmap(),
+            MainWindow.MainControl.Contour1 = _contour;
+            MainWindow.MainControl.Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                _contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
-                System.Windows.Int32Rect.Empty,
-                BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
             );
-            mainWindow.ListBoxContour1.ItemsSource = contour.ContourSet;
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
         {
             SaveContours_Click(null, null);
 
-            mainWindow.Contour2 = contour;
-            mainWindow.Contour2Image.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                contour.Bitmap.GetHbitmap(),
+            MainWindow.MainControl.Contour2 = _contour;
+            MainWindow.MainControl.Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                _contour.Bitmap.GetHbitmap(),
                 IntPtr.Zero,
-                System.Windows.Int32Rect.Empty,
-                BitmapSizeOptions.FromWidthAndHeight((int)contour.Width, (int)contour.Height)
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
             );
-            mainWindow.ListBoxContour2.ItemsSource = contour.ContourSet;
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
@@ -332,10 +324,11 @@ namespace APP.View
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        internal void OnClosing(CancelEventArgs e)
         {
             if (_saveRequired)
             {
+                MainWindow.ChangeView(1);
                 MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (result)
                 {
@@ -378,6 +371,7 @@ namespace APP.View
             CanvasContour.Children.Clear();
             _przedzial.Clear();
             _przedzial.Add(0);
+            CanvasContourBackground.ImageSource = null;
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -408,8 +402,10 @@ namespace APP.View
             e.Handled = true;
         }
 
-        
 
-       
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            MainWindow.ChangeView(2);
+        }
     }
 }

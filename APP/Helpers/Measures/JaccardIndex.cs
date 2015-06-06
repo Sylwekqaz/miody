@@ -94,7 +94,7 @@ namespace APP.Helpers.Measures
                 {
                     for (int j = 0; j < item1.Value.GetLength(1); j++)
                     {
-                        if (item1.Value[i, j] && item2[i, j])
+                        if (item1.Value[i, j] && item2[i, j]) 
                         {
                             licznik++;
                         }

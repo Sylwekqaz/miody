@@ -73,13 +73,17 @@
     <Compile Include="Helpers\FileHandling\BitmapSaver.cs" />
     <Compile Include="Helpers\FileHandling\TxtSaver.cs" />
     <Compile Include="Helpers\Measures\JaccardIndex.cs" />
-    <Compile Include="View\ResultWindow.xaml.cs">
-      <DependentUpon>ResultWindow.xaml</DependentUpon>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ContourSelection.xaml.cs">
-      <DependentUpon>ContourSelection.xaml</DependentUpon>
+    <Compile Include="View\ResultControl.xaml.cs">
+      <DependentUpon>ResultControl.xaml</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
-    <Page Include="View\MainWindow.xaml">
+    <Compile Include="View\ContourSelectionControl.xaml.cs">
+      <DependentUpon>ContourSelectionControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\MainControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -87,21 +91,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\CounturHelper.cs" />
     <Compile Include="Helpers\Measures\Comparison.cs" />
     <Compile Include="Model\Contour.cs" />
     <Compile Include="Model\Mask.cs" />
     <Compile Include="Model\ContourPoint.cs" />
     <Compile Include="Model\Result.cs" />
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="View\MainControl.xaml.cs">
+      <DependentUpon>MainControl.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ResultWindow.xaml">
+    <Page Include="View\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ContourSelection.xaml">
+    <Page Include="View\ResultControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ContourSelectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

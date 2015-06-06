@@ -1,17 +1,16 @@
-﻿<Window x:Class="APP.View.ContourSelection"
+﻿<ContentControl x:Class="APP.View.ContourSelectionControl"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CounturSelection" Width="900" Height="675">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Window.CommandBindings>
+    <ContentControl.CommandBindings>
         <CommandBinding Command="Undo" Executed="Undo_Executed" />
         <CommandBinding Command="Save" Executed="SaveContours_Click" />
-    </Window.CommandBindings>
+    </ContentControl.CommandBindings>
 
-    <Window.InputBindings>
+    <ContentControl.InputBindings>
         <KeyBinding Command="Undo" Key="Z" Modifiers="Control" />
         <KeyBinding Command="Save" Key="S" Modifiers="Control" />
-    </Window.InputBindings>
+    </ContentControl.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,18 +28,15 @@
                 <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click" />
                 <MenuItem Header="Wczytaj kontury..." Click="LoadContours_Click" />
                 <Separator />
-                <MenuItem Header="Zastosuj algorytm" IsEnabled="False" />
-                <Separator />
                 <MenuItem Header="Zapisz kontury..." InputGestureText="Ctrl+S" Click="SaveContours_Click" />
                 <MenuItem Header="Zapisz i wczytaj do pola 'Kontur 1'" Click="SaveContourAndLoad1_Click" />
                 <MenuItem Header="Zapisz i wczytaj do pola 'Kontur 2'" Click="SaveContourAndLoad2_Click" />
-                <Separator />
-                <MenuItem Header="Zakończ" Click="Close_Click" />
             </MenuItem>
             <MenuItem Header="Edycja">
                 <MenuItem Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
                 <MenuItem Header="Wyczyść" Click="MenuItem_Click" />
             </MenuItem>
+            <MenuItem Header="Wróć >>" Click="MenuItem_OnClick"></MenuItem>
             <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click"
                       Margin="0,0,10,0" />
         </Menu>
@@ -91,4 +87,4 @@
         </DockPanel>
 
     </Grid>
-</Window>
+</ContentControl>

@@ -69,7 +69,6 @@ namespace APP.Helpers.FileHandling
             IEnumerable<Pollen> pylki = Pollen.Values;
 
             double podobienstwo = 0;
-            //     Contour wynikContour = new Contour(0, 0);    //todo- zrobic te wysokosc i szerokosc do konturu
             int lineNumber = 1;
             while (reader.Peek() != -1)
             {

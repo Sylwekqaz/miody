@@ -127,11 +127,6 @@ namespace APP.Helpers
 
         #endregion
 
-        public static void Reduce(this Bitmap sourceImage, int radius)
-        {
-            throw new NotImplementedException();
-        }
-
 
         public static void Clear(this Bitmap sourceImage, Color color)
         {

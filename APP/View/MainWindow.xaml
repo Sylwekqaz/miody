@@ -1,70 +1,69 @@
 ﻿<Window x:Class="APP.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="780" Width="1100" WindowStartupLocation="CenterScreen" Background="WhiteSmoke">
-    <Grid>
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:view="clr-namespace:APP.View"
+        Title="MainWindow" Height="350" Width="525" >
+    <Window.Resources>
+        <Storyboard x:Key="Storyboard">
+            <DoubleAnimation
+                                Storyboard.TargetName="InnerGrid"
+                                Storyboard.TargetProperty="Tag"
+                                To="{DynamicResource TargetGridAnimation}"
+                                Duration="0:0:0.5">
+                <DoubleAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseInOut"></CircleEase>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <system:Double x:Key="TargetGridAnimation">-2</system:Double>
+
+    </Window.Resources>
+    <Grid Name="OuterGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60*" />
-            <ColumnDefinition Width="225" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="225" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.ColumnSpan="4" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
-            <Menu.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </Menu.ItemsPanel>
-            <MenuItem Header="Stwórz kontur" Click="ContourSelectionOpen_Click" Margin="0,0,0,0" />
-            <MenuItem Name="GetResultButton" Header="Porównaj kontury" Click="ResultOpen_Click" FontWeight="Bold" IsEnabled="False"/>
-        </Menu>
+        <Button Grid.Row="0" Grid.Column="0" Content="1" Click="ButtonBase_OnClick" />
+        <Button Grid.Row="0" Grid.Column="1" Content="2" Click="ButtonBase_OnClick"  />
+        <Button Grid.Row="0" Grid.Column="2" Content="3" Click="ButtonBase_OnClick"  />
 
-        <Menu Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
-            <Menu.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </Menu.ItemsPanel>
-            <MenuItem Header="Wczytaj...">
-                <MenuItem Header="Wczytaj kontur 1" Click="LoadContour1_Click" />
-                <MenuItem Header="Wczytaj kontur 2" Click="LoadContour2_Click" />
-            </MenuItem>
-            <MenuItem Header="Wyczyść...">
-                <MenuItem Header="Wyczyść kontur 1" Click="ClearContour1_Click" />
-                <MenuItem Header="Wyczyść kontur 2" Click="ClearContour2_Click" />
-            </MenuItem>
-        </Menu>
 
-        <Image Grid.Column="0" Grid.Row="2" Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <Image Grid.Column="0" Grid.Row="3" Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Grid
+            Width="{Binding Path=ActualWidth, ElementName=OuterGrid, Converter={view:MyltiplyConverter}, ConverterParameter='3'}"
+            Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" Name="InnerGrid">
 
-        <ListView Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour1" Margin="0,0,0,118">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
-                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
-                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
 
-        <ListView Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Name="ListBoxContour2" Margin="0,0,0,118" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn  Header="X" Width="40" DisplayMemberBinding="{Binding Location.X}"/>
-                    <GridViewColumn  Header="Y" Width="40" DisplayMemberBinding="{Binding Location.Y}"/>
-                    <GridViewColumn  Header="Rodzaj" Width="140" DisplayMemberBinding="{Binding Type.Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <ListBox Name="ErrorBox" Grid.Column="1" HorizontalAlignment="Left" Height="113" Margin="0,232,0,0" Grid.Row="3" VerticalAlignment="Top" Width="455" Grid.ColumnSpan="3"/>
 
+
+            <Grid.Margin>
+                <MultiBinding Converter="{view:LeftMarginConverter}">
+                    <Binding Path="ActualWidth" ElementName="OuterGrid"/>
+                    <Binding Path="Tag" RelativeSource="{RelativeSource Self}" />
+                </MultiBinding>
+            </Grid.Margin>
+
+            <Grid.Tag>
+                <system:Double>-1.0</system:Double>
+            </Grid.Tag>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Name="ContourSelectionControlCointainer" Margin="2"/>
+            <DockPanel Grid.Column="1" Name="MainWindowContainer" Margin="2"/>
+            <DockPanel Grid.Column="2" Name="ResultControlCointainer" Margin="2"/> 
+
+        </Grid>
     </Grid>
+
+
 </Window>
