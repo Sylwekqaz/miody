@@ -20,7 +20,7 @@
                     <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <MenuItem Header="Stwórz kontur" Click="ContourSelectionOpen_Click" Margin="0,0,0,0" />
+            <MenuItem Header="Stwórz kontury" Click="ContourSelectionOpen_Click" Margin="0,0,0,0" />
             <MenuItem Name="GetResultButton" Header="Porównaj kontury" Click="ResultOpen_Click" FontWeight="Bold" IsEnabled="False"/>
         </Menu>
 
