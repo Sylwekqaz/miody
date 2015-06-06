@@ -35,16 +35,32 @@ namespace APP.Helpers.FileHandling
         /// Kamil
         public Contour LoadTxt(TextReader reader)
         {
-            string[] line;
             int w = 0;
             int h = 0;
             string readLine = reader.ReadLine();
-            line = readLine.Split(' ');
+            if (readLine==null)
+            {
+                _log.Log("Plik jest pusty");
+                throw new Exception("Plik jest pusty");
+            }
+            var line = readLine.Split(' ');
 
-            w = int.Parse(line[0]);
-            h = int.Parse(line[1]);
-            var wynikContour = new Contour(w + 10, h + 10);
-            wynikContour.Bitmap = new Bitmap(w + 10, h + 10);
+            Contour wynikContour;
+            try
+            {
+                w = int.Parse(line[0]);
+                h = int.Parse(line[1]);
+
+                wynikContour = new Contour(w + 10, h + 10)
+                {
+                    Bitmap = new Bitmap(w + 10, h + 10)
+                };
+            }
+            catch (Exception e)
+            {
+                _log.Log("Linia:1 " + e.Message);
+                throw new Exception("Linia:1 " + e.Message, e);
+            }
 
 
             //parametr is not valid, przyczyna:
@@ -57,39 +73,46 @@ namespace APP.Helpers.FileHandling
             int lineNumber = 1;
             while (reader.Peek() != -1)
             {
+
                 lineNumber++;
 
-
-                readLine = reader.ReadLine();
-                line = readLine.Split(' ');
-
-
-                if (readLine != null)
+                try
                 {
-                    if (line.Length > 2)
-                    {
-                        podobienstwo = (double) MatchFinder(pylki, line[2]).ToList<object>()[1];
-                        if (podobienstwo > 0.55)
-                        {
-                            ContourPoint point = new ContourPoint()
-                            {
-                                Location = new Point(int.Parse(line[0]), int.Parse(line[1])),
-                                Type = (Pollen) ((string) MatchFinder(pylki, line[2]).ToList<object>()[0])
-                            };
+                    readLine = reader.ReadLine();
+                    line = readLine.Split(' ');
 
-                            wynikContour.ContourSet.Add(point);
-                            wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y,
-                                point.Type.Color.ToDrawingColor());
+
+                    if (readLine != null)
+                    {
+                        if (line.Length > 2)
+                        {
+                            podobienstwo = (double) MatchFinder(pylki, line[2]).ToList<object>()[1];
+                            if (podobienstwo > 0.55)
+                            {
+                                ContourPoint point = new ContourPoint()
+                                {
+                                    Location = new Point(int.Parse(line[0]), int.Parse(line[1])),
+                                    Type = (Pollen) ((string) MatchFinder(pylki, line[2]).ToList<object>()[0])
+                                };
+
+                                wynikContour.ContourSet.Add(point);
+                                wynikContour.Bitmap.SetPixel(point.Location.X, point.Location.Y,
+                                    point.Type.Color.ToDrawingColor());
+                            }
+                            else
+                            {
+                                _log.Log("Linia:" + lineNumber + " Nie rozpoznano nazwy pyłku");
+                            }
                         }
                         else
                         {
-                            _log.Log("Nie rozpoznano nazwy pyłku w linii: " + lineNumber);
+                            _log.Log("Linia:" + lineNumber + " Nie wystaraczająca ilośc danych w wierszu");
                         }
                     }
-                    else
-                    {
-                        _log.Log("Błąd w linijce: " + lineNumber);
-                    }
+                }
+                catch (Exception e)
+                {
+                    _log.Log("Linia:" + lineNumber + " "+e.Message);
                 }
             }
             reader.Close();
