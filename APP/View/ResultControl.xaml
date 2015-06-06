@@ -12,7 +12,7 @@
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
-            <MenuItem Name="ImageSaveButton" Header="Zapisz zdjęcie" IsEnabled="False" Margin="10,5,0,0" Click="SaveImage_Click" />
+            <MenuItem Name="ImageSaveButton" Header="Zapisz rysunek" IsEnabled="False" Margin="10,5,0,0" Click="SaveImage_Click" />
             <MenuItem Name="ResultSaveButton" Header="Zapisz rezultat" IsEnabled="False" Margin="0,5,0,0" Click="SaveResult_Click"/>
             <MenuItem Header="Wróć" Click="MenuItem_OnClick" Margin="0,5,0,0"></MenuItem>
         </Menu>
