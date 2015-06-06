@@ -101,8 +101,16 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-
-                var loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+                Contour loadContour;
+                try
+                {
+                    loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 var image  = Imaging.CreateBitmapSourceFromHBitmap(
                     loadContour.Bitmap.GetHbitmap(),
                     IntPtr.Zero,

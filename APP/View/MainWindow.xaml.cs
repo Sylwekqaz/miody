@@ -120,7 +120,16 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                Contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
+               
+                try
+                {
+                    Contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
                     Contour1.Bitmap.GetHbitmap(),
                     IntPtr.Zero,
@@ -151,7 +160,15 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                Contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                try
+                {
+                    Contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
                 Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
                     Contour2.Bitmap.GetHbitmap(),
