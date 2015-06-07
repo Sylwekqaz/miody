@@ -27,16 +27,16 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Plik" Margin="10,0,0,0">
                 <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click" />
-                <MenuItem Header="Wczytaj kontury..." Click="LoadContours_Click" />
+                <MenuItem Name="wczytaj_kontury" Header="Wczytaj kontury..." Click="LoadContours_Click" />
                 <Separator />
-                <MenuItem Header="Zapisz kontury..." InputGestureText="Ctrl+S" Click="SaveContours_Click" />
-                <MenuItem Header="Zapisz i wczytaj do pola 'Kontur 1'" Click="SaveContourAndLoad1_Click" />
-                <MenuItem Header="Zapisz i wczytaj do pola 'Kontur 2'" Click="SaveContourAndLoad2_Click" />
+                <MenuItem Name="zapisz_kontury" Header="Zapisz kontury..." InputGestureText="Ctrl+S" Click="SaveContours_Click" />
+                <MenuItem Name="zapisz_i_wczytaj_do_pola1" Header="Zapisz i wczytaj do pola 'Kontur 1'" Click="SaveContourAndLoad1_Click" />
+                <MenuItem Name="zapisz_i_wczytaj_do_pola2" Header="Zapisz i wczytaj do pola 'Kontur 2'" Click="SaveContourAndLoad2_Click" />
             </MenuItem>
             <MenuItem Header="Edycja">
-                <MenuItem Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
-                <MenuItem Header="Wyczyść tło" Click="MenuItem_Click" />
-                <MenuItem Header="Wyczyść kontury" Click="MenuItem2_Click" />
+                <MenuItem Name="cofnij" Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
+                <MenuItem Name="wyczysc_tlo" Header="Wyczyść tło" Click="MenuItem_Click" />
+                <MenuItem Name="wyczysc_kontury"  Header="Wyczyść kontury" Click="MenuItem2_Click" />
             </MenuItem>
             <MenuItem Header="Wróć >>" Click="MenuItem_OnClick"></MenuItem>
             <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click"
