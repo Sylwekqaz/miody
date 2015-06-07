@@ -388,26 +388,31 @@ namespace APP.View
         {
             SaveContours_Click(null, null);
 
-            MainWindow.MainControl.Contour1 = _contour;
-            MainWindow.MainControl.Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                _contour.Bitmap.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
-                );
+            if (_contour!=null)
+            {
+                MainWindow.MainControl.Contour1 = _contour;
+                MainWindow.MainControl.Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    _contour.Bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
+                    );
+            }
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
         {
             SaveContours_Click(null, null);
-
-            MainWindow.MainControl.Contour2 = _contour;
-            MainWindow.MainControl.Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                _contour.Bitmap.GetHbitmap(),
-                IntPtr.Zero,
-                Int32Rect.Empty,
-                BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
-                );
+            if (_contour != null)
+            {
+                MainWindow.MainControl.Contour2 = _contour;
+                MainWindow.MainControl.Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                    _contour.Bitmap.GetHbitmap(),
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
+                    );
+            }
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
