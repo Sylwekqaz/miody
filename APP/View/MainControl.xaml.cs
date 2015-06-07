@@ -11,6 +11,11 @@ using APP.Helpers.Measures;
 using APP.Model;
 using Autofac;
 using Microsoft.Win32;
+using System.ComponentModel;
+using System.Globalization;
+using System.Windows.Data;
+using System.Windows.Markup;
+using System.Windows.Media.Animation;
 
 namespace APP.View
 {
@@ -98,7 +103,8 @@ namespace APP.View
                 SetContourSizes();
                 MainWindow.ResultControl.GetResult(Contour1, Contour2);
                 MainWindow.ChangeView(3);
-
+             MainWindow.ResultControl.TextBlock1.Text =  "Trwa obliczanie...";
+               
             }
             else MessageBox.Show("Wczytaj oba kontury!");
         }

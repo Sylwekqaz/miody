@@ -43,6 +43,7 @@ namespace APP.View
 
         public void GetResult(Contour a, Contour b)
         {
+           
             Clear();
 
             _a = a;
@@ -88,16 +89,20 @@ namespace APP.View
 
         private void Policz(object sender, DoWorkEventArgs args)
         {
+         
+           // TextBlock1.Text = "Trwa obliczanie...";  nie bo nalezy do innego wątku..
             var resultsList = new List<Result>();
             foreach (Comparison comparison in _comparisons)
             {
+               
                 comparison.ProgresChanged += ComparisonProgresChanged;
                 resultsList.Add(comparison.GetResult(_a, _b));
             }
-
-
+          
+           
             TextBlock1.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
+                
                 TextBlockTitle.Inlines.Clear();
                 TextBlockResult.Inlines.Clear();
 
@@ -153,6 +158,8 @@ namespace APP.View
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+           // text block z powrotem
+            TextBlock1.Text = "Trwa obliczanie..";
             Bitmap res = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
 
             ResultImage.Source = Imaging.CreateBitmapSourceFromHBitmap(res.GetHbitmap(), IntPtr.Zero,
