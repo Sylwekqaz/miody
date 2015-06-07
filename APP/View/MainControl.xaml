@@ -8,6 +8,7 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -42,7 +43,8 @@
 
         <Image Grid.Column="0" Grid.Row="2" Name="Contour1Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2" />
         <Image Grid.Column="0" Grid.Row="3" Name="Contour2Image" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2" />
-        <ListBox Name="ErrorBox" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2"></ListBox>
+        <ListBox Name="ErrorBox" Grid.Row="2" Grid.RowSpan="2" Grid.Column="1"></ListBox>
 
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" FontSize="20" Name="ResultText" Text="Trwa wczytywanie..." HorizontalAlignment="Center" Visibility="Collapsed"></TextBlock>
     </Grid>
 </ContentControl>

@@ -34,6 +34,7 @@ namespace APP.View
         private Contour _contour2;
 
         public MainWindow MainWindow;
+        private BackgroundWorker _worker;
 
         public Contour Contour1
         {
@@ -103,8 +104,7 @@ namespace APP.View
                 SetContourSizes();
                 MainWindow.ResultControl.GetResult(Contour1, Contour2);
                 MainWindow.ChangeView(3);
-             MainWindow.ResultControl.TextBlock1.Text =  "Trwa obliczanie...";
-               
+                MainWindow.ResultControl.TextBlock1.Text = "Trwa obliczanie...";
             }
             else MessageBox.Show("Wczytaj oba kontury!");
         }
@@ -122,23 +122,38 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-               
                 try
                 {
-                    Contour1 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                    _worker = new BackgroundWorker();
+                    _worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                    {
+                        Dispatcher Disp = ResultText.Dispatcher;
+
+                        Disp.Invoke(LoadingProcess);
+                        //now
+                        var contour = _contourLoader.LoadContour(openFileDialog1.FileName);
+
+                        Disp.Invoke(() =>
+                        {
+                            Contour1 = contour;
+                            Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                                Contour1.Bitmap.GetHbitmap(),
+                                IntPtr.Zero,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromWidthAndHeight(Contour1.Width, Contour1.Height)
+                                );
+                        });
+
+                        Disp.Invoke(WorkerProcessEnd);
+                    };
+
+                    _worker.RunWorkerAsync();
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                Contour1Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    Contour1.Bitmap.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(Contour1.Width, Contour1.Height)
-                    );
-
             }
         }
 
@@ -163,21 +178,36 @@ namespace APP.View
             {
                 try
                 {
-                    Contour2 = _contourLoader.LoadContour(openFileDialog1.FileName);
+                    _worker = new BackgroundWorker();
+                    _worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                    {
+                        Dispatcher Disp = ResultText.Dispatcher;
+
+                        Disp.Invoke(LoadingProcess);
+                        var contour = _contourLoader.LoadContour(openFileDialog1.FileName);
+
+                        Disp.Invoke(() =>
+                        {
+                            Contour2 = contour;
+
+                            Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
+                                Contour2.Bitmap.GetHbitmap(),
+                                IntPtr.Zero,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromWidthAndHeight(Contour2.Width, Contour2.Height)
+                                );
+                        });
+
+                        Disp.Invoke(WorkerProcessEnd);
+                    };
+
+                    _worker.RunWorkerAsync();
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-
-                Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
-                    Contour2.Bitmap.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(Contour2.Width, Contour2.Height)
-                    );
-
             }
         }
 
@@ -195,6 +225,19 @@ namespace APP.View
             Contour1.Height = height;
             Contour2.Width = width;
             Contour2.Height = height;
+        }
+
+        private void LoadingProcess()
+        {
+            this.IsEnabled = false;
+            ResultText.Visibility = Visibility.Visible;
+        }
+
+
+        private void WorkerProcessEnd()
+        {
+            this.IsEnabled = true;
+            ResultText.Visibility = Visibility.Collapsed;
         }
     }
 }
