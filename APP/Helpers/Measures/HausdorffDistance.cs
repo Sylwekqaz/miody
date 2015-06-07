@@ -6,6 +6,11 @@ using APP.Model;
 
 namespace APP.Helpers.Measures
 {
+    /// <summary>
+    /// klasa udostępniająca metody 
+    ///  do wyznaczania metryki Hausdorffa
+    /// </summary>
+    
     internal class HausdorffDistance : Comparison
     {
         public HausdorffDistance()
@@ -13,10 +18,36 @@ namespace APP.Helpers.Measures
             Scale = 5;
         }
 
+        /// <summary>
+        /// Metoda wyznaczająca przekątną bitmapy
+        
+        /// </summary>
+        /// <param name="bitmap">
+        /// obiekt klasy Bitmap
+        /// </param>
+        /// <returns>
+        /// zwraca wartość zmiennoprzecinkową double długości przekątnej bitmapy
+        /// </returns>
+        /// Rafał
         public static double BitmapDiagonal(Bitmap bitmap)
         {
             return Math.Sqrt(Math.Pow(bitmap.Height, 2) + Math.Pow(bitmap.Width, 2));
         }
+        /// <summary>
+        /// Metoda wyznaczająca listę infimów dla zbiorów
+        /// </summary>
+        /// <param name="listaA">
+        /// pierwszy zbiór punktów
+        /// </param>
+        /// <param name="listaB">
+        /// drugi zbiór punktów
+        /// </param>
+        /// <returns>
+        /// zwraca listę której elementami są infima zbiorów odległości między
+        /// wyznaczonym elementem z pierwszej listy a każdym elementem listy drugiej
+        /// każde infimum zawiera odległości dla tego samego gatunku punktów z obu list
+        /// </returns>
+        /// Rafał
 
         protected List<double> InfimumList(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
         {
@@ -49,7 +80,15 @@ namespace APP.Helpers.Measures
             }
             return listaInfimum;
         }
-
+        /// <summary>
+        /// Metoda liczy maksymalną wartość kolekcji double
+        /// </summary>
+        /// <param name="listaInfimum">
+        /// kolekcja
+        /// <returns>
+        /// zwraca maksymalną wartość z kolekcji
+        /// </returns>
+        /// Rafał
 
         protected double? SupremumList(IList<double> listaInfimum)
         {
@@ -60,6 +99,21 @@ namespace APP.Helpers.Measures
             return listaInfimum.Max();
             }
 
+        /// <summary>
+        /// Metoda nadpisuje metodę wirtualną służącą do wyznaczania miar
+        /// </summary>
+        /// <param name="a">
+        /// pierwszy obiekt typu Contour
+        /// </param>
+        /// <param name="b">
+        /// drugi obiekt typu Contour
+        /// </param>
+        /// <returns>
+        /// zwraca w obiekcie typu Result wartość metryki Hausdorffa i jej tytuł
+        
+        /// </returns>
+        /// Rafał
+      
 
         public override Result GetResult(Contour a, Contour b)
         {
@@ -86,7 +140,7 @@ namespace APP.Helpers.Measures
                 obj.D = 0;
             }
             obj.Title = "Metryka Hausdorffa";
-
+           
             return obj;
 
 
