@@ -75,6 +75,10 @@ namespace APP.Model
         /// Kamil
         public static Pollen TryPrase(Color color) //zamieniamy  color->pylek
         {
+            if (color.A <200)
+            {
+                return null;
+            }
             return Values.FirstOrDefault(pollen => color.GetDistance(pollen.Color) < Tolerance);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 using APP.Model;
 
 namespace APP.Helpers.FileHandling
@@ -36,13 +37,18 @@ namespace APP.Helpers.FileHandling
             contourBitmap.Clear(Color.Transparent);
 
             Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
-            
-
-            for (int i = 0; i < bitmap.Height; i++)
-            {
-                for (int j = 0; j < bitmap.Width; j++)
+            int bh = bitmap.Height;
+            int bw = bitmap.Width;
+            Parallel.For(0, bh, i => { 
+            //for (int i = 0; i < bitmap.Height; i++)
+            //{
+                for (int j = 0; j < bw; j++)
                 {
-                    var drawingColor = bitmap.GetPixel(j, i);
+                    Color drawingColor;
+                    lock (bitmap)
+                    {
+                        drawingColor = bitmap.GetPixel(j, i);
+                    }
 
                     var pollen = Pollen.TryPrase(drawingColor.ToMediaColor());
                     if (pollen != null)
@@ -53,16 +59,22 @@ namespace APP.Helpers.FileHandling
                             Type = pollen
                         };
 
-                        contourBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
+                        lock (contourBitmap)
+                        {
+                            contourBitmap.SetPixel(j, i, point.Type.Color.ToDrawingColor());
+                        }
 
-                        wynikContour.ContourSet.Add(point);
+                        lock (wynikContour)
+                        {
+                            wynikContour.ContourSet.Add(point);
+                        }
                     }
                     else if (drawingColor.ToArgb() != -1)
                     {
                         _error = true;
                     }
                 }
-            }
+            });
 
         //    var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);  no chyba nie
             if (_error)
