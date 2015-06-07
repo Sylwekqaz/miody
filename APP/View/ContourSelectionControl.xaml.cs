@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
+using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,13 +12,15 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using APP.Helpers;
 using APP.Helpers.FileHandling;
 using APP.Model;
 using Microsoft.Win32;
 using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using Color = System.Windows.Media.Color;
+using Color = System.Drawing.Color;
 using Path = System.IO.Path;
+using Pen = System.Drawing.Pen;
 using Point = System.Windows.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
@@ -126,8 +130,8 @@ namespace APP.View
 
                 // chyba niepotrzebnie zmienia...
 
-                //CanvasContour.Height = image.Height;
-                //CanvasContour.Width = image.Width;
+                CanvasContour.Height = image.Height;
+                CanvasContour.Width = image.Width;
 
                 Rectangle rectangle = new Rectangle
                 {
@@ -268,36 +272,90 @@ namespace APP.View
                 string path = saveFileDialog1.FileName;
                 _saveFileName = Path.GetFileName(path);
 
-                CanvasContourBackground.Opacity = 0;
+                //CanvasContourBackground.Opacity = 0;
 
-                Rect prostokat = VisualTreeHelper.GetDescendantBounds(CanvasContour);
+                //Rect prostokat = VisualTreeHelper.GetDescendantBounds(CanvasContour);
 
-                RenderTargetBitmap bmp = new RenderTargetBitmap((int) prostokat.Width, (int) prostokat.Height, 96, 96,
-                    PixelFormats.Pbgra32);
+                //RenderTargetBitmap bmp = new RenderTargetBitmap((int) prostokat.Width, (int) prostokat.Height, 96, 96,
+                //    PixelFormats.Pbgra32);
 
-                DrawingVisual dv = new DrawingVisual();
+                //DrawingVisual dv = new DrawingVisual();
 
-                using (DrawingContext dc = dv.RenderOpen())
+                //using (DrawingContext dc = dv.RenderOpen())
+                //{
+                //    VisualBrush vb = new VisualBrush(CanvasContour);
+                //    RenderOptions.SetEdgeMode(vb, EdgeMode.Aliased);
+                //    RenderOptions.SetEdgeMode(bmp, EdgeMode.Aliased);
+                //    foreach (DependencyObject child in CanvasContour.Children)
+                //    {
+                //        RenderOptions.SetEdgeMode(child, EdgeMode.Aliased);
+                //    }
+                //    dc.DrawRectangle(Brushes.White, null, new Rect(prostokat.Size));
+                //    dc.DrawRectangle(vb, null, new Rect(new Point(), prostokat.Size));
+                //}
+
+
+                //bmp.Render(dv);
+
+                //MemoryStream stream = new MemoryStream();
+                //BitmapEncoder encoder2 = new BmpBitmapEncoder();
+                //encoder2.Frames.Add(BitmapFrame.Create(bmp));
+                //encoder2.Save(stream);
+                //Bitmap bitmap = new Bitmap(stream); 
+                //bitmap.Save("temp.bmp");
+
+
+                Bitmap bitmap = new Bitmap((int) CanvasContour.Width,(int)CanvasContour.Height);
+                
+
+                
+                Rectangle rectangle = CanvasContour.Children.OfType<Rectangle>().FirstOrDefault();
+                if (rectangle!=null)
                 {
-                    VisualBrush vb = new VisualBrush(CanvasContour);
-                    dc.DrawRectangle(Brushes.White, null, new Rect(prostokat.Size));
-                    dc.DrawRectangle(vb, null, new Rect(new Point(), prostokat.Size));
+
+
+                    var bitmapSource = ((rectangle.Fill as ImageBrush).ImageSource as BitmapSource);
+
+                    var width = bitmapSource.PixelWidth;
+                    var height = bitmapSource.PixelHeight;
+                    var stride = width * ((bitmapSource.Format.BitsPerPixel + 7) / 8);
+                    var memoryBlockPointer = Marshal.AllocHGlobal(height * stride);
+                    bitmapSource.CopyPixels(new Int32Rect(0, 0, width, height), memoryBlockPointer, height * stride, stride);
+                    bitmap = new Bitmap(width, height, stride, System.Drawing.Imaging.PixelFormat.Format32bppPArgb, memoryBlockPointer);
+
+                    
+
+                   
+
                 }
 
+                Graphics graphics = Graphics.FromImage(bitmap);
+                graphics.SmoothingMode = SmoothingMode.None;
+                if (rectangle==null)
+                {
+                    graphics.Clear(Color.Transparent);
+                }
 
-                bmp.Render(dv);
+                foreach (object child in CanvasContour.Children)
+                {
+                    if (child is Line)
+                    {
+                        var line = child as Line;
+                        System.Drawing.Point startPoint = new System.Drawing.Point((int)line.X1, (int)line.Y1);
+                        System.Drawing.Point stopPoint = new System.Drawing.Point((int)line.X2, (int)line.Y2);
 
-                MemoryStream stream = new MemoryStream();
-                BitmapEncoder encoder2 = new BmpBitmapEncoder();
-                encoder2.Frames.Add(BitmapFrame.Create(bmp));
-                encoder2.Save(stream);
-                Bitmap bitmap = new Bitmap(stream); 
 
+                        graphics.DrawLine(new Pen((line.Stroke as SolidColorBrush).Color.ToDrawingColor(), 1), startPoint, stopPoint);
+
+                    }
+                }
+
+                bitmap.Save("temp.bmp");
 
                 worker.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
 
-                    System.Windows.Threading.Dispatcher Disp = ResultText.Dispatcher;
+                    Dispatcher Disp = ResultText.Dispatcher;
 
                     Disp.Invoke(SavingProcess);
 
@@ -350,8 +408,8 @@ namespace APP.View
                 var item = listView.SelectedItem;
                 if (item != null)
                 {
-                    Color color = (Color) ((Pollen) item);
-                    Color mediaColor = Color.FromArgb(color.A, color.R,
+                    System.Windows.Media.Color color = (System.Windows.Media.Color) ((Pollen) item);
+                    System.Windows.Media.Color mediaColor = System.Windows.Media.Color.FromArgb(color.A, color.R,
                         color.G, color.B);
                     _brushColor = new SolidColorBrush(mediaColor);
                 }
