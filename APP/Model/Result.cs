@@ -2,9 +2,14 @@
 
 namespace APP.Model
 {
+    /// <summary>
+    /// klasa reprezentująca wyniki miar
+    /// </summary>
     public class Result
     {
-        public String Title { get; set; }
+        //!tytuł miary
+        public String Title { get; set; } 
+        //!wartość miary
         public double D { get; set; }
     }
 }

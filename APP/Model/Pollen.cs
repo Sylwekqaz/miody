@@ -9,8 +9,8 @@ namespace APP.Model
     /// <summary>
     /// Klasa która działa jak rozbudowany enum
     /// </summary>
-    /// Kamil
-    public sealed class Pollen //nie mozna po  niej dziedziczyc
+    /// /copyright Kamil
+    public sealed class Pollen
     {
         public static readonly Dictionary<Color, Pollen> KolorPylkowList = new Dictionary<Color, Pollen>();
         public static readonly Dictionary<string, Pollen> NazwyPylkowList = new Dictionary<string, Pollen>();

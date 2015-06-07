@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace APP.Model
 {
+    /// <summary>
+    /// Klasa modelująca kontury
+    /// </summary>
     public class Contour
     {
         private int _width;
@@ -15,8 +18,8 @@ namespace APP.Model
             ContourSet = new HashSet<ContourPoint>();
         }
 
-
-        public int Width
+        //! szerokość rysunku z konturami
+        public int Width 
         {
             get { return _width; }
             set
@@ -26,6 +29,7 @@ namespace APP.Model
             }
         }
 
+        //! wysokość rysunku z konturami
         public int Height
         {
             get { return _height; }
@@ -36,9 +40,10 @@ namespace APP.Model
             }
         }
 
-        public HashSet<ContourPoint> ContourSet { get; set; }
-        public Bitmap Bitmap { get; set; } 
+        public HashSet<ContourPoint> ContourSet { get; set; } //!< zbiór punktów tworzących kontury
+        
+        public Bitmap Bitmap { get; set; } //!< bitmapa reprezentująca kontury
 
-        public Mask Mask { get; set; }
+        public Mask Mask { get; set; } //!< kontury wypełnione
     }
 }

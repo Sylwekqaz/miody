@@ -2,10 +2,15 @@
 
 namespace APP.Model
 {
+    /// <summary>
+    /// Klasa modelująca punkty konturów
+    /// </summary>
     public class ContourPoint
     {
-        public Pollen Type { get; set; } // Typ Pyłku 
+        //!gatunek pyłku
+        public Pollen Type { get; set; } 
 
+        //!współrzędne punktu
         public Point Location { get; set; }
 
         protected bool Equals(ContourPoint other)
