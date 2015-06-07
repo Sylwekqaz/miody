@@ -35,13 +35,8 @@ namespace APP.Helpers.FileHandling
             contourBitmap.MakeTransparent();
             contourBitmap.Clear(Color.Transparent);
 
-
-
-
-            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height)
-            {
-                Bitmap = bitmap
-            };
+            Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
+            
 
             for (int i = 0; i < bitmap.Height; i++)
             {
