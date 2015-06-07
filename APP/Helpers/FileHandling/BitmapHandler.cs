@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Threading.Tasks;
 using APP.Model;
+using System.IO;
+using System;
 
 namespace APP.Helpers.FileHandling
 {
@@ -31,6 +33,10 @@ namespace APP.Helpers.FileHandling
         /// Kamil
         public Contour LoadBitmap(Bitmap bitmap)
         {
+            string fileName = string.Format("errorlog-{0:yyyy-MM-dd_HH-mm-ss}.txt", DateTime.Now);
+            TextWriter tw = new StreamWriter(fileName);
+
+            tw.WriteLine("Następujące piksele zawierają nieprawidłowe kolory: ");
 
             Bitmap contourBitmap = new Bitmap(bitmap.Width, bitmap.Height);
             contourBitmap.MakeTransparent();
@@ -71,6 +77,10 @@ namespace APP.Helpers.FileHandling
                     }
                     else if (drawingColor.ToArgb() != -1)
                     {
+                        lock (tw)
+                        {
+                            tw.WriteLine("[" + i + "," + j + "]");
+                        }
                         _error = true;
                     }
                 }
@@ -81,6 +91,9 @@ namespace APP.Helpers.FileHandling
             {
                Log.Log("Podczas wczytywania bitmapy program napotkał piksele których nie mógł rozpoznać");
             }
+
+            tw.Close();
+
             wynikContour.Bitmap = contourBitmap;
             return wynikContour;
         }
