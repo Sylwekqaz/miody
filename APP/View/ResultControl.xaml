@@ -19,11 +19,11 @@
         
         <Image Grid.Row="1" Name="ResultImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         
-        <TextBlock Grid.Row="2" Name="TextBlock1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16">
-           Trwa obliczanie...
+        <TextBlock Grid.Row="2" x:Name="TextBlock1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16">
+           Trwa obliczanie..
         </TextBlock>
         
-        <TextBlock Grid.Row="2" Name="TextBlockTitle" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-400,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
+        <TextBlock Grid.Row="2" x:Name="TextBlockTitle" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-400,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
         </TextBlock>
         <TextBlock Grid.Row="2" Name="TextBlockResult" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="200,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
         </TextBlock>

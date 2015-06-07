@@ -14,12 +14,14 @@ namespace APP.View
     /// </summary>
     public partial class MainWindow : Window
     {
+       
         private MainControl _mainControl;
         private ContourSelectionControl _contourSelectionControl;
         private ResultControl _resultControl;
 
         public MainWindow(MainControl mainControl, ContourSelectionControl contourSelectionControl, ResultControl resultControl)
         {
+            
             InitializeComponent();
             MainControl = mainControl;
             ContourSelectionControl = contourSelectionControl;
@@ -67,15 +69,22 @@ namespace APP.View
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+           // ResultControl.TextBlock1.Text = "Trwa obliczanie...";
+	
             object senderValue = ((Button)sender).Content;
             var viewNumber = Convert.ToInt32(senderValue);
             ChangeView(viewNumber);
         }
 
         public void ChangeView(int viewNumber)
+        
         {
-            this.Resources["TargetGridAnimation"] = ((double) -(viewNumber - 1));
-            ((Storyboard)Resources["Storyboard"]).Begin();
+            if (ResultControl.TextBlock1.Text !=  "Trwa obliczanie...")
+            {
+                this.Resources["TargetGridAnimation"] = ((double)-(viewNumber - 1));
+                ((Storyboard)Resources["Storyboard"]).Begin();
+            }
+           
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -129,6 +138,7 @@ namespace APP.View
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+           
             double multiply = 1;
             foreach (object value in values)
             {
