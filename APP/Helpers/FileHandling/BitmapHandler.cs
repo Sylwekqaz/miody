@@ -75,11 +75,11 @@ namespace APP.Helpers.FileHandling
                             wynikContour.ContourSet.Add(point);
                         }
                     }
-                    else if (drawingColor.ToArgb() != -1)
+                    else if (drawingColor.ToArgb() != -1 && drawingColor.A>200)
                     {
                         lock (tw)
                         {
-                            tw.WriteLine("[" + i + "," + j + "]");
+                            tw.WriteLine("[" + j + "," + i + "]");
                         }
                         _error = true;
                     }
