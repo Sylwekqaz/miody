@@ -118,6 +118,21 @@ namespace APP.Helpers.FileHandling
             return wynikContour;
         }
 
+        /// <summary>
+        /// Metoda dla podanej kolekcji pyłków i ciągu tekstowego wyszukuje
+        /// najbardziej pasującą do ciągu tekstowego nazwę pyłku i podobieństwo w przedziale [0,1]
+        /// </summary>
+        /// <param name="obj">
+        /// kolekcja pyłków
+        /// </param>
+        /// /// <param name="line">
+        /// ciąg tekstowy do porównania
+        /// </param>
+        /// <returns>
+        /// Zwraca kolekcję stringów;  nazwa pyłku i podobieństwo do niej
+        /// </returns>
+        /// Rafał
+
         protected IEnumerable<object> MatchFinder(IEnumerable<Pollen> obj, string line)
         {
             double max = 0;
@@ -150,8 +165,26 @@ namespace APP.Helpers.FileHandling
         }
     }
 
+    /// <summary>
+    /// Klasa statyczna z metodą rozszerzająca obiekt string
+   /// </summary>
     public static class CompareStrings
     {
+        /// <summary>
+        /// Metoda rozszerzająca obiekt string
+        /// Metoda porównuje dwa ciągi tekstowe 
+        /// </summary>
+        /// <param name="source">
+        /// pierwszy ciąg tekstowy;źródło do porównań
+        /// </param>
+        /// /// <param name="target">
+        /// drugi ciąg tekstowy
+        /// </param>
+        /// <returns>
+        /// zwraca wartość zmiennoprzecinkową; wynik podobieństwa (przedział [0,1])
+        /// </returns>
+        /// Rafał
+
         public static double CompareToString(this string source, string target)
             //metoda Levenshteina: http://social.technet.microsoft.com/wiki/contents/articles/26805.calculating-percentage-similarity-of-two-strings-in-c.aspx
         {
