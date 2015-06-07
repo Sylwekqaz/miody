@@ -59,9 +59,9 @@
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Column="0" Name="ContourSelectionControlCointainer" Margin="2"/>
-            <DockPanel Grid.Column="1" Name="MainWindowContainer" Margin="2"/>
-            <DockPanel Grid.Column="2" Name="ResultControlCointainer" Margin="2"/> 
+            <DockPanel Grid.Column="0" Name="ContourSelectionControlCointainer" />
+            <DockPanel Grid.Column="1" Name="MainWindowContainer" />
+            <DockPanel Grid.Column="2" Name="ResultControlCointainer" /> 
 
         </Grid>
     </Grid>
