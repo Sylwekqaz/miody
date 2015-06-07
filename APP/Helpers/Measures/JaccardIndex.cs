@@ -8,7 +8,7 @@ namespace APP.Helpers.Measures
     {
 
 
-        private readonly MaskGenerator _maskGenerator;
+        private readonly IMaskGenerator _maskGenerator;
 
 
         void SubProgresChanged()
@@ -20,7 +20,7 @@ namespace APP.Helpers.Measures
         private bool _maskAComplete;
 
 
-        public JaccardIndex(MaskGenerator maskGenerator)
+        public JaccardIndex(IMaskGenerator maskGenerator)
         {
             _maskGenerator = maskGenerator;
             _maskGenerator.ProgresChanged = SubProgresChanged;

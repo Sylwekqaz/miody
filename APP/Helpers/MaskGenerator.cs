@@ -7,7 +7,14 @@ using APP.Model;
 
 namespace APP.Helpers
 {
-    public class MaskGenerator
+    public interface IMaskGenerator
+    {
+        double Progres { get; }
+        Action ProgresChanged { get; set; }
+        Mask GenerateMask(Contour contour);
+    }
+
+    public class MaskGenerator : IMaskGenerator
     {
 
         private double _progres;

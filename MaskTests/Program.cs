@@ -14,12 +14,10 @@ namespace MaskTests
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(1/2);
-
             // przygotowanie testu 
             IBitmapHandler handler = new BitmapHandler(new ErrorLog());
             Contour contour = handler.LoadBitmap(new Bitmap(@"..\..\Images\kontur 2.bmp"));
-            MaskGenerator generator = new MaskGenerator();
+            IMaskGenerator generator = new MaskGenerator();
 
 
 
