@@ -74,9 +74,13 @@ namespace APP.View
             TextBlockResult.Visibility = Visibility.Hidden;
 
             ResultImage.Visibility = Visibility.Hidden;
+            DiffImage.Visibility = Visibility.Hidden;
 
             ImageSaveButton.IsEnabled = false;
             ResultSaveButton.IsEnabled = false;
+            DiffSaveButton.IsEnabled = false;
+
+            BackButton.IsEnabled = false;
         }
 
         private void Policz(object sender, DoWorkEventArgs args)
@@ -147,14 +151,23 @@ namespace APP.View
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            // text block z powrotem
-            TextBlock1.Text = "Trwa obliczanie..";
-            Bitmap res = DiffMask(_a.Mask, _b.Mask);//OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
+
+            Bitmap res = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
 
             ResultImage.Source = Imaging.CreateBitmapSourceFromHBitmap(res.GetHbitmap(), IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight(res.Width, res.Height)
                 );
+
+            Bitmap diff = DiffMask(_a.Mask, _b.Mask);//OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
+
+            DiffImage.Source = Imaging.CreateBitmapSourceFromHBitmap(diff.GetHbitmap(), IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight(diff.Width, diff.Height)
+                );
+
+            
+
 
             ResultBar.Visibility = Visibility.Collapsed;
 
@@ -163,11 +176,14 @@ namespace APP.View
             TextBlockResult.Visibility = Visibility.Visible;
 
             ResultImage.Visibility = Visibility.Visible;
+            DiffImage.Visibility = Visibility.Visible;
 
             ImageSaveButton.IsEnabled = true;
             ResultSaveButton.IsEnabled = true;
+            DiffSaveButton.IsEnabled = true;
 
-            
+            BackButton.IsEnabled = true;
+
 
 
 
@@ -180,7 +196,7 @@ namespace APP.View
         }
 
 
-        private void SaveImage_Click(object sender, RoutedEventArgs e)
+        private void DiffSave_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog
             {
@@ -195,6 +211,26 @@ namespace APP.View
             {
                 string path = saveFileDialog1.FileName;
                 Bitmap bitmap = DiffMask(_a.Mask, _b.Mask);
+
+                bitmap.Save(path);
+            }
+        }
+
+        private void ImageSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "Bitmapa (*.bmp;*.png)|*.bmp;*.png",
+                FilterIndex = 1,
+                FileName = _saveFileName
+            };
+
+            bool? userClickedOk = saveFileDialog1.ShowDialog();
+
+            if (userClickedOk == true)
+            {
+                string path = saveFileDialog1.FileName;
+                Bitmap bitmap = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
 
                 bitmap.Save(path);
             }
@@ -265,7 +301,6 @@ namespace APP.View
 
         private void MenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            Clear();
             MainWindow.ChangeView(2);
         }
     }

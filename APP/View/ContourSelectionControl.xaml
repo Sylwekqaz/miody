@@ -1,6 +1,11 @@
 ﻿<ContentControl x:Class="APP.View.ContourSelectionControl"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <ContentControl.Resources>
+        <system:Boolean x:Key="DrawindActive">False</system:Boolean>
+    </ContentControl.Resources>
 
     <ContentControl.CommandBindings>
         <CommandBinding Command="Undo" Executed="Undo_Executed" />
@@ -27,16 +32,16 @@
             </Menu.ItemsPanel>
             <MenuItem Header="Plik" Margin="10,0,0,0">
                 <MenuItem Header="Wczytaj tło..." Click="LoadBackground_Click" />
-                <MenuItem Name="wczytaj_kontury" Header="Wczytaj kontury..." Click="LoadContours_Click" />
+                <MenuItem Name="wczytaj_kontury" Header="Wczytaj kontury..." Click="LoadContours_Click" IsEnabled="{DynamicResource DrawindActive}" />
                 <Separator />
-                <MenuItem Name="zapisz_kontury" Header="Zapisz kontury..." InputGestureText="Ctrl+S" Click="SaveContours_Click" />
-                <MenuItem Name="zapisz_i_wczytaj_do_pola1" Header="Zapisz i wczytaj do pola 'Kontur 1'" Click="SaveContourAndLoad1_Click" />
-                <MenuItem Name="zapisz_i_wczytaj_do_pola2" Header="Zapisz i wczytaj do pola 'Kontur 2'" Click="SaveContourAndLoad2_Click" />
+                <MenuItem Name="zapisz_kontury" Header="Zapisz kontury..." InputGestureText="Ctrl+S" Click="SaveContours_Click" IsEnabled="{DynamicResource DrawindActive}" />
+                <MenuItem Name="zapisz_i_wczytaj_do_pola1" Header="Zapisz i wczytaj do pola 'Kontur 1'" Click="SaveContourAndLoad1_Click" IsEnabled="{DynamicResource DrawindActive}"/>
+                <MenuItem Name="zapisz_i_wczytaj_do_pola2" Header="Zapisz i wczytaj do pola 'Kontur 2'" Click="SaveContourAndLoad2_Click" IsEnabled="{DynamicResource DrawindActive}" />
             </MenuItem>
-            <MenuItem Header="Edycja">
-                <MenuItem Name="cofnij" Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" />
-                <MenuItem Name="wyczysc_tlo" Header="Wyczyść tło" Click="MenuItem_Click" />
-                <MenuItem Name="wyczysc_kontury"  Header="Wyczyść kontury" Click="MenuItem2_Click" />
+            <MenuItem Header="Edycja" IsEnabled="{DynamicResource DrawindActive}">
+                <MenuItem Name="cofnij" Header="Cofnij" InputGestureText="Ctrl+Z" Command="Undo" IsEnabled="{DynamicResource DrawindActive}" />
+                <MenuItem Name="wyczysc_tlo" Header="Wyczyść tło i kontury" Click="MenuItem_Click" IsEnabled="{DynamicResource DrawindActive}" />
+                <MenuItem Name="wyczysc_kontury"  Header="Wyczyść kontury" Click="MenuItem2_Click" IsEnabled="{DynamicResource DrawindActive}" />
             </MenuItem>
             <MenuItem Header="Wróć >>" Click="MenuItem_OnClick"></MenuItem>
             <MenuItem Header="Tabela kolorów" HorizontalAlignment="Right" Click="TabelaKolorowShow_Click"

@@ -7,28 +7,31 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="80" />
             <RowDefinition Height="15" />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke">
-            <MenuItem Name="ImageSaveButton" Header="Zapisz rysunek" IsEnabled="False" Margin="10,5,0,0" Click="SaveImage_Click" />
+            <MenuItem Name="DiffSaveButton" Header="Zapisz mapę różnic" IsEnabled="False" Margin="10,5,0,0" Click="DiffSave_Click" />
+            <MenuItem Name="ImageSaveButton" Header="Zapisz mape konturów" IsEnabled="False" Margin="10,5,0,0" Click="ImageSave_Click" />
             <MenuItem Name="ResultSaveButton" Header="Zapisz rezultat" IsEnabled="False" Margin="0,5,0,0" Click="SaveResult_Click"/>
-            <MenuItem Header="Wróć" Click="MenuItem_OnClick" Margin="0,5,0,0"></MenuItem>
+            <MenuItem Name="BackButton" Header="Wróć" Click="MenuItem_OnClick" Margin="0,5,0,0"></MenuItem>
         </Menu>
-        
-        <Image Grid.Row="1" Name="ResultImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        
-        <TextBlock Grid.Row="2" x:Name="TextBlock1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16">
+
+        <Image Grid.Row="1" Name="DiffImage"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Image Grid.Row="2" Name="ResultImage"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+        <TextBlock Grid.Row="3" x:Name="TextBlock1" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16">
            Trwa obliczanie..
         </TextBlock>
         
-        <TextBlock Grid.Row="2" x:Name="TextBlockTitle" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-400,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
+        <TextBlock Grid.Row="3" x:Name="TextBlockTitle" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-400,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
         </TextBlock>
-        <TextBlock Grid.Row="2" Name="TextBlockResult" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="200,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
+        <TextBlock Grid.Row="3" Name="TextBlockResult" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="200,0,0,0"  TextWrapping="Wrap" FontSize="16" Visibility="Hidden">            
         </TextBlock>
         
-        <ProgressBar Grid.Row="3" Name="ResultBar" Minimum="0" Maximum="100"></ProgressBar>
+        <ProgressBar Grid.Row="4" Name="ResultBar" Minimum="0" Maximum="100"></ProgressBar>
         
     </Grid>
 </ContentControl>

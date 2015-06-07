@@ -52,13 +52,7 @@ namespace APP.View
             _conveter = conveter;
             _contourLoader = contourLoader;
             InitializeComponent();
-            zapisz_i_wczytaj_do_pola1.IsEnabled = false;
-            zapisz_i_wczytaj_do_pola2.IsEnabled = false;
-            zapisz_kontury.IsEnabled = false;
-            wczytaj_kontury.IsEnabled = false;
-            cofnij.IsEnabled = false;
-            wyczysc_kontury.IsEnabled = false;
-            wyczysc_tlo.IsEnabled = false;
+
             _przedzial = new List<int> {0};
 
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
@@ -181,6 +175,8 @@ namespace APP.View
                 CanvasContour.Width = bitmapImage.Width;
                 CanvasContour.Height = bitmapImage.Height;
                 CanvasContourBackground.ImageSource = bitmapImage;
+
+                this.Resources["DrawindActive"] = true;
             }
         }
 
@@ -222,7 +218,7 @@ namespace APP.View
 
         private void CanvasContour_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+            if (e.ButtonState == MouseButtonState.Pressed && ((bool)this.Resources["DrawindActive"]))
             {
                 _currentPoint = e.GetPosition(CanvasContour);
                 if (_brushColor != null)
@@ -245,7 +241,7 @@ namespace APP.View
 
         private void CanvasContour_MouseEnter(object sender, MouseEventArgs e) //wolny, bo sie duzo razy wykonuje
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed && ((bool)this.Resources["DrawindActive"]))
             {
                 _currentPoint = e.GetPosition(CanvasContour);
             }
@@ -441,6 +437,7 @@ namespace APP.View
         {
             if (_saveRequired)
             {
+                int oldView = MainWindow.GetViewNumber();
                 MainWindow.ChangeView(1);
                 MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning",
                     MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
@@ -461,11 +458,13 @@ namespace APP.View
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                MainWindow.ChangeView(oldView);
             }
 
 
             // e.Cancel = true;
             //Hide();
+           
         }
 
         private void Undo_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -481,7 +480,10 @@ namespace APP.View
         // funkcja Wyczyść tło
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            this.Resources["DrawindActive"] = false;
             CanvasContourBackground.ImageSource = null;
+            MenuItem2_Click(sender,e);
+
         }
 
         // funkcja Wyczyść kontury
@@ -490,6 +492,7 @@ namespace APP.View
             CanvasContour.Children.Clear();
             _przedzial.Clear();
             _przedzial.Add(0);
+            _saveRequired = false;
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

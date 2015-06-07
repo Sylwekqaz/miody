@@ -14,14 +14,13 @@ namespace APP.View
     /// </summary>
     public partial class MainWindow : Window
     {
-       
         private MainControl _mainControl;
         private ContourSelectionControl _contourSelectionControl;
         private ResultControl _resultControl;
 
-        public MainWindow(MainControl mainControl, ContourSelectionControl contourSelectionControl, ResultControl resultControl)
+        public MainWindow(MainControl mainControl, ContourSelectionControl contourSelectionControl,
+            ResultControl resultControl)
         {
-            
             InitializeComponent();
             MainControl = mainControl;
             ContourSelectionControl = contourSelectionControl;
@@ -68,16 +67,16 @@ namespace APP.View
         }
 
 
-
         public void ChangeView(int viewNumber)
-        
         {
-            if (ResultControl.TextBlock1.Text !=  "Trwa obliczanie...")
-            {
-                this.Resources["TargetGridAnimation"] = ((double)-(viewNumber - 1));
-                ((Storyboard)Resources["Storyboard"]).Begin();
-            }
-           
+            this.Resources["TargetGridAnimation"] = ((double) -(viewNumber - 1));
+            ((Storyboard) Resources["Storyboard"]).Begin();
+        }
+
+        public int GetViewNumber()
+        {
+            double targetMargin = (double) this.Resources["TargetGridAnimation"];
+            return (int) ((-targetMargin) + 1);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -87,6 +86,7 @@ namespace APP.View
     }
 
     #region Converters
+
     public class MyltiplyConverter : MarkupExtension, IValueConverter
     {
         private static MyltiplyConverter _instance;
@@ -95,7 +95,7 @@ namespace APP.View
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return System.Convert.ToDouble(value) * System.Convert.ToDouble(parameter);
+            return System.Convert.ToDouble(value)*System.Convert.ToDouble(parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -114,12 +114,15 @@ namespace APP.View
     public class LeftMarginConverter : MarkupExtension, IValueConverter, IMultiValueConverter
     {
         private static LeftMarginConverter _instance;
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+
+        public object Convert(object value, System.Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
         {
-            return new Thickness(System.Convert.ToDouble(value) * System.Convert.ToDouble(parameter), 0, 0, 0);
+            return new Thickness(System.Convert.ToDouble(value)*System.Convert.ToDouble(parameter), 0, 0, 0);
         }
 
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, System.Type targetType, object parameter,
+            System.Globalization.CultureInfo culture)
         {
             return null;
         }
@@ -131,7 +134,6 @@ namespace APP.View
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-           
             double multiply = 1;
             foreach (object value in values)
             {
@@ -145,5 +147,6 @@ namespace APP.View
             return null;
         }
     }
+
     #endregion
 }
