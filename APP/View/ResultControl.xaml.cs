@@ -28,7 +28,7 @@ namespace APP.View
         private Contour _a;
         private Contour _b;
 
-        private AbortableBackgroundWorker _worker;
+        private BackgroundWorker _worker;
 
         private readonly IContourSaver _contourSaver;
         private string _saveFileName = "Bitmapa";
@@ -55,13 +55,7 @@ namespace APP.View
 
         private void Clear()
         {
-            if (_worker!=null)
-            {
-                _worker.Abort();
-                _worker.Dispose();
-            }
-
-            _worker = new AbortableBackgroundWorker();
+            _worker = new BackgroundWorker();
             _worker.WorkerReportsProgress = true;
 
             _worker.ProgressChanged += _worker_ProgressChanged;
@@ -232,34 +226,6 @@ namespace APP.View
         {
             Clear();
             MainWindow.ChangeView(2);
-        }
-    }
-
-    public class AbortableBackgroundWorker : BackgroundWorker
-    {
-        private Thread workerThread;
-
-        protected override void OnDoWork(DoWorkEventArgs e)
-        {
-            workerThread = Thread.CurrentThread;
-            try
-            {
-                base.OnDoWork(e);
-            }
-            catch (ThreadAbortException)
-            {
-                e.Cancel = true; //We must set Cancel property to true!
-                Thread.ResetAbort(); //Prevents ThreadAbortException propagation
-            }
-        }
-
-        public void Abort()
-        {
-            if (workerThread != null)
-            {
-                workerThread.Abort();
-                workerThread = null;
-            }
         }
     }
 }

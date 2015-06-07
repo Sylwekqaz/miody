@@ -44,7 +44,7 @@ namespace APP.View
 
         private bool _saveRequired;
 
-        BackgroundWorker worker = new AbortableBackgroundWorker();
+        private BackgroundWorker _worker = new BackgroundWorker();
 
         public ContourSelectionControl(IContourSaver contourSaver, IBitmapHandler conveter, IContourLoader contourLoader)
         {
@@ -58,9 +58,6 @@ namespace APP.View
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
 
             ListColors.ItemsSource = values;
-
-            
-
         }
 
         public MainWindow MainWindow { get; set; }
@@ -70,14 +67,15 @@ namespace APP.View
         {
             if (_saveRequired)
             {
-                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (result)
                 {
-                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                    case MessageBoxResult.None: // użytkownik pożucił zamykanie okna
                         return;
                         break;
-                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
-                       return;
+                    case MessageBoxResult.Cancel: // użytkownik pożucił zamykanie okna
+                        return;
                         break;
                     case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
                         SaveContours_Click(null, null);
@@ -105,45 +103,57 @@ namespace APP.View
 
                 try
                 {
-                    loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+                    _worker = new BackgroundWorker();
+                    _worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                    {
+                        Dispatcher Disp = ResultText.Dispatcher;
+
+                        Disp.Invoke(LoadingProcess);
+                        loadContour = _contourLoader.LoadContour(openFileDialog1.FileName);
+
+                        Disp.Invoke(() =>
+                        {
+                            var image = Imaging.CreateBitmapSourceFromHBitmap(
+                                loadContour.Bitmap.GetHbitmap(),
+                                IntPtr.Zero,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromWidthAndHeight(loadContour.Width, loadContour.Height)
+                                );
+
+
+                            CanvasContour.Children.Clear();
+                            _przedzial.Clear();
+                            _przedzial.Add(0);
+
+
+                            // chyba niepotrzebnie zmienia...
+
+                            CanvasContour.Height = image.Height;
+                            CanvasContour.Width = image.Width;
+
+                            Rectangle rectangle = new Rectangle
+                            {
+                                Fill = new ImageBrush(image),
+                                Width = image.Width,
+                                Height = image.Height
+                            };
+
+
+                            rectangle.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Unspecified);
+
+                            CanvasContour.Children.Add(rectangle);
+                        });
+
+                        Disp.Invoke(WorkerProcessEnd);
+                    };
+
+                    _worker.RunWorkerAsync();
                 }
                 catch (Exception exception)
                 {
                     MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-
-                var image  = Imaging.CreateBitmapSourceFromHBitmap(
-                    loadContour.Bitmap.GetHbitmap(),
-                    IntPtr.Zero,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromWidthAndHeight(loadContour.Width, loadContour.Height)
-                    );
-
-               
-
-
-                CanvasContour.Children.Clear();
-                _przedzial.Clear();
-                _przedzial.Add(0);
-
-
-                // chyba niepotrzebnie zmienia...
-
-                CanvasContour.Height = image.Height;
-                CanvasContour.Width = image.Width;
-
-                Rectangle rectangle = new Rectangle
-                {
-                    Fill = new ImageBrush(image),
-                    Width = image.Width,
-                    Height = image.Height
-                };
-
-
-                rectangle.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Unspecified);
-
-                CanvasContour.Children.Add(rectangle);           
             }
         }
 
@@ -182,7 +192,6 @@ namespace APP.View
                 if (_brushColor == null) return;
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-
                     Line line = new Line
                     {
                         Stroke = _brushColor,
@@ -210,11 +219,10 @@ namespace APP.View
             if (e.ButtonState == MouseButtonState.Pressed)
             {
                 _currentPoint = e.GetPosition(CanvasContour);
-                if (_brushColor!=null)
+                if (_brushColor != null)
                 {
                     _saveRequired = true;
                 }
-                
             }
         }
 
@@ -240,11 +248,23 @@ namespace APP.View
 
         private void SavingProcess()
         {
+            this.IsEnabled = false;
             ResultText.Text = "Trwa zapisywanie...";
             ResultText.Visibility = Visibility.Visible;
         }
-        private void SavingProcessEnd()
+
+        private void LoadingProcess()
         {
+            this.IsEnabled = false;
+            ResultText.Text = "Trwa wczytywanie...";
+            ResultText.Visibility = Visibility.Visible;
+        }
+
+
+
+        private void WorkerProcessEnd()
+        {
+            this.IsEnabled = true;
             ResultText.Visibility = Visibility.Collapsed;
         }
 
@@ -268,7 +288,6 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                
                 string path = saveFileDialog1.FileName;
                 _saveFileName = Path.GetFileName(path);
 
@@ -305,33 +324,27 @@ namespace APP.View
                 //bitmap.Save("temp.bmp");
 
 
-                Bitmap bitmap = new Bitmap((int) CanvasContour.Width,(int)CanvasContour.Height);
-                
+                Bitmap bitmap = new Bitmap((int) CanvasContour.Width, (int) CanvasContour.Height);
 
-                
+
                 Rectangle rectangle = CanvasContour.Children.OfType<Rectangle>().FirstOrDefault();
-                if (rectangle!=null)
+                if (rectangle != null)
                 {
-
-
                     var bitmapSource = ((rectangle.Fill as ImageBrush).ImageSource as BitmapSource);
 
                     var width = bitmapSource.PixelWidth;
                     var height = bitmapSource.PixelHeight;
-                    var stride = width * ((bitmapSource.Format.BitsPerPixel + 7) / 8);
-                    var memoryBlockPointer = Marshal.AllocHGlobal(height * stride);
-                    bitmapSource.CopyPixels(new Int32Rect(0, 0, width, height), memoryBlockPointer, height * stride, stride);
-                    bitmap = new Bitmap(width, height, stride, System.Drawing.Imaging.PixelFormat.Format32bppPArgb, memoryBlockPointer);
-
-                    
-
-                   
-
+                    var stride = width*((bitmapSource.Format.BitsPerPixel + 7)/8);
+                    var memoryBlockPointer = Marshal.AllocHGlobal(height*stride);
+                    bitmapSource.CopyPixels(new Int32Rect(0, 0, width, height), memoryBlockPointer, height*stride,
+                        stride);
+                    bitmap = new Bitmap(width, height, stride, System.Drawing.Imaging.PixelFormat.Format32bppPArgb,
+                        memoryBlockPointer);
                 }
 
                 Graphics graphics = Graphics.FromImage(bitmap);
                 graphics.SmoothingMode = SmoothingMode.None;
-                if (rectangle==null)
+                if (rectangle == null)
                 {
                     graphics.Clear(Color.Transparent);
                 }
@@ -341,20 +354,18 @@ namespace APP.View
                     if (child is Line)
                     {
                         var line = child as Line;
-                        System.Drawing.Point startPoint = new System.Drawing.Point((int)line.X1, (int)line.Y1);
-                        System.Drawing.Point stopPoint = new System.Drawing.Point((int)line.X2, (int)line.Y2);
+                        System.Drawing.Point startPoint = new System.Drawing.Point((int) line.X1, (int) line.Y1);
+                        System.Drawing.Point stopPoint = new System.Drawing.Point((int) line.X2, (int) line.Y2);
 
 
-                        graphics.DrawLine(new Pen((line.Stroke as SolidColorBrush).Color.ToDrawingColor(), 1), startPoint, stopPoint);
-
+                        graphics.DrawLine(new Pen((line.Stroke as SolidColorBrush).Color.ToDrawingColor(), 1),
+                            startPoint, stopPoint);
                     }
                 }
 
-                bitmap.Save("temp.bmp");
-
-                worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                _worker = new BackgroundWorker();
+                _worker.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
-
                     Dispatcher Disp = ResultText.Dispatcher;
 
                     Disp.Invoke(SavingProcess);
@@ -364,11 +375,10 @@ namespace APP.View
 
                     _saveRequired = false;
 
-                    Disp.Invoke(SavingProcessEnd);
-
+                    Disp.Invoke(WorkerProcessEnd);
                 };
 
-                worker.RunWorkerAsync();
+                _worker.RunWorkerAsync();
 
                 CanvasContourBackground.Opacity = 1;
             }
@@ -384,7 +394,7 @@ namespace APP.View
                 IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
-            );
+                );
         }
 
         private void SaveContourAndLoad2_Click(object sender, RoutedEventArgs e)
@@ -397,7 +407,7 @@ namespace APP.View
                 IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromWidthAndHeight(_contour.Width, _contour.Height)
-            );
+                );
         }
 
         private void ListViewTypes_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
@@ -421,13 +431,14 @@ namespace APP.View
             if (_saveRequired)
             {
                 MainWindow.ChangeView(1);
-                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show("Postęp nie został zapisany czy chcesz zapisać?", "Warning",
+                    MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 switch (result)
                 {
-                    case MessageBoxResult.None:   // użytkownik pożucił zamykanie okna
+                    case MessageBoxResult.None: // użytkownik pożucił zamykanie okna
                         e.Cancel = true;
                         break;
-                    case MessageBoxResult.Cancel:  // użytkownik pożucił zamykanie okna
+                    case MessageBoxResult.Cancel: // użytkownik pożucił zamykanie okna
                         e.Cancel = true;
                         break;
                     case MessageBoxResult.Yes: //zapisujemy i zamykamy okno
@@ -438,13 +449,11 @@ namespace APP.View
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
-                }  
+                }
             }
-            
 
 
-
-           // e.Cancel = true;
+            // e.Cancel = true;
             //Hide();
         }
 
@@ -496,7 +505,6 @@ namespace APP.View
             }
 
 
-            
             e.Handled = true;
         }
 
