@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using APP.Model;
 using System.IO;
 using System;
+using System.Windows;
+using Point = System.Drawing.Point;
 
 namespace APP.Helpers.FileHandling
 {
@@ -33,8 +35,9 @@ namespace APP.Helpers.FileHandling
         /// Kamil
         public Contour LoadBitmap(Bitmap bitmap)
         {
+            _error = false;
             string fileName = string.Format("errorlog-{0:yyyy-MM-dd_HH-mm-ss}.txt", DateTime.Now);
-            TextWriter tw = new StreamWriter(fileName);
+            TextWriter tw = new StringWriter();
 
             tw.WriteLine("Następujące piksele zawierają nieprawidłowe kolory: ");
 
@@ -45,9 +48,10 @@ namespace APP.Helpers.FileHandling
             Contour wynikContour = new Contour(bitmap.Width, bitmap.Height);
             int bh = bitmap.Height;
             int bw = bitmap.Width;
-            Parallel.For(0, bh, i => { 
-            //for (int i = 0; i < bitmap.Height; i++)
-            //{
+            Parallel.For(0, bh, i =>
+            {
+                //for (int i = 0; i < bitmap.Height; i++)
+                //{
                 for (int j = 0; j < bw; j++)
                 {
                     Color drawingColor;
@@ -75,7 +79,7 @@ namespace APP.Helpers.FileHandling
                             wynikContour.ContourSet.Add(point);
                         }
                     }
-                    else if (drawingColor.ToArgb() != -1 && drawingColor.A>200)
+                    else if (drawingColor.ToArgb() != -1 && drawingColor.A > 200)
                     {
                         lock (tw)
                         {
@@ -86,11 +90,18 @@ namespace APP.Helpers.FileHandling
                 }
             });
 
-        //    var a = Pollen.KoniczynaC.Color.GetDistance(Color.White);  no chyba nie
+
             if (_error)
             {
-               Log.Log("Podczas wczytywania bitmapy program napotkał piksele których nie mógł rozpoznać");
+                TextWriter log = new StreamWriter(fileName);
+                log.Write(tw);
+                log.Close();
+
+                MessageBox.Show("Wczytywanie bitmapy napotkało kilka błędnych pixeli. Raport wygenerowano do pliku: \n" + Directory.GetCurrentDirectory() + "\\" + fileName, "Warning",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+
             }
+
 
             tw.Close();
 

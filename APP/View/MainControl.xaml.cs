@@ -24,7 +24,6 @@ namespace APP.View
     /// </summary>
     public partial class MainControl : ContentControl
     {
-        private IErrorLog _errorLog;
         private readonly ContourLoader _contourLoader;
         private readonly IEnumerable<Comparison> _comparisons;
 
@@ -70,16 +69,11 @@ namespace APP.View
             }
         }
 
-        public MainControl(ContourLoader contourLoader, IEnumerable<Comparison> comparisons, IErrorLog errorLog)
+        public MainControl(ContourLoader contourLoader, IEnumerable<Comparison> comparisons)
         {
             _contourLoader = contourLoader;
             _comparisons = comparisons;
-            _errorLog = errorLog;
-
-            _errorLog.Changed +=
-                () =>
-                    this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        (Action) (() => { ErrorBox.ItemsSource = _errorLog.GetLog(); }));
+            
 
 
             InitializeComponent();
@@ -122,12 +116,14 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                try
+                _worker = new BackgroundWorker();
+
+                _worker.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
-                    _worker = new BackgroundWorker();
-                    _worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                    Dispatcher Disp = ResultText.Dispatcher;
+                    try
                     {
-                        Dispatcher Disp = ResultText.Dispatcher;
+                        
 
                         Disp.Invoke(LoadingProcess);
                         //now
@@ -145,15 +141,19 @@ namespace APP.View
                         });
 
                         Disp.Invoke(WorkerProcessEnd);
-                    };
+                    }
+                    catch (Exception exception)
+                    {
+                        Disp.Invoke(() =>
+                        {
+                            MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        });
+                        
+                        return;
+                    }
+                };
 
-                    _worker.RunWorkerAsync();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                _worker.RunWorkerAsync();
             }
         }
 
@@ -176,20 +176,22 @@ namespace APP.View
 
             if (userClickedOk == true)
             {
-                try
+                _worker = new BackgroundWorker();
+
+                _worker.DoWork += delegate(object s, DoWorkEventArgs args)
                 {
-                    _worker = new BackgroundWorker();
-                    _worker.DoWork += delegate(object s, DoWorkEventArgs args)
+                    Dispatcher Disp = ResultText.Dispatcher;
+                    try
                     {
-                        Dispatcher Disp = ResultText.Dispatcher;
+
 
                         Disp.Invoke(LoadingProcess);
+                        //now
                         var contour = _contourLoader.LoadContour(openFileDialog1.FileName);
 
                         Disp.Invoke(() =>
                         {
                             Contour2 = contour;
-
                             Contour2Image.Source = Imaging.CreateBitmapSourceFromHBitmap(
                                 Contour2.Bitmap.GetHbitmap(),
                                 IntPtr.Zero,
@@ -199,15 +201,19 @@ namespace APP.View
                         });
 
                         Disp.Invoke(WorkerProcessEnd);
-                    };
+                    }
+                    catch (Exception exception)
+                    {
+                        Disp.Invoke(() =>
+                        {
+                            MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                        });
 
-                    _worker.RunWorkerAsync();
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+                        return;
+                    }
+                };
+
+                _worker.RunWorkerAsync();
             }
         }
 

@@ -45,7 +45,17 @@ namespace APP.Helpers.FileHandling
             if (Path.GetExtension(path).Contains(".txt"))   //EndsWith(".txt"))
             {
                 StreamReader reader = new StreamReader(path);
-                loadedContour = _txtHandler.LoadTxt(reader);
+                try
+                {
+                    
+                    loadedContour = _txtHandler.LoadTxt(reader);
+                }
+                finally
+                {
+                    reader.Close();
+                }
+
+                
             }
             else
             {

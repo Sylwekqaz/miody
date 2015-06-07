@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using APP.Model;
+using Point = System.Drawing.Point;
 
 namespace APP.Helpers.FileHandling
 {
@@ -15,12 +17,7 @@ namespace APP.Helpers.FileHandling
 
     public class TxtHandler : ITxtHandler
     {
-        private readonly IErrorLog _log;
-
-        public TxtHandler(IErrorLog log)
-        {
-            _log = log;
-        }
+        private bool _error = false;
 
         /// <summary>
         /// Metoda odczytuje z pliku txt dane linijka po linijce
@@ -35,12 +32,15 @@ namespace APP.Helpers.FileHandling
         /// Kamil
         public Contour LoadTxt(TextReader reader)
         {
+            _error = false;
+            string fileName = string.Format("errorlog-{0:yyyy-MM-dd_HH-mm-ss}.txt", DateTime.Now);
+            TextWriter tw = new StringWriter();
+
             int w = 0;
             int h = 0;
             string readLine = reader.ReadLine();
             if (readLine==null)
             {
-                _log.Log("Plik jest pusty");
                 throw new Exception("Plik jest pusty");
             }
             var line = readLine.Split(' ');
@@ -58,7 +58,6 @@ namespace APP.Helpers.FileHandling
             }
             catch (Exception e)
             {
-                _log.Log("Linia:1 " + e.Message);
                 throw new Exception("Linia:1 " + e.Message, e);
             }
 
@@ -100,21 +99,33 @@ namespace APP.Helpers.FileHandling
                             }
                             else
                             {
-                                _log.Log("Linia:" + lineNumber + " Nie rozpoznano nazwy pyłku");
+                                tw.WriteLine("Linia:" + lineNumber + " Nie rozpoznano nazwy pyłku");
+                                _error = true;
                             }
                         }
                         else
                         {
-                            _log.Log("Linia:" + lineNumber + " Nie wystaraczająca ilośc danych w wierszu");
+                            tw.WriteLine("Linia:" + lineNumber + " Nie wystaraczająca ilośc danych w wierszu");
+                            _error = true;
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    _log.Log("Linia:" + lineNumber + " "+e.Message);
+                    tw.WriteLine("Linia:" + lineNumber + " " + e.Message);
+                    _error = true;
                 }
             }
-            reader.Close();
+
+            if (_error)
+            {
+                TextWriter errorWriter = new StreamWriter(fileName);
+                errorWriter.Write(tw);
+                errorWriter.Close();
+
+                MessageBox.Show("Wczytywanie pliku napotkało kilka błędów. Raport wygenerowano do pliku: \n" + Directory.GetCurrentDirectory() + "\\" + fileName, "Warning",
+                   MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             return wynikContour;
         }
 
