@@ -67,14 +67,7 @@ namespace APP.View
             }
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-           // ResultControl.TextBlock1.Text = "Trwa obliczanie...";
-	
-            object senderValue = ((Button)sender).Content;
-            var viewNumber = Convert.ToInt32(senderValue);
-            ChangeView(viewNumber);
-        }
+
 
         public void ChangeView(int viewNumber)
         
