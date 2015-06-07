@@ -14,6 +14,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Security.Permissions;
 using System.Threading;
+using APP.Helpers;
 using APP.Helpers.FileHandling;
 
 namespace APP.View
@@ -37,13 +38,10 @@ namespace APP.View
         public ResultControl()
         {
             InitializeComponent();
-
-
         }
 
         public void GetResult(Contour a, Contour b)
         {
-           
             Clear();
 
             _a = a;
@@ -83,20 +81,17 @@ namespace APP.View
 
         private void Policz(object sender, DoWorkEventArgs args)
         {
-         
-           // TextBlock1.Text = "Trwa obliczanie...";  nie bo nalezy do innego wątku..
+            // TextBlock1.Text = "Trwa obliczanie...";  nie bo nalezy do innego wątku..
             var resultsList = new List<Result>();
             foreach (Comparison comparison in _comparisons)
             {
-               
                 comparison.ProgresChanged += ComparisonProgresChanged;
                 resultsList.Add(comparison.GetResult(_a, _b));
             }
-          
-           
+
+
             TextBlock1.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                
                 TextBlockTitle.Inlines.Clear();
                 TextBlockResult.Inlines.Clear();
 
@@ -152,9 +147,9 @@ namespace APP.View
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-           // text block z powrotem
+            // text block z powrotem
             TextBlock1.Text = "Trwa obliczanie..";
-            Bitmap res = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
+            Bitmap res = DiffMask(_a.Mask, _b.Mask);//OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
 
             ResultImage.Source = Imaging.CreateBitmapSourceFromHBitmap(res.GetHbitmap(), IntPtr.Zero,
                 Int32Rect.Empty,
@@ -171,6 +166,11 @@ namespace APP.View
 
             ImageSaveButton.IsEnabled = true;
             ResultSaveButton.IsEnabled = true;
+
+            
+
+
+
         }
 
 
@@ -194,7 +194,7 @@ namespace APP.View
             if (userClickedOk == true)
             {
                 string path = saveFileDialog1.FileName;
-                Bitmap bitmap = OneOnAnotherBitmap(_a.Bitmap, _b.Bitmap);
+                Bitmap bitmap = DiffMask(_a.Mask, _b.Mask);
 
                 bitmap.Save(path);
             }
@@ -220,6 +220,47 @@ namespace APP.View
 
                 writer.Close();
             }
+        }
+
+        private Bitmap DiffMask(Mask maskA, Mask maskB)
+        {
+            Bitmap bitmap = new Bitmap(maskA.Width, maskA.Height);
+            Graphics.FromImage(bitmap).Clear(Color.White);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    IEnumerable<Pollen> a = maskA.MaskMap.Where(pair => pair.Value[y,x]).Select(pair => pair.Key);
+                    IEnumerable<Pollen> b = maskB.MaskMap.Where(pair => pair.Value[y,x]).Select(pair => pair.Key);
+                    if (!a.Any())
+                    {
+                        if (!b.Any())
+                        {
+                            continue;
+                        }
+                        bitmap.SetPixel(x,y,Color.Red);
+                    }
+                    else
+                    {
+                        if (!b.Any())
+                        {
+                            bitmap.SetPixel(x, y, Color.Blue);
+                        }
+                        else if (a.SequenceEqual(b))
+                        {
+                            bitmap.SetPixel(x, y, Color.Black);
+                        }
+                        else
+                        {
+                            bitmap.SetPixel(x, y, Color.Yellow);
+                        }
+                    }
+                }
+            }
+
+
+            return bitmap;
         }
 
         private void MenuItem_OnClick(object sender, RoutedEventArgs e)
