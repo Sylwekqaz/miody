@@ -52,7 +52,13 @@ namespace APP.View
             _conveter = conveter;
             _contourLoader = contourLoader;
             InitializeComponent();
-
+            zapisz_i_wczytaj_do_pola1.IsEnabled = false;
+            zapisz_i_wczytaj_do_pola2.IsEnabled = false;
+            zapisz_kontury.IsEnabled = false;
+            wczytaj_kontury.IsEnabled = false;
+            cofnij.IsEnabled = false;
+            wyczysc_kontury.IsEnabled = false;
+            wyczysc_tlo.IsEnabled = false;
             _przedzial = new List<int> {0};
 
             IEnumerable<Pollen> values = Pollen.NazwyPylkowList.Values;
