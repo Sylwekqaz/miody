@@ -4,42 +4,64 @@ using System;
 
 namespace APP.Helpers.Measures
 {
+    /// \copyright Wiktor Suchecki & Krzysztof Traczyk
     internal class HammingDistance : Comparison
     {
         public HammingDistance()
         {
             Scale = 5;
         }
-
+        /// <summary>
+        /// Metoda obliczająca miarę podobieństwa opartą na odległości Hamminga. 
+        /// Na podstawie dwóch wejściowych obiektów a i b typu Contour, reprezentujących zbiory punktów, zwracana jest wartość równa
+        /// (1 -(moc różnicy między a i b + moc różnicy między b i a)/(moc sumy zbiorów a i b))*100. Metoda korzysta z metody prywatnej 
+        /// CardinalityOfDifference.
+        /// </summary>
+        /// <param name="a">
+        /// Pierwszy obiekt klasy Contour 
+        /// </param>
+        /// <param name="b">
+        /// Drugi obiekt klasy Contour
+        /// </param>
+        /// 
         public override Result GetResult(Contour a, Contour b)
         {
-            double mocRóżnicyAB = MocRóżnicy(a.ContourSet, b.ContourSet);
-            double mocRóżnicyBA = MocRóżnicy(b.ContourSet, a.ContourSet);
-            double mocCzęściWspólnej = a.ContourSet.Count - mocRóżnicyAB;
+            double CountAMinusB = CardinalityOfDifference(a.ContourSet, b.ContourSet);
+            double CountBMinusA = CardinalityOfDifference(b.ContourSet, a.ContourSet);
+            double CountCommonPart = a.ContourSet.Count - CountAMinusB;
 
-            double wynik = (1 -
-                           (mocRóżnicyAB + mocRóżnicyBA)/(a.ContourSet.Count + b.ContourSet.Count - mocCzęściWspólnej))*100;
-            wynik = Math.Round(wynik, 2);
-            return new Result {Title = "Miara 3 (oparta na odległości Hamminga)", D = wynik};
+            double result = (1 -
+                           (CountAMinusB + CountBMinusA)/(a.ContourSet.Count + b.ContourSet.Count - CountCommonPart))*100;
+            result = Math.Round(result, 2);
+            return new Result {Title = "Miara 3 (oparta na odległości Hamminga)", D = result};
         }
-
-        private int MocRóżnicy(HashSet<ContourPoint> listaA, HashSet<ContourPoint> listaB)
+        /// <summary>
+        /// Metoda obliczająca moc różnicy między zbiorem A i zbiorem B
+        /// </summary>
+        /// <param name="A">
+        /// Pierwszy zbiór ContourPointów 
+        /// </param>
+        /// <param name="B">
+        /// Drugi zbiór ContourPointów
+        /// </param>
+        ///
+        private int CardinalityOfDifference(HashSet<ContourPoint> A, HashSet<ContourPoint> B)
         {
-            int licznik = 0;
+            int counter = 0;
 
-            foreach (ContourPoint item in listaA)
+            foreach (ContourPoint item in A)
             {
-                bool istniejeRówny = false;
-                foreach (ContourPoint item2 in listaB)
+                bool EqualElementExists = false;
+                foreach (ContourPoint item2 in B)
                 {
                     if (item.Type == item2.Type && item.Location == item2.Location)
                     {
-                        istniejeRówny = true;
+                        EqualElementExists = true;
                     }
                 }
-                if (!istniejeRówny) licznik++;
+                if (!EqualElementExists) counter++;
             }
-            return licznik;
+            return counter;
         }
     }
 }
